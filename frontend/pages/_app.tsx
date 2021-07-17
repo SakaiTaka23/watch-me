@@ -1,4 +1,4 @@
-import { createMuiTheme, CssBaseline, ThemeProvider, useMediaQuery } from '@material-ui/core';
+import { createTheme, CssBaseline, ThemeProvider, useMediaQuery } from '@material-ui/core';
 import { AppProps } from 'next/app';
 import { useEffect, useMemo } from 'react';
 import { AuthProvider } from '../hooks/firebase/useFirebase';
@@ -9,7 +9,7 @@ const App = ({ Component, pageProps }: AppProps) => {
 
   const theme = useMemo(
     () =>
-      createMuiTheme({
+      createTheme({
         palette: {
           type: prefersDarkMode ? 'dark' : 'light',
         },
