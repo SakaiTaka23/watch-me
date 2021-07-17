@@ -1,19 +1,17 @@
-import { useContext } from 'react';
-import { AuthContext } from '../hooks/firebase/useFirebase';
+import Pagination from '@material-ui/lab/Pagination';
+import React from 'react';
+import Profile from '../components/organisms/Profile';
+import ScheduleCard from '../components/organisms/ScheduleCard';
 
-const Home = () => {
-  const { user, isLoading, Logout } = useContext(AuthContext);
-
-  if (isLoading) {
-    return <h1>loading</h1>;
-  }
-
+const index = () => {
   return (
-    <div>
-      <pre>{user ? user.displayName + 'でログインしています' : 'ログインしていません'}</pre>
-      <button onClick={() => Logout()}>Logout</button>
-    </div>
+    <>
+      <Profile />
+      <div>2021年</div>
+      <Pagination count={12} />
+      <ScheduleCard />
+    </>
   );
 };
 
-export default Home;
+export default index;
