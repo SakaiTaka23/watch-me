@@ -8,7 +8,7 @@ const AuthLinks = () => {
   const uiConfig = {
     signInFlow: 'popup',
     signInSuccessUrl: '/private',
-    signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID],
+    signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID, firebase.auth.TwitterAuthProvider.PROVIDER_ID],
     callbacks: {
       signInSuccessWithAuthResult: (authResult) => {
         const isNewUser = authResult.additionalUserInfo.isNewUser;
