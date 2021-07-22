@@ -18,11 +18,7 @@ func SetRouter(app *fiber.App) *fiber.App {
 	})
 	user := app.Group("/user", middleware.AuthMiddleware)
 	user.Post("/", userHandler.CreateUser)
-	user.Patch("/:username", func(c *fiber.Ctx) error {
-		return c.JSON(fiber.Map{
-			"message": "update user infomation",
-		})
-	})
+	user.Patch("/:username", userHandler.UpdateUser)
 
 	schedule := app.Group("/schedule", middleware.AuthMiddleware)
 	schedule.Post("/", func(c *fiber.Ctx) error {

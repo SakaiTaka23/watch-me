@@ -29,3 +29,13 @@ func (handler *UserHandler) CreateUser(c *fiber.Ctx) error {
 	handler.userUsecase.CreateUser(&user)
 	return c.SendStatus(200)
 }
+
+func (handler *UserHandler) UpdateUser(c *fiber.Ctx) error {
+	user := c.Locals("user").(model.User)
+	request := new(request.UpdateUser)
+	user.Name = request.UserName
+	user.ScheduleTitle = request.ScheduleTitle
+	handler.userUsecase.UpdateUser(&user)
+
+	return c.JSON(user)
+}
