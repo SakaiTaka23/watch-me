@@ -31,9 +31,17 @@ func (handler *UserHandler) CreateUser(c *fiber.Ctx) error {
 }
 
 func (handler *UserHandler) GetUserProfile(c *fiber.Ctx) error {
-	username := c.Query("username")
-	userInfo := handler.userUsecase.GetUserInfo(username)
+	username := c.Params("username")
+	userInfo := handler.userUsecase.GetUserProfile(username)
 	return c.JSON(userInfo)
+}
+
+func (handler *UserHandler) GetUserSchedule(c *fiber.Ctx) error {
+	name := c.Params("username")
+	year := c.Query("year")
+	month := c.Query("month")
+	schedule := handler.userUsecase.GetUserSchedule(name, year, month)
+	return c.JSON(schedule)
 }
 
 func (handler *UserHandler) UpdateUser(c *fiber.Ctx) error {
