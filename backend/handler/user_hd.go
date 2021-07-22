@@ -30,7 +30,7 @@ func (handler *UserHandler) CreateUser(c *fiber.Ctx) error {
 	return c.SendStatus(200)
 }
 
-func (handler *UserHandler) GetUserInfo(c *fiber.Ctx) error {
+func (handler *UserHandler) GetUserProfile(c *fiber.Ctx) error {
 	username := c.Query("username")
 	userInfo := handler.userUsecase.GetUserInfo(username)
 	return c.JSON(userInfo)
