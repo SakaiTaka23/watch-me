@@ -10,6 +10,7 @@ import (
 func SetRouter(app *fiber.App) *fiber.App {
 	middleware.SetAppMiddleware(app)
 	userHandler := injector.InjectUserHandler()
+	// scheduleHandler := injector.InjectScheduleHandler()
 
 	app.Get("/user/:username", userHandler.GetUserSchedule)
 	app.Get("/user/:username/info", userHandler.GetUserProfile)
@@ -23,7 +24,7 @@ func SetRouter(app *fiber.App) *fiber.App {
 			"message": "post schedule create",
 		})
 	})
-	schedule.Patch("/", func(c *fiber.Ctx) error {
+	schedule.Delete("/", func(c *fiber.Ctx) error {
 		return c.JSON(fiber.Map{
 			"message": "delete schedule",
 		})
