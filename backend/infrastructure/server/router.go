@@ -11,11 +11,7 @@ func SetRouter(app *fiber.App) *fiber.App {
 	middleware.SetAppMiddleware(app)
 	userHandler := injector.InjectUserHandler()
 
-	app.Get("/user/:username", func(c *fiber.Ctx) error {
-		return c.JSON(fiber.Map{
-			"message": "get user schedule by user id",
-		})
-	})
+	app.Get("/user/:username", userHandler.GetUserSchedule)
 	app.Get("/user/:username/info", userHandler.GetUserProfile)
 	user := app.Group("/user", middleware.AuthMiddleware)
 	user.Post("/", userHandler.CreateUser)
