@@ -13,7 +13,12 @@ func SetRouter(app *fiber.App) *fiber.App {
 
 	app.Get("/user/:username", func(c *fiber.Ctx) error {
 		return c.JSON(fiber.Map{
-			"message": "get user info by user id",
+			"message": "get user schedule by user id",
+		})
+	})
+	app.Get("/user/:username/info", func(c *fiber.Ctx) error {
+		return c.JSON(fiber.Map{
+			"message": "get user simple info",
 		})
 	})
 	user := app.Group("/user", middleware.AuthMiddleware)
