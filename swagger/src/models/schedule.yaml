@@ -1,0 +1,62 @@
+description: ''
+type: object
+x-examples:
+  example-1:
+    id: string
+    about: string
+    emoji: string
+    date: date
+    start_date: date-time
+    end_date: date-time
+    place: string
+    title: string
+    url: string
+examples:
+  - id: string
+    about: string
+    emoji: string
+    date: string
+    start_date: string
+    end_date: string
+    place: string
+    title: string
+    url: string
+properties:
+  id:
+    type: string
+    minLength: 1
+  about:
+    type: string
+    minLength: 1
+  emoji:
+    type: string
+    minLength: 1
+  date:
+    type: string
+    minLength: 1
+    format: date
+  start_date:
+    type: string
+    minLength: 1
+    format: time
+  end_date:
+    type: string
+    minLength: 1
+    format: time
+  place:
+    type: string
+    minLength: 1
+  title:
+    type: string
+    minLength: 1
+  url:
+    type: string
+    minLength: 1
+required:
+  - id
+  - emoji
+  - date
+  - start_date
+  - place
+  - title
+  - url
