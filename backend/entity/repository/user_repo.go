@@ -6,4 +6,5 @@ type UserRepository interface {
 	CreateUser(user *model.User) string
 	DeleteUser(id string)
 	FindFromID(id string) *model.User
+	UpdateUser(user *model.User) *model.User
 }
