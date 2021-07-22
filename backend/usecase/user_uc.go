@@ -7,6 +7,7 @@ import (
 
 type UserUsecase interface {
 	CreateUser(user *model.User)
+	GetUserInfo(name string) *model.User
 	UpdateUser(user *model.User) *model.User
 }
 
@@ -21,6 +22,10 @@ func NewUserUsecase(userRepo repository.UserRepository) UserUsecase {
 
 func (usecase *userUsecase) CreateUser(user *model.User) {
 	usecase.userRepo.CreateUser(user)
+}
+
+func (usecase *userUsecase) GetUserInfo(name string) *model.User {
+	return usecase.userRepo.FindFromName(name)
 }
 
 func (usecase *userUsecase) UpdateUser(user *model.User) *model.User {
