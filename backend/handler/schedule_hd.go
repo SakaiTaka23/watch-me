@@ -4,6 +4,7 @@ import (
 	"backend/entity/model"
 	"backend/usecase"
 	"log"
+	"strconv"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -28,4 +29,11 @@ func (handler *ScheduleHandler) CreateSchedule(c *fiber.Ctx) error {
 
 	handler.scheduleUsecase.CreateSchedule(&schedule)
 	return c.JSON(schedule.ID)
+}
+
+func (handler *ScheduleHandler) DeleteSchedule(c *fiber.Ctx) error {
+	id := c.Params("id")
+	idInt, _ := strconv.Atoi(id)
+	handler.scheduleUsecase.DeleteSchedule(uint(idInt))
+	return c.SendStatus(200)
 }

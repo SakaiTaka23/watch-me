@@ -7,7 +7,7 @@ import (
 
 type ScheduleUsecase interface {
 	CreateSchedule(schedule *model.Schedule) uint
-	DeleteSchedule(id string)
+	DeleteSchedule(id uint)
 }
 
 type scheduleUsecase struct {
@@ -23,6 +23,6 @@ func (usecase *scheduleUsecase) CreateSchedule(schedule *model.Schedule) uint {
 	return usecase.scheduleRepo.CreateSchedule(schedule)
 }
 
-func (usecase *scheduleUsecase) DeleteSchedule(id string) {
-
+func (usecase *scheduleUsecase) DeleteSchedule(id uint) {
+	usecase.scheduleRepo.DeleteSchedule(id)
 }
