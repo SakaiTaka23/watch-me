@@ -3,6 +3,8 @@ package usecase
 import (
 	"backend/entity/model"
 	"backend/entity/repository"
+
+	"github.com/google/uuid"
 )
 
 type ScheduleUsecase interface {
@@ -20,6 +22,8 @@ func NewScheduleUsecase(scheduleRepo repository.ScheduleRepository) ScheduleUsec
 }
 
 func (usecase *scheduleUsecase) CreateSchedule(schedule *model.Schedule) string {
+	uuid, _ := uuid.NewUUID()
+	schedule.ID = uuid.String()
 	return usecase.scheduleRepo.CreateSchedule(schedule)
 }
 
