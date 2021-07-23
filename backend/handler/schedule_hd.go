@@ -38,6 +38,9 @@ func (handler *ScheduleHandler) DeleteSchedule(c *fiber.Ctx) error {
 
 func (handler *ScheduleHandler) GetSchedule(c *fiber.Ctx) error {
 	id := c.Params("schedule")
-	schedule := handler.scheduleUsecase.FindSchedule(id)
+	schedule, err := handler.scheduleUsecase.FindSchedule(id)
+	if err != nil {
+		return c.SendStatus(404)
+	}
 	return c.JSON(schedule)
 }
