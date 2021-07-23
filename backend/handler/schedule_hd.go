@@ -31,7 +31,13 @@ func (handler *ScheduleHandler) CreateSchedule(c *fiber.Ctx) error {
 }
 
 func (handler *ScheduleHandler) DeleteSchedule(c *fiber.Ctx) error {
-	id := c.Params("id")
+	id := c.Params("schedule")
 	handler.scheduleUsecase.DeleteSchedule(id)
 	return c.SendStatus(200)
+}
+
+func (handler *ScheduleHandler) GetSchedule(c *fiber.Ctx) error {
+	id := c.Params("schedule")
+	schedule := handler.scheduleUsecase.FindSchedule(id)
+	return c.JSON(schedule)
 }

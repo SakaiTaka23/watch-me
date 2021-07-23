@@ -23,3 +23,9 @@ func (scheduleRepo *ScheduleRepository) CreateSchedule(schedule *model.Schedule)
 func (scheduleRepo *ScheduleRepository) DeleteSchedule(id string) {
 	scheduleRepo.MySQLHandler.Conn.Delete(&model.Schedule{}, id)
 }
+
+func (scheduleRepo *ScheduleRepository) GetScheduleInfo(id string) *model.Schedule {
+	var schedule model.Schedule
+	scheduleRepo.MySQLHandler.Conn.Where("id = ?", id).First(&schedule)
+	return &schedule
+}
