@@ -24,8 +24,32 @@ func (handler *UserHandler) CreateUser(c *fiber.Ctx) error {
 	if err := c.BodyParser(name); err != nil {
 		name.UserName = "user"
 	}
-	log.Printf("recieved body: %s", name)
+	log.Printf("received body: %s", name)
 	user.Name = name.UserName
 	handler.userUsecase.CreateUser(&user)
 	return c.SendStatus(200)
+}
+
+func (handler *UserHandler) GetUserProfile(c *fiber.Ctx) error {
+	username := c.Params("username")
+	userInfo := handler.userUsecase.GetUserProfile(username)
+	return c.JSON(userInfo)
+}
+
+func (handler *UserHandler) GetUserSchedule(c *fiber.Ctx) error {
+	name := c.Params("username")
+	year := c.Query("year")
+	month := c.Query("month")
+	schedule := handler.userUsecase.GetUserSchedule(name, year, month)
+	return c.JSON(schedule)
+}
+
+func (handler *UserHandler) UpdateUser(c *fiber.Ctx) error {
+	user := c.Locals("user").(model.User)
+	request := new(request.UpdateUser)
+	user.Name = request.UserName
+	user.ScheduleTitle = request.ScheduleTitle
+	handler.userUsecase.UpdateUser(&user)
+
+	return c.JSON(user)
 }

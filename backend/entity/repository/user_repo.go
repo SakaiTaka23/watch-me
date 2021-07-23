@@ -1,9 +1,14 @@
 package repository
 
-import "backend/entity/model"
+import (
+	"backend/entity/model"
+	"time"
+)
 
 type UserRepository interface {
 	CreateUser(user *model.User) string
 	DeleteUser(id string)
-	FindFromID(id string) *model.User
+	FindFromName(name string) *model.User
+	ScheduleFromName(name string, period time.Time) *model.Schedule
+	UpdateUser(user *model.User) *model.User
 }

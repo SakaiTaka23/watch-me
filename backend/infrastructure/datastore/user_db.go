@@ -4,6 +4,7 @@ import (
 	"backend/entity/model"
 	"backend/entity/repository"
 	"backend/infrastructure/datastore/mysql"
+	"time"
 )
 
 type UserRepository struct {
@@ -24,8 +25,19 @@ func (userRepo *UserRepository) DeleteUser(id string) {
 	userRepo.MySQLHandler.Conn.Delete(&model.User{}, id)
 }
 
-func (useeRepo *UserRepository) FindFromID(id string) *model.User {
+func (userRepo *UserRepository) FindFromName(name string) *model.User {
 	var user *model.User
-	useeRepo.MySQLHandler.Conn.Where("id = ?", id).First(&user)
+	userRepo.MySQLHandler.Conn.Preload("sns").Where("name = ?", name).First(&user)
+	return user
+}
+
+func (userRepo *UserRepository) ScheduleFromName(name string, period time.Time) *model.Schedule {
+	var schedule *model.Schedule
+	userRepo.MySQLHandler.Conn.Where("name = ?", name).Where("Date = ?", period).Find(&schedule)
+	return schedule
+}
+
+func (userRepo *UserRepository) UpdateUser(user *model.User) *model.User {
+	userRepo.MySQLHandler.Conn.Preload("sns").Model(&user).Where("id = ?", user.ID).First(&user).Update("name", "title")
 	return user
 }
