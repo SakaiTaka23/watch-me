@@ -15,9 +15,10 @@ func NewScheduleRepository(sqlHandler mysql.MySQLHandler) repository.ScheduleRep
 	return &scheduleRepository
 }
 
-func (scheduleRepo *ScheduleRepository) CreateSchedule(schedule *model.Schedule) string {
-	return "ok"
+func (scheduleRepo *ScheduleRepository) CreateSchedule(schedule *model.Schedule) uint {
+	scheduleRepo.MySQLHandler.Conn.Create(&schedule)
+	return schedule.ID
 }
 
-func (scheduleRepo *ScheduleRepository) DeleteSchedule(id string) {
+func (scheduleRepo *ScheduleRepository) DeleteSchedule(id uint) {
 }

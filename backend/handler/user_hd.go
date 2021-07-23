@@ -24,7 +24,7 @@ func (handler *UserHandler) CreateUser(c *fiber.Ctx) error {
 	if err := c.BodyParser(name); err != nil {
 		name.UserName = "user"
 	}
-	log.Printf("recieved body: %s", name)
+	log.Printf("received body: %s", name)
 	user.Name = name.UserName
 	handler.userUsecase.CreateUser(&user)
 	return c.SendStatus(200)
