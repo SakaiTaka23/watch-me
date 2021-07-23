@@ -40,7 +40,10 @@ func (handler *UserHandler) GetUserSchedule(c *fiber.Ctx) error {
 	name := c.Params("username")
 	year := c.Query("year")
 	month := c.Query("month")
-	schedule := handler.userUsecase.GetUserSchedule(name, year, month)
+	schedule, err := handler.userUsecase.GetUserSchedule(name, year, month)
+	if err != nil {
+		return c.SendStatus(404)
+	}
 	return c.JSON(schedule)
 }
 

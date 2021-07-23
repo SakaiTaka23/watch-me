@@ -11,7 +11,7 @@ import (
 type UserUsecase interface {
 	CreateUser(user *model.User)
 	GetUserProfile(name string) *model.User
-	GetUserSchedule(name string, year string, month string) *model.Schedule
+	GetUserSchedule(name string, year string, month string) (*model.Schedule, error)
 	UpdateUser(user *model.User) *model.User
 }
 
@@ -32,12 +32,15 @@ func (usecase *userUsecase) GetUserProfile(name string) *model.User {
 	return usecase.userRepo.FindFromName(name)
 }
 
-func (usecase *userUsecase) GetUserSchedule(name string, year string, month string) *model.Schedule {
+func (usecase *userUsecase) GetUserSchedule(name string, year string, month string) (*model.Schedule, error) {
 	monthInt, _ := strconv.Atoi(month)
 	format := year + fmt.Sprintf("%02d", monthInt)
 	period, _ := time.Parse(format, "2000-01")
-	schedule := usecase.userRepo.ScheduleFromName(name, period)
-	return schedule
+	schedule, err := usecase.userRepo.ScheduleFromName(name, period)
+	if err != nil {
+		return nil, err
+	}
+	return schedule, nil
 }
 
 func (usecase *userUsecase) UpdateUser(user *model.User) *model.User {

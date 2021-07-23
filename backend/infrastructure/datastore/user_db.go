@@ -4,7 +4,10 @@ import (
 	"backend/entity/model"
 	"backend/entity/repository"
 	"backend/infrastructure/datastore/mysql"
+	"errors"
 	"time"
+
+	"gorm.io/gorm"
 )
 
 type UserRepository struct {
@@ -31,10 +34,12 @@ func (userRepo *UserRepository) FindFromName(name string) *model.User {
 	return user
 }
 
-func (userRepo *UserRepository) ScheduleFromName(name string, period time.Time) *model.Schedule {
+func (userRepo *UserRepository) ScheduleFromName(name string, period time.Time) (*model.Schedule, error) {
 	var schedule *model.Schedule
-	userRepo.MySQLHandler.Conn.Where("name = ?", name).Where("Date = ?", period).Find(&schedule)
-	return schedule
+	if err := userRepo.MySQLHandler.Conn.Where("name = ?", name).Where("Date = ?", period).Take(&schedule).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, err
+	}
+	return schedule, nil
 }
 
 func (userRepo *UserRepository) UpdateUser(user *model.User) *model.User {
