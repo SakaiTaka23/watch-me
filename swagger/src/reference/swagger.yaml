@@ -38,6 +38,8 @@ paths:
                 example-1:
                   value:
                     id: string-uid
+        '401':
+          description: Unauthorized
       operationId: create-schedule
       description: 情報を元にスケジュールを新規作成する
       parameters: []
@@ -82,6 +84,8 @@ paths:
       responses:
         '200':
           description: 削除完了
+        '401':
+          description: Unauthorized
       operationId: delete-schedule-schedule
       description: スケジュールを消す
       security:
@@ -161,6 +165,50 @@ paths:
         - Firebase: []
       tags:
         - user
+    patch:
+      summary: update user
+      operationId: patch-user-update
+      responses:
+        '200':
+          $ref: '#/components/responses/UserUpdateResult'
+        '401':
+          description: Unauthorized
+      description: ユーザーのスケジュールタイトル・名前の更新を行う
+      security:
+        - Firebase: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              description: ''
+              type: object
+              x-examples:
+                example-1:
+                  name: string
+                  schedule_title: string
+              properties:
+                name:
+                  type: string
+                  minLength: 1
+                schedule_title:
+                  type: string
+                  minLength: 1
+              required:
+                - name
+                - schedule_title
+            examples:
+              両方変更:
+                value:
+                  name: string
+                  schedule_title: string
+              名前のみを変更:
+                value:
+                  name: string
+                  schedule_title: default value
+        description: 両方を更新する場合片方を更新する場合どちらであっても両方の情報を送信する
+      tags:
+        - user
+        - sns
   '/user/{username}':
     parameters:
       - schema:
@@ -185,52 +233,6 @@ paths:
       parameters:
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/month'
-    patch:
-      summary: Update User Information
-      operationId: patch-user-username
-      responses:
-        '200':
-          $ref: '#/components/responses/UserUpdateResult'
-        '401':
-          description: Unauthorized
-      description: |-
-        ユーザーの情報を更新
-        /user で行っても良いかも
-      requestBody:
-        content:
-          application/json:
-            schema:
-              description: ''
-              x-examples:
-                example-1:
-                  name: string
-                  schedule_title: string
-              anyOf:
-                - properties:
-                    name:
-                      type: string
-                      minLength: 1
-                    schedule_title:
-                      type: string
-                      minLength: 1
-              type: object
-            examples:
-              change both:
-                value:
-                  name: string
-                  schedule_title: string
-              change name:
-                value:
-                  name: changed name
-                  schedule_title: default value
-        description: |-
-          ユーザーを更新する
-          一方の更新・両方の更新どちらも可能であるがどちらの場合でもあっても全ての要素を送信する
-      parameters: []
-      security:
-        - Firebase: []
-      tags:
-        - user
   '/user/{username}/info':
     parameters:
       - schema:
@@ -472,4 +474,5 @@ security:
   - Firebase: []
 tags:
   - name: schedule
+  - name: sns
   - name: user
