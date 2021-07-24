@@ -4,7 +4,6 @@ import (
 	"backend/entity/model"
 	"backend/handler/request"
 	"backend/usecase"
-	"log"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -20,18 +19,24 @@ func NewUserHandler(userUsecase usecase.UserUsecase) UserHandler {
 
 func (handler *UserHandler) CreateUser(c *fiber.Ctx) error {
 	user := c.Locals("user").(model.User)
-	name := new(request.CreateUser)
-	if err := c.BodyParser(name); err != nil {
-		name.UserName = "user"
+	request := new(request.CreateUser)
+	if err := c.BodyParser(request); err != nil {
+		return c.SendStatus(400)
 	}
-	log.Printf("received body: %s", name)
-	user.Name = name.UserName
+	if err := request.Validate(); err != nil {
+		return c.SendStatus(400)
+	}
+	user.Name = request.Name
+	user.Email = request.Email
 	handler.userUsecase.CreateUser(&user)
 	return c.SendStatus(200)
 }
 
 func (handler *UserHandler) GetUserProfile(c *fiber.Ctx) error {
 	username := c.Params("username")
+	if username == "" || len(username) > 30 {
+		return c.SendStatus(404)
+	}
 	userInfo, err := handler.userUsecase.GetUserProfile(username)
 	if err != nil {
 		return c.SendStatus(404)
@@ -53,6 +58,12 @@ func (handler *UserHandler) GetUserSchedule(c *fiber.Ctx) error {
 func (handler *UserHandler) UpdateUser(c *fiber.Ctx) error {
 	user := c.Locals("user").(model.User)
 	request := new(request.UpdateUser)
+	if err := c.BodyParser(request); err != nil {
+		return c.SendStatus(400)
+	}
+	if err := request.Validate(); err != nil {
+		return c.SendStatus(400)
+	}
 	user.Name = request.UserName
 	user.ScheduleTitle = request.ScheduleTitle
 	handler.userUsecase.UpdateUser(&user)

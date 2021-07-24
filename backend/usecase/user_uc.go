@@ -22,6 +22,7 @@ func NewUserUsecase(userRepo repository.UserRepository) UserUsecase {
 }
 
 func (usecase *userUsecase) CreateUser(user *model.User) {
+	user.ScheduleTitle = "マイスケジュール"
 	usecase.userRepo.CreateUser(user)
 }
 
