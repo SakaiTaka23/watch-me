@@ -34,6 +34,9 @@ func (handler *UserHandler) CreateUser(c *fiber.Ctx) error {
 
 func (handler *UserHandler) GetUserProfile(c *fiber.Ctx) error {
 	username := c.Params("username")
+	if username == "" || len(username) > 30 {
+		return c.SendStatus(404)
+	}
 	userInfo, err := handler.userUsecase.GetUserProfile(username)
 	if err != nil {
 		return c.SendStatus(404)
