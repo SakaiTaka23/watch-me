@@ -3,9 +3,6 @@ package usecase
 import (
 	"backend/entity/model"
 	"backend/entity/repository"
-	"fmt"
-	"strconv"
-	"time"
 )
 
 type UserUsecase interface {
@@ -33,10 +30,7 @@ func (usecase *userUsecase) GetUserProfile(name string) (*model.User, error) {
 }
 
 func (usecase *userUsecase) GetUserSchedule(name string, year string, month string) (*model.Schedule, error) {
-	monthInt, _ := strconv.Atoi(month)
-	format := year + fmt.Sprintf("%02d", monthInt)
-	period, _ := time.Parse(format, "2000-01")
-	return usecase.userRepo.ScheduleFromName(name, period)
+	return usecase.userRepo.ScheduleFromName(name, year, month)
 }
 
 func (usecase *userUsecase) UpdateUser(user *model.User) *model.User {
