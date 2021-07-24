@@ -10,7 +10,7 @@ import (
 
 type UserUsecase interface {
 	CreateUser(user *model.User)
-	GetUserProfile(name string) *model.User
+	GetUserProfile(name string) (*model.User, error)
 	GetUserSchedule(name string, year string, month string) (*model.Schedule, error)
 	UpdateUser(user *model.User) *model.User
 }
@@ -28,7 +28,7 @@ func (usecase *userUsecase) CreateUser(user *model.User) {
 	usecase.userRepo.CreateUser(user)
 }
 
-func (usecase *userUsecase) GetUserProfile(name string) *model.User {
+func (usecase *userUsecase) GetUserProfile(name string) (*model.User, error) {
 	return usecase.userRepo.FindFromName(name)
 }
 

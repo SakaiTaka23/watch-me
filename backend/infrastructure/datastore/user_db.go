@@ -28,10 +28,12 @@ func (userRepo *UserRepository) DeleteUser(id string) {
 	userRepo.MySQLHandler.Conn.Delete(&model.User{}, id)
 }
 
-func (userRepo *UserRepository) FindFromName(name string) *model.User {
+func (userRepo *UserRepository) FindFromName(name string) (*model.User, error) {
 	var user *model.User
-	userRepo.MySQLHandler.Conn.Preload("sns").Where("name = ?", name).First(&user)
-	return user
+	if err := userRepo.MySQLHandler.Conn.Preload("sns").Where("name = ?", name).First(&user).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, err
+	}
+	return user, nil
 }
 
 func (userRepo *UserRepository) ScheduleFromName(name string, period time.Time) (*model.Schedule, error) {

@@ -32,7 +32,10 @@ func (handler *UserHandler) CreateUser(c *fiber.Ctx) error {
 
 func (handler *UserHandler) GetUserProfile(c *fiber.Ctx) error {
 	username := c.Params("username")
-	userInfo := handler.userUsecase.GetUserProfile(username)
+	userInfo, err := handler.userUsecase.GetUserProfile(username)
+	if err != nil {
+		return c.SendStatus(404)
+	}
 	return c.JSON(userInfo)
 }
 
