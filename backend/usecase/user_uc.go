@@ -36,11 +36,7 @@ func (usecase *userUsecase) GetUserSchedule(name string, year string, month stri
 	monthInt, _ := strconv.Atoi(month)
 	format := year + fmt.Sprintf("%02d", monthInt)
 	period, _ := time.Parse(format, "2000-01")
-	schedule, err := usecase.userRepo.ScheduleFromName(name, period)
-	if err != nil {
-		return nil, err
-	}
-	return schedule, nil
+	return usecase.userRepo.ScheduleFromName(name, period)
 }
 
 func (usecase *userUsecase) UpdateUser(user *model.User) *model.User {
