@@ -55,6 +55,12 @@ func (handler *UserHandler) GetUserSchedule(c *fiber.Ctx) error {
 func (handler *UserHandler) UpdateUser(c *fiber.Ctx) error {
 	user := c.Locals("user").(model.User)
 	request := new(request.UpdateUser)
+	if err := c.BodyParser(request); err != nil {
+		return c.SendStatus(400)
+	}
+	if err := request.Validate(); err != nil {
+		return c.SendStatus(400)
+	}
 	user.Name = request.UserName
 	user.ScheduleTitle = request.ScheduleTitle
 	handler.userUsecase.UpdateUser(&user)
