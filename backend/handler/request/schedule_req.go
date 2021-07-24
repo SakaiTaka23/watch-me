@@ -22,7 +22,7 @@ type CreateSchedule struct {
 	UserID    string
 }
 
-func (s *CreateSchedule) ValidateSchedule() error {
+func (s *CreateSchedule) Validate() error {
 	validate := validator.New()
 	_ = validate.RegisterValidation("is-time", isTime)
 	if err := validate.Struct(s); err != nil {

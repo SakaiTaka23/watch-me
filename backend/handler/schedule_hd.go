@@ -24,7 +24,7 @@ func (handler *ScheduleHandler) CreateSchedule(c *fiber.Ctx) error {
 	if err := c.BodyParser(request); err != nil {
 		return c.SendStatus(400)
 	}
-	if err := request.ValidateSchedule(); err != nil {
+	if err := request.Validate(); err != nil {
 		return c.SendStatus(400)
 	}
 	schedule = request.ChangeStruct()
