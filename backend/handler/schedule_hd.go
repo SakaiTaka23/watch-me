@@ -2,8 +2,8 @@ package handler
 
 import (
 	"backend/entity/model"
+	"backend/handler/request"
 	"backend/usecase"
-	"log"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -18,15 +18,19 @@ func NewScheduleHandler(scheduleUsecase usecase.ScheduleUsecase) ScheduleHandler
 }
 
 func (handler *ScheduleHandler) CreateSchedule(c *fiber.Ctx) error {
-	var schedule model.Schedule
+	var request request.CreateSchedule
+	var schedule *model.Schedule
 	user := c.Locals("user").(model.User)
-	if err := c.BodyParser(schedule); err != nil {
-		log.Println("request not valid")
+	if err := c.BodyParser(request); err != nil {
 		return c.SendStatus(400)
 	}
+	if err := request.ValidateSchedule(); err != nil {
+		return c.SendStatus(400)
+	}
+	schedule = request.ChangeStruct()
 	schedule.UserID = user.ID
 
-	handler.scheduleUsecase.CreateSchedule(&schedule)
+	handler.scheduleUsecase.CreateSchedule(schedule)
 	return c.JSON(schedule.ID)
 }
 
