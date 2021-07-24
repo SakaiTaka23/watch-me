@@ -10,7 +10,7 @@ import (
 type ScheduleUsecase interface {
 	CreateSchedule(schedule *model.Schedule) string
 	DeleteSchedule(id string)
-	FindSchedule(id string) *model.Schedule
+	FindSchedule(id string) (*model.Schedule, error)
 }
 
 type scheduleUsecase struct {
@@ -32,7 +32,6 @@ func (usecase *scheduleUsecase) DeleteSchedule(id string) {
 	usecase.scheduleRepo.DeleteSchedule(id)
 }
 
-func (usecase *scheduleUsecase) FindSchedule(id string) *model.Schedule {
-	var schedule *model.Schedule = usecase.scheduleRepo.GetScheduleInfo(id)
-	return schedule
+func (usecase *scheduleUsecase) FindSchedule(id string) (*model.Schedule, error) {
+	return usecase.scheduleRepo.GetScheduleInfo(id)
 }

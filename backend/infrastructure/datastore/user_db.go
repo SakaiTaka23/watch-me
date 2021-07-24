@@ -4,7 +4,10 @@ import (
 	"backend/entity/model"
 	"backend/entity/repository"
 	"backend/infrastructure/datastore/mysql"
+	"errors"
 	"time"
+
+	"gorm.io/gorm"
 )
 
 type UserRepository struct {
@@ -25,16 +28,20 @@ func (userRepo *UserRepository) DeleteUser(id string) {
 	userRepo.MySQLHandler.Conn.Delete(&model.User{}, id)
 }
 
-func (userRepo *UserRepository) FindFromName(name string) *model.User {
+func (userRepo *UserRepository) FindFromName(name string) (*model.User, error) {
 	var user *model.User
-	userRepo.MySQLHandler.Conn.Preload("sns").Where("name = ?", name).First(&user)
-	return user
+	if err := userRepo.MySQLHandler.Conn.Preload("sns").Where("name = ?", name).First(&user).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, err
+	}
+	return user, nil
 }
 
-func (userRepo *UserRepository) ScheduleFromName(name string, period time.Time) *model.Schedule {
+func (userRepo *UserRepository) ScheduleFromName(name string, period time.Time) (*model.Schedule, error) {
 	var schedule *model.Schedule
-	userRepo.MySQLHandler.Conn.Where("name = ?", name).Where("Date = ?", period).Find(&schedule)
-	return schedule
+	if err := userRepo.MySQLHandler.Conn.Where("name = ?", name).Where("Date = ?", period).Take(&schedule).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, err
+	}
+	return schedule, nil
 }
 
 func (userRepo *UserRepository) UpdateUser(user *model.User) *model.User {

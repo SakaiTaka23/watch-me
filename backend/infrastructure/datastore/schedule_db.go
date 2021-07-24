@@ -4,6 +4,9 @@ import (
 	"backend/entity/model"
 	"backend/entity/repository"
 	"backend/infrastructure/datastore/mysql"
+	"errors"
+
+	"gorm.io/gorm"
 )
 
 type ScheduleRepository struct {
@@ -24,8 +27,10 @@ func (scheduleRepo *ScheduleRepository) DeleteSchedule(id string) {
 	scheduleRepo.MySQLHandler.Conn.Delete(&model.Schedule{}, id)
 }
 
-func (scheduleRepo *ScheduleRepository) GetScheduleInfo(id string) *model.Schedule {
+func (scheduleRepo *ScheduleRepository) GetScheduleInfo(id string) (*model.Schedule, error) {
 	var schedule model.Schedule
-	scheduleRepo.MySQLHandler.Conn.Where("id = ?", id).First(&schedule)
-	return &schedule
+	if err := scheduleRepo.MySQLHandler.Conn.Where("id = ?", id).First(&schedule).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, err
+	}
+	return &schedule, nil
 }
