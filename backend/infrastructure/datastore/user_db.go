@@ -5,7 +5,6 @@ import (
 	"backend/entity/repository"
 	"backend/infrastructure/datastore/mysql"
 	"errors"
-	"time"
 
 	"gorm.io/gorm"
 )
@@ -36,9 +35,9 @@ func (userRepo *UserRepository) FindFromName(name string) (*model.User, error) {
 	return user, nil
 }
 
-func (userRepo *UserRepository) ScheduleFromName(name string, period time.Time) (*model.Schedule, error) {
+func (userRepo *UserRepository) ScheduleFromName(name string, year string, month string) (*model.Schedule, error) {
 	var schedule *model.Schedule
-	if err := userRepo.MySQLHandler.Conn.Where("name = ?", name).Where("Date = ?", period).Take(&schedule).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+	if err := userRepo.MySQLHandler.Conn.Where("name = ?", name).Where("year = ?", year).Where("month = ?", month).Take(&schedule).Error; errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, err
 	}
 	return schedule, nil
