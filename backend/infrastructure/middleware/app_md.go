@@ -8,7 +8,7 @@ import (
 func SetAppMiddleware(app *fiber.App) *fiber.App {
 	app.Use(cors.New(cors.Config{
 		AllowOrigins: "http://127.0.0.1:3000",
-		AllowMethods: "GET,POST",
+		AllowMethods: "GET,POST,DELETE,PATCH",
 		AllowHeaders: "Authorization,Content-Type",
 	}))
 
