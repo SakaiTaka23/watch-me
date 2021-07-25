@@ -67,6 +67,5 @@ func (handler *UserHandler) UpdateUser(c *fiber.Ctx) error {
 	user.Name = request.UserName
 	user.ScheduleTitle = request.ScheduleTitle
 	handler.userUsecase.UpdateUser(&user)
-
 	return c.JSON(user)
 }

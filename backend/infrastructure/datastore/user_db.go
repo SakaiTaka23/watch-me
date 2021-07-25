@@ -5,6 +5,7 @@ import (
 	"backend/entity/repository"
 	"backend/infrastructure/datastore/mysql"
 	"errors"
+	"fmt"
 
 	"gorm.io/gorm"
 )
@@ -29,7 +30,7 @@ func (userRepo *UserRepository) DeleteUser(id string) {
 
 func (userRepo *UserRepository) FindFromName(name string) (*model.User, error) {
 	var user *model.User
-	if err := userRepo.MySQLHandler.Conn.Preload("sns").Where("name = ?", name).First(&user).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+	if err := userRepo.MySQLHandler.Conn.Preload("SNS").Where("name = ?", name).First(&user).Error; errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, err
 	}
 	return user, nil
@@ -37,13 +38,15 @@ func (userRepo *UserRepository) FindFromName(name string) (*model.User, error) {
 
 func (userRepo *UserRepository) ScheduleFromName(name string, year string, month string) (*model.Schedule, error) {
 	var schedule *model.Schedule
-	if err := userRepo.MySQLHandler.Conn.Where("name = ?", name).Where("year = ?", year).Where("month = ?", month).Take(&schedule).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+	if err := userRepo.MySQLHandler.Conn.Preload("Schedule").Model(&model.User{}).Where("name = ?", name).Where("year = ?", year).Where("month = ?", month).Take(&schedule).Error; errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, err
 	}
 	return schedule, nil
 }
 
 func (userRepo *UserRepository) UpdateUser(user *model.User) *model.User {
-	userRepo.MySQLHandler.Conn.Preload("SNS").Model(&user).Select("name", "title").Where("id = ?", user.ID).First(&user).Updates(model.User{Name: user.Name, ScheduleTitle: user.ScheduleTitle})
+	fmt.Println(user.ScheduleTitle)
+	userRepo.MySQLHandler.Conn.Debug().Preload("SNS").Select("name", "schedule_title").Where("id = ?", user.ID).First(&user).Updates(model.User{Name: user.Name, ScheduleTitle: user.ScheduleTitle})
+	fmt.Println(user.ScheduleTitle)
 	return user
 }
