@@ -44,6 +44,6 @@ func (userRepo *UserRepository) ScheduleFromName(name string, year string, month
 }
 
 func (userRepo *UserRepository) UpdateUser(user *model.User) *model.User {
-	userRepo.MySQLHandler.Conn.Preload("sns").Model(&user).Where("id = ?", user.ID).First(&user).Update("name", "title")
+	userRepo.MySQLHandler.Conn.Preload("SNS").Model(&user).Select("name", "title").Where("id = ?", user.ID).First(&user).Updates(model.User{Name: user.Name, ScheduleTitle: user.ScheduleTitle})
 	return user
 }

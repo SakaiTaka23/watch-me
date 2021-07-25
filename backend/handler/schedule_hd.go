@@ -4,6 +4,7 @@ import (
 	"backend/entity/model"
 	"backend/handler/request"
 	"backend/usecase"
+	"log"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -21,10 +22,12 @@ func (handler *ScheduleHandler) CreateSchedule(c *fiber.Ctx) error {
 	var request request.CreateSchedule
 	var schedule *model.Schedule
 	user := c.Locals("user").(model.User)
-	if err := c.BodyParser(request); err != nil {
+	if err := c.BodyParser(&request); err != nil {
+		log.Println(err)
 		return c.SendStatus(400)
 	}
 	if err := request.Validate(); err != nil {
+		log.Println(err)
 		return c.SendStatus(400)
 	}
 	schedule = request.ChangeStruct()
