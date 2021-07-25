@@ -5,13 +5,13 @@ import (
 )
 
 type CreateUser struct {
-	Name  string `json:"name" validation:"required"`
-	Email string `json:"email" validation:"email"`
+	Name  string `json:"name" validate:"required"`
+	Email string `json:"email" validate:"email"`
 }
 
 type UpdateUser struct {
-	UserName      string `json:"name" validation:"required,min=1,max=30"`
-	ScheduleTitle string `json:"title" validation:"required,min=1,max=20"`
+	UserName      string `json:"name" validate:"required,min=1,max=30,alpha,lowercase"`
+	ScheduleTitle string `json:"title" validate:"required,min=1,max=20"`
 }
 
 func (c *CreateUser) Validate() error {
