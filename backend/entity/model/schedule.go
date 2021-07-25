@@ -12,5 +12,5 @@ type Schedule struct {
 	Place     string `json:"place"`
 	Title     string `json:"title" gorm:"not null"`
 	URL       string `json:"url"`
-	UserID    string
+	UserID    string `json:"user_id"`
 }
