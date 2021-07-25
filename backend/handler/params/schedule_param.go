@@ -1,6 +1,6 @@
 package params
 
-import "github.com/go-playground/validator"
+import "github.com/go-playground/validator/v10"
 
 type Schedule struct {
 	UID string `validate:"required,uuid5"`

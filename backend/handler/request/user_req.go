@@ -1,7 +1,7 @@
 package request
 
 import (
-	"github.com/go-playground/validator"
+	"github.com/go-playground/validator/v10"
 )
 
 type CreateUser struct {

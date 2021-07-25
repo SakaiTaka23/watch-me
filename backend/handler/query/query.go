@@ -1,6 +1,6 @@
 package query
 
-import "github.com/go-playground/validator"
+import "github.com/go-playground/validator/v10"
 
 type Period struct {
 	Year  string `validate:"required,gte=2021,lte=2025"`
