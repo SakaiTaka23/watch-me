@@ -11,9 +11,9 @@ type CreateSchedule struct {
 	ID        string `json:"id"`
 	About     string `json:"about" validate:"min=1,max=250"`
 	Emoji     string `json:"emoji" validate:"required,min=1,max=20"`
-	Year      string `json:"year" validate:"required,min=2021,max=2025"`
-	Month     string `json:"month" validate:"required,min=1,max=12"`
-	Day       string `json:"day" validate:"required,min=1,max=31"`
+	Year      uint   `json:"year" validate:"required,min=2021,max=2025"`
+	Month     uint   `json:"month" validate:"required,min=1,max=12"`
+	Day       uint   `json:"day" validate:"required,min=1,max=31"`
 	StartTime string `json:"start_time" validate:"required,is-time"`
 	EndTime   string `json:"end_time" validate:"is-time"`
 	Place     string `json:"place" validate:"min=1,max=50"`
