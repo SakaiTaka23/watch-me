@@ -1,7 +1,6 @@
 package mysql
 
 import (
-	"backend/entity/model"
 	"os"
 
 	"gorm.io/driver/mysql"
@@ -18,7 +17,11 @@ func Connect() *MySQLHandler {
 	protocol := "tcp(db:3306)"
 	dbname := os.Getenv("DB_DATABASE")
 
-	connection, err := gorm.Open(mysql.Open(user+":"+pass+"@"+protocol+"/"+dbname), &gorm.Config{})
+	dsn := user + ":" + pass + "@" + protocol + "/" + dbname + "?charset=utf8"
+	connection, err := gorm.Open(mysql.New(mysql.Config{
+		DSN:               dsn,
+		DefaultStringSize: 256,
+	}), &gorm.Config{})
 
 	if err != nil {
 		panic("could not connect to the database")
@@ -26,10 +29,6 @@ func Connect() *MySQLHandler {
 
 	MySQLHandler := new(MySQLHandler)
 	MySQLHandler.Conn = connection
-
-	if err := connection.AutoMigrate(&model.User{}); err != nil {
-		panic(err)
-	}
 
 	return MySQLHandler
 }
