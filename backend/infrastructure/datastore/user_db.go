@@ -35,11 +35,13 @@ func (userRepo *UserRepository) FindFromName(name string) (*model.User, error) {
 	return user, nil
 }
 
-func (userRepo *UserRepository) ScheduleFromName(name string, year string, month string) (*model.Schedule, error) {
-	var schedule *model.Schedule
-	if err := userRepo.MySQLHandler.Conn.Preload("Schedule").Model(&model.User{}).Where("name = ?", name).Where("year = ?", year).Where("month = ?", month).Take(&schedule).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+func (userRepo *UserRepository) ScheduleFromName(name string, year string, month string) ([]*model.Schedule, error) {
+	var schedule []*model.Schedule
+	var user *model.User
+	if err := userRepo.MySQLHandler.Conn.Where("name = ?", name).Take(&user).Error; errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, err
 	}
+	userRepo.MySQLHandler.Conn.Where("user_id = ?", user.ID).Where("year = ?", year).Where("month = ?", month).Find(&schedule)
 	return schedule, nil
 }
 
