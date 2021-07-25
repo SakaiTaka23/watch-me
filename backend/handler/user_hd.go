@@ -2,6 +2,7 @@ package handler
 
 import (
 	"backend/entity/model"
+	"backend/handler/params"
 	"backend/handler/request"
 	"backend/usecase"
 
@@ -33,11 +34,13 @@ func (handler *UserHandler) CreateUser(c *fiber.Ctx) error {
 }
 
 func (handler *UserHandler) GetUserProfile(c *fiber.Ctx) error {
-	username := c.Params("username")
-	if username == "" || len(username) > 30 {
+	username := params.User{
+		UserName: c.Params("username"),
+	}
+	if err := username.Validate(); err != nil {
 		return c.SendStatus(404)
 	}
-	userInfo, err := handler.userUsecase.GetUserProfile(username)
+	userInfo, err := handler.userUsecase.GetUserProfile(username.UserName)
 	if err != nil {
 		return c.SendStatus(404)
 	}
@@ -45,10 +48,15 @@ func (handler *UserHandler) GetUserProfile(c *fiber.Ctx) error {
 }
 
 func (handler *UserHandler) GetUserSchedule(c *fiber.Ctx) error {
-	name := c.Params("username")
+	username := params.User{
+		UserName: c.Params("username"),
+	}
+	if err := username.Validate(); err != nil {
+		return c.SendStatus(404)
+	}
 	year := c.Query("year")
 	month := c.Query("month")
-	schedule, err := handler.userUsecase.GetUserSchedule(name, year, month)
+	schedule, err := handler.userUsecase.GetUserSchedule(username.UserName, year, month)
 	if err != nil {
 		return c.SendStatus(404)
 	}
