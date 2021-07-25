@@ -143,6 +143,7 @@ paths:
         name: schedule
         in: path
         required: true
+        description: スケジュールのuid
     delete:
       summary: delete schedule
       tags:
@@ -152,6 +153,8 @@ paths:
           description: 削除完了
         '401':
           description: Unauthorized
+        '404':
+          description: Not Found
       operationId: delete-schedule-schedule
       description: |-
         スケジュールを消す
@@ -297,9 +300,12 @@ paths:
     parameters:
       - schema:
           type: string
+          maxLength: 30
+          minLength: 1
         name: username
         in: path
         required: true
+        description: ユーザー名
     get:
       summary: Get User Schedule by User ID
       tags:
@@ -322,9 +328,12 @@ paths:
     parameters:
       - schema:
           type: string
+          minLength: 1
+          maxLength: 30
         name: username
         in: path
         required: true
+        description: ユーザー名
     get:
       summary: user get info
       tags:

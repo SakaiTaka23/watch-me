@@ -3,6 +3,7 @@ package handler
 import (
 	"backend/entity/model"
 	"backend/handler/params"
+	"backend/handler/query"
 	"backend/handler/request"
 	"backend/usecase"
 
@@ -54,9 +55,14 @@ func (handler *UserHandler) GetUserSchedule(c *fiber.Ctx) error {
 	if err := username.Validate(); err != nil {
 		return c.SendStatus(404)
 	}
-	year := c.Query("year")
-	month := c.Query("month")
-	schedule, err := handler.userUsecase.GetUserSchedule(username.UserName, year, month)
+	period := query.Period{
+		Year:  c.Query("year"),
+		Month: c.Query("month"),
+	}
+	if err := period.Validate(); err != nil {
+		return c.SendStatus(404)
+	}
+	schedule, err := handler.userUsecase.GetUserSchedule(username.UserName, period.Year, period.Month)
 	if err != nil {
 		return c.SendStatus(404)
 	}
