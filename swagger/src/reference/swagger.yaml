@@ -10,7 +10,7 @@ info:
     name: github
     url: SakaiTaka23
 servers:
-  - url: 'http://localhost:8000'
+  - url: 'http://localhost:5000'
 paths:
   /schedule:
     post:
@@ -138,9 +138,12 @@ paths:
     parameters:
       - schema:
           type: string
+          minLength: 40
+          maxLength: 40
         name: schedule
         in: path
         required: true
+        description: スケジュールのuid
     delete:
       summary: delete schedule
       tags:
@@ -150,8 +153,12 @@ paths:
           description: 削除完了
         '401':
           description: Unauthorized
+        '404':
+          description: Not Found
       operationId: delete-schedule-schedule
-      description: スケジュールを消す
+      description: |-
+        スケジュールを消す
+        今のところ既に削除されたものをリクエストしても200を返す
       security:
         - Firebase: []
       parameters:
@@ -173,7 +180,7 @@ paths:
               examples:
                 example-1:
                   value:
-                    id: string
+                    id: 6ba7b810-9dad-11d1-80b4-00c04fd430c8
                     about: string
                     emoji: string
                     year: 2021
@@ -184,6 +191,7 @@ paths:
                     place: string
                     title: string
                     url: 'http://example.com'
+                    user_id: 6ba7b810-9dad-11d1-80b4-00c04fd430c8
         '404':
           description: Not Found
       description: スケジュールの情報を取得する
@@ -211,10 +219,6 @@ paths:
                   name: string
                   email: string
               properties:
-                id:
-                  type: string
-                  minLength: 1
-                  format: uuid
                 name:
                   type: string
                   minLength: 1
@@ -223,17 +227,20 @@ paths:
                   minLength: 1
                   format: email
               required:
-                - id
                 - name
-                - email
             examples:
               example-1:
                 value:
-                  id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
                   name: string
                   email: user@example.com
+              example-2:
+                value:
+                  name: string
         description: firebaseより得た要素を入れる
-      description: ユーザーを新規登録
+      description: |-
+        ユーザーを新規登録
+
+        ユーザーが既に存在している(uidが既に登録されている)場合であっても200を返す
       parameters: []
       security:
         - Firebase: []
@@ -247,7 +254,11 @@ paths:
           $ref: '#/components/responses/UserUpdateResult'
         '401':
           description: Unauthorized
-      description: ユーザーのスケジュールタイトル・名前の更新を行う
+      description: |-
+        ユーザーのスケジュールタイトル・名前の更新を行う
+
+        【確認】
+        スケジュール、SNSがある時にSNSのみ取得しているかどうかを確認しておく
       security:
         - Firebase: []
       requestBody:
@@ -264,23 +275,23 @@ paths:
                 name:
                   type: string
                   minLength: 1
-                  maxLength: 10
-                schedule_title:
+                  maxLength: 30
+                title:
                   type: string
                   minLength: 1
                   maxLength: 20
               required:
                 - name
-                - schedule_title
+                - title
             examples:
               両方変更:
                 value:
                   name: string
-                  schedule_title: string
+                  title: string
               名前のみを変更:
                 value:
                   name: string
-                  schedule_title: default value
+                  title: default value
         description: 両方を更新する場合片方を更新する場合どちらであっても両方の情報を送信する
       tags:
         - user
@@ -289,9 +300,12 @@ paths:
     parameters:
       - schema:
           type: string
+          maxLength: 30
+          minLength: 1
         name: username
         in: path
         required: true
+        description: ユーザー名
     get:
       summary: Get User Schedule by User ID
       tags:
@@ -314,9 +328,12 @@ paths:
     parameters:
       - schema:
           type: string
+          minLength: 1
+          maxLength: 30
         name: username
         in: path
         required: true
+        description: ユーザー名
     get:
       summary: user get info
       tags:
@@ -327,7 +344,9 @@ paths:
         '404':
           description: Not Found
       operationId: get-user-username-info
-      description: そのユーザーに関する基本的な情報を返す
+      description: |-
+        そのユーザーに関する基本的な情報を返す
+        ユーザーのemailが入っているので削除しておく
       security: []
 components:
   schemas:
@@ -346,7 +365,7 @@ components:
           title: string
           url: string
       examples:
-        - id: string
+        - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
           about: string
           emoji: string
           year: 2021
@@ -357,12 +376,14 @@ components:
           place: string
           title: string
           url: 'http://example.com'
+          user_id: a169451c-8525-4352-b8ca-070dd449a1a5
       x-tags:
         - schedule
       x-internal: false
       properties:
         id:
           type: string
+          format: uuid
         about:
           type: string
           minLength: 1
@@ -402,6 +423,9 @@ components:
           type: string
           minLength: 1
           format: uri
+        user_id:
+          type: string
+          format: uuid
       required:
         - emoji
         - year
@@ -409,6 +433,7 @@ components:
         - day
         - start_time
         - title
+        - user_id
     SNS:
       description: snsの情報
       type: object
@@ -530,12 +555,18 @@ components:
                 sns:
                   - {}
             properties:
+              id:
+                type: string
+                format: uuid
               name:
                 type: string
                 minLength: 1
-              schedule_title:
+              title:
                 type: string
                 minLength: 1
+              email:
+                type: string
+                format: email
               sns:
                 type: array
                 uniqueItems: true
@@ -543,8 +574,19 @@ components:
                 items:
                   $ref: '#/components/schemas/SNS'
             required:
+              - id
               - name
-              - schedule_title
+              - title
+          examples:
+            example-1:
+              value:
+                id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                name: string
+                title: string
+                email: user@example.com
+                sns:
+                  - id: '1'
+                    url: 'http://example.com'
     UserSchedule:
       description: Example response
       content:
@@ -556,7 +598,7 @@ components:
           examples:
             example-1:
               value:
-                - id: string
+                - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
                   about: string
                   emoji: string
                   year: 2021
@@ -567,6 +609,7 @@ components:
                   place: string
                   title: string
                   url: 'http://example.com'
+                  user_id: a169451c-8525-4352-b8ca-070dd449a1a5
   parameters:
     year:
       name: year

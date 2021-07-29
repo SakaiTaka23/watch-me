@@ -2,6 +2,8 @@ package handler
 
 import (
 	"backend/entity/model"
+	"backend/handler/params"
+	"backend/handler/query"
 	"backend/handler/request"
 	"backend/usecase"
 
@@ -33,11 +35,13 @@ func (handler *UserHandler) CreateUser(c *fiber.Ctx) error {
 }
 
 func (handler *UserHandler) GetUserProfile(c *fiber.Ctx) error {
-	username := c.Params("username")
-	if username == "" || len(username) > 30 {
+	username := params.User{
+		UserName: c.Params("username"),
+	}
+	if err := username.Validate(); err != nil {
 		return c.SendStatus(404)
 	}
-	userInfo, err := handler.userUsecase.GetUserProfile(username)
+	userInfo, err := handler.userUsecase.GetUserProfile(username.UserName)
 	if err != nil {
 		return c.SendStatus(404)
 	}
@@ -45,10 +49,20 @@ func (handler *UserHandler) GetUserProfile(c *fiber.Ctx) error {
 }
 
 func (handler *UserHandler) GetUserSchedule(c *fiber.Ctx) error {
-	name := c.Params("username")
-	year := c.Query("year")
-	month := c.Query("month")
-	schedule, err := handler.userUsecase.GetUserSchedule(name, year, month)
+	username := params.User{
+		UserName: c.Params("username"),
+	}
+	if err := username.Validate(); err != nil {
+		return c.SendStatus(404)
+	}
+	period := query.Period{
+		Year:  c.Query("year"),
+		Month: c.Query("month"),
+	}
+	if err := period.Validate(); err != nil {
+		return c.SendStatus(404)
+	}
+	schedule, err := handler.userUsecase.GetUserSchedule(username.UserName, period.Year, period.Month)
 	if err != nil {
 		return c.SendStatus(404)
 	}
@@ -67,6 +81,5 @@ func (handler *UserHandler) UpdateUser(c *fiber.Ctx) error {
 	user.Name = request.UserName
 	user.ScheduleTitle = request.ScheduleTitle
 	handler.userUsecase.UpdateUser(&user)
-
 	return c.JSON(user)
 }

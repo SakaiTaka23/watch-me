@@ -24,7 +24,7 @@ func (scheduleRepo *ScheduleRepository) CreateSchedule(schedule *model.Schedule)
 }
 
 func (scheduleRepo *ScheduleRepository) DeleteSchedule(id string) {
-	scheduleRepo.MySQLHandler.Conn.Delete(&model.Schedule{}, id)
+	scheduleRepo.MySQLHandler.Conn.Where("id = ?", id).Delete(&model.Schedule{})
 }
 
 func (scheduleRepo *ScheduleRepository) GetScheduleInfo(id string) (*model.Schedule, error) {

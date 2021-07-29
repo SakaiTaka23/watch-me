@@ -2,6 +2,7 @@ package handler
 
 import (
 	"backend/entity/model"
+	"backend/handler/params"
 	"backend/handler/request"
 	"backend/usecase"
 
@@ -21,7 +22,7 @@ func (handler *ScheduleHandler) CreateSchedule(c *fiber.Ctx) error {
 	var request request.CreateSchedule
 	var schedule *model.Schedule
 	user := c.Locals("user").(model.User)
-	if err := c.BodyParser(request); err != nil {
+	if err := c.BodyParser(&request); err != nil {
 		return c.SendStatus(400)
 	}
 	if err := request.Validate(); err != nil {
@@ -35,20 +36,24 @@ func (handler *ScheduleHandler) CreateSchedule(c *fiber.Ctx) error {
 }
 
 func (handler *ScheduleHandler) DeleteSchedule(c *fiber.Ctx) error {
-	id := c.Params("schedule")
-	if len(id) > 40 {
-		return c.SendStatus(400)
+	param := params.Schedule{
+		UID: c.Params("schedule"),
 	}
-	handler.scheduleUsecase.DeleteSchedule(id)
+	if err := param.Validate(); err != nil {
+		return c.SendStatus(404)
+	}
+	handler.scheduleUsecase.DeleteSchedule(param.UID)
 	return c.SendStatus(200)
 }
 
 func (handler *ScheduleHandler) GetSchedule(c *fiber.Ctx) error {
-	id := c.Params("schedule")
-	if len(id) > 40 {
-		return c.SendStatus(400)
+	param := params.Schedule{
+		UID: c.Params("schedule"),
 	}
-	schedule, err := handler.scheduleUsecase.FindSchedule(id)
+	if err := param.Validate(); err != nil {
+		return c.SendStatus(404)
+	}
+	schedule, err := handler.scheduleUsecase.FindSchedule(param.UID)
 	if err != nil {
 		return c.SendStatus(404)
 	}
