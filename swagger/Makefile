@@ -2,7 +2,7 @@ build: ## dockerイメージ作成
 	docker build -t redoc-cli -f Dockerfile .
 
 doc: ## ドキュメント作成
-	docker run --rm -it  -v $(PWD):/data redoc-cli bundle src/reference/swagger.yaml
+	docker run --rm -it  -v $(PWD):/data redoc-cli bundle reference/swagger.yaml
 
 open: ## 生成されたドキュメントを開く
 	open redoc-static.html

@@ -614,8 +614,6 @@ components:
         minLength: 1
         maxLength: 12
       description: 検索したい月
-security:
-  - Firebase: []
 tags:
   - name: schedule
   - name: sns
