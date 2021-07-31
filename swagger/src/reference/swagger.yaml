@@ -217,22 +217,16 @@ paths:
                 example-1:
                   id: string
                   name: string
-                  email: string
               properties:
                 name:
                   type: string
                   minLength: 1
-                email:
-                  type: string
-                  minLength: 1
-                  format: email
               required:
                 - name
             examples:
               example-1:
                 value:
                   name: string
-                  email: user@example.com
               example-2:
                 value:
                   name: string
@@ -344,9 +338,7 @@ paths:
         '404':
           description: Not Found
       operationId: get-user-username-info
-      description: |-
-        そのユーザーに関する基本的な情報を返す
-        ユーザーのemailが入っているので削除しておく
+      description: そのユーザーに関する基本的な情報を返す
       security: []
 components:
   schemas:
@@ -464,7 +456,12 @@ components:
           id: string
           name: string
           schedule_title: string
-          email: string
+      examples:
+        - id: string
+          name: string
+          schedule_title: string
+      x-tags:
+        - user
       properties:
         id:
           type: string
@@ -475,22 +472,10 @@ components:
         schedule_title:
           type: string
           minLength: 1
-        email:
-          type: string
-          minLength: 1
-          format: email
       required:
         - id
         - name
         - schedule_title
-        - email
-      examples:
-        - id: string
-          name: string
-          schedule_title: string
-          email: user@example.com
-      x-tags:
-        - user
   securitySchemes:
     Firebase:
       type: oauth2
@@ -550,23 +535,23 @@ components:
             type: object
             x-examples:
               example-1:
+                id: string
                 name: string
                 schedule_title: string
                 sns:
-                  - {}
+                  - id: '1'
+                    url: 'http://example.com'
             properties:
               id:
                 type: string
+                minLength: 1
                 format: uuid
               name:
                 type: string
                 minLength: 1
-              title:
+              schedule_title:
                 type: string
                 minLength: 1
-              email:
-                type: string
-                format: email
               sns:
                 type: array
                 uniqueItems: true
@@ -576,14 +561,14 @@ components:
             required:
               - id
               - name
-              - title
+              - schedule_title
+              - sns
           examples:
             example-1:
               value:
                 id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
                 name: string
-                title: string
-                email: user@example.com
+                schedule_title: string
                 sns:
                   - id: '1'
                     url: 'http://example.com'
