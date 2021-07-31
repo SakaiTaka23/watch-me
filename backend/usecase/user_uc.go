@@ -6,7 +6,7 @@ import (
 )
 
 type UserUsecase interface {
-	CreateUser(user *model.User)
+	CreateUser(user *model.User) error
 	GetUserProfile(name string) (*model.User, error)
 	GetUserSchedule(name string, year string, month string) ([]*model.Schedule, error)
 	UpdateUser(user *model.User) *model.User
@@ -21,9 +21,16 @@ func NewUserUsecase(userRepo repository.UserRepository) UserUsecase {
 	return &userUsecase
 }
 
-func (usecase *userUsecase) CreateUser(user *model.User) {
+func (usecase *userUsecase) CreateUser(user *model.User) error {
+	if user.Name == "" {
+		user.Name = "ユーザー" + user.ID
+	}
 	user.ScheduleTitle = "マイスケジュール"
-	usecase.userRepo.CreateUser(user)
+	_, err := usecase.userRepo.CreateUser(user)
+	if err != nil {
+		return err
+	}
+	return err
 }
 
 func (usecase *userUsecase) GetUserProfile(name string) (*model.User, error) {

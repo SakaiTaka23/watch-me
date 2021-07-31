@@ -207,6 +207,8 @@ paths:
           description: OK
         '401':
           description: Unauthorized
+        '409':
+          description: 既にユーザー
       requestBody:
         content:
           application/json:

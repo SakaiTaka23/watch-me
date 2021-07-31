@@ -29,7 +29,9 @@ func (handler *UserHandler) CreateUser(c *fiber.Ctx) error {
 		return c.SendStatus(400)
 	}
 	user.Name = request.Name
-	handler.userUsecase.CreateUser(&user)
+	if err := handler.userUsecase.CreateUser(&user); err != nil {
+		return c.SendStatus(409)
+	}
 	return c.SendStatus(200)
 }
 
