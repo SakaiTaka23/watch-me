@@ -343,6 +343,48 @@ paths:
       operationId: get-user-username-info
       description: そのユーザーに関する基本的な情報を返す
       security: []
+  '/user/{username}/unique':
+    parameters:
+      - schema:
+          type: string
+        name: username
+        in: path
+        required: true
+        description: ユーザー名
+    get:
+      summary: check unique username
+      tags:
+        - user
+      responses:
+        '200':
+          description: 判定結果
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                x-examples:
+                  example-1:
+                    result: bool
+                properties:
+                  result:
+                    type: boolean
+                required:
+                  - result
+              examples:
+                'true':
+                  value:
+                    result: true
+                'false':
+                  value:
+                    result: false
+        '400':
+          description: ユーザー名がない場合・長すぎる場合に返す
+      operationId: get-user-username-unique
+      description: |-
+        ユーザー名を入れそのユーザー名が既に存在しているかどうかを判定し返す
+        結果によらずステータスは200を返す
+      security: []
 components:
   schemas:
     Schedule:

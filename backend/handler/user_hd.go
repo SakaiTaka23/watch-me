@@ -19,6 +19,19 @@ func NewUserHandler(userUsecase usecase.UserUsecase) UserHandler {
 	return userHandler
 }
 
+func (handler *UserHandler) CheckUnique(c *fiber.Ctx) error {
+	username := params.User{
+		UserName: c.Params("username"),
+	}
+	if err := username.Validate(); err != nil {
+		return c.SendStatus(400)
+	}
+	result := handler.userUsecase.CheckUnique(username.UserName)
+	return c.JSON(fiber.Map{
+		"result": result,
+	})
+}
+
 func (handler *UserHandler) CreateUser(c *fiber.Ctx) error {
 	user := c.Locals("user").(model.User)
 	request := new(request.CreateUser)
