@@ -3,13 +3,15 @@ package usecase
 import (
 	"backend/entity/model"
 	"backend/entity/repository"
+	"errors"
 )
 
 type UserUsecase interface {
+	CheckUnique(name string) bool
 	CreateUser(user *model.User) error
 	GetUserProfile(name string) (*model.User, error)
 	GetUserSchedule(name string, year string, month string) ([]*model.Schedule, error)
-	UpdateUser(user *model.User) *model.User
+	UpdateUser(user *model.User) (*model.User, error)
 }
 
 type userUsecase struct {
@@ -19,6 +21,10 @@ type userUsecase struct {
 func NewUserUsecase(userRepo repository.UserRepository) UserUsecase {
 	userUsecase := userUsecase{userRepo: userRepo}
 	return &userUsecase
+}
+
+func (usecase *userUsecase) CheckUnique(name string) bool {
+	return usecase.userRepo.CheckUnique(name)
 }
 
 func (usecase *userUsecase) CreateUser(user *model.User) error {
@@ -41,6 +47,9 @@ func (usecase *userUsecase) GetUserSchedule(name string, year string, month stri
 	return usecase.userRepo.ScheduleFromName(name, year, month)
 }
 
-func (usecase *userUsecase) UpdateUser(user *model.User) *model.User {
-	return usecase.userRepo.UpdateUser(user)
+func (usecase *userUsecase) UpdateUser(user *model.User) (*model.User, error) {
+	if !usecase.CheckUnique(user.Name) {
+		return nil, errors.New("not an unique username")
+	}
+	return usecase.userRepo.UpdateUser(user), nil
 }

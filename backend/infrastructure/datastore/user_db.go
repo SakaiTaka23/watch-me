@@ -18,6 +18,12 @@ func NewUserRepository(sqlHandler mysql.MySQLHandler) repository.UserRepository 
 	return &userRepository
 }
 
+func (userRepo *UserRepository) CheckUnique(name string) bool {
+	count := int64(0)
+	userRepo.MySQLHandler.Conn.Model(&model.User{}).Where("name = ?", name).Count(&count)
+	return count <= 0
+}
+
 func (userRepo *UserRepository) CreateUser(user *model.User) (string, error) {
 	if err := userRepo.MySQLHandler.Conn.Create(&user).Error; errors.Is(err, gorm.ErrInvalidTransaction) {
 		return "", err

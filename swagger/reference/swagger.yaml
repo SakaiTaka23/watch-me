@@ -236,7 +236,9 @@ paths:
       description: |-
         ユーザーを新規登録
 
-        ユーザーが既に存在している(uidが既に登録されている)場合であっても200を返す
+        ユーザーが既に存在している(uidが既に登録されている)場合409を返す
+
+        ユーザーの初期値は「ユーザー+uid」
       parameters: []
       security:
         - Firebase: []
@@ -250,11 +252,10 @@ paths:
           $ref: '#/components/responses/UserUpdateResult'
         '401':
           description: Unauthorized
-      description: |-
+        '409':
+          description: 既に存在する名前が出たときにコンフリクト
+      description: |
         ユーザーのスケジュールタイトル・名前の更新を行う
-
-        【確認】
-        スケジュール、SNSがある時にSNSのみ取得しているかどうかを確認しておく
       security:
         - Firebase: []
       requestBody:
