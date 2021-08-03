@@ -9,16 +9,16 @@ import (
 
 type CreateSchedule struct {
 	ID        string `json:"id"`
-	About     string `json:"about" validate:"min=1,max=250"`
+	About     string `json:"about" validate:"omitempty,min=1,max=250"`
 	Emoji     string `json:"emoji" validate:"required,min=1,max=20"`
 	Year      uint16 `json:"year" validate:"required,min=2021,max=2025"`
 	Month     uint8  `json:"month" validate:"required,min=1,max=12"`
 	Day       uint8  `json:"day" validate:"required,min=1,max=31"`
 	StartTime string `json:"start_time" validate:"required,is-time"`
-	EndTime   string `json:"end_time" validate:"is-time"`
-	Place     string `json:"place" validate:"min=1,max=50"`
+	EndTime   string `json:"end_time" validate:"omitempty,is-time"`
+	Place     string `json:"place" validate:"omitempty,min=1,max=50"`
 	Title     string `json:"title" validate:"required,min=1,max=20"`
-	URL       string `json:"url" validate:"url"`
+	URL       string `json:"url" validate:"omitempty,url"`
 	UserID    string
 }
 
