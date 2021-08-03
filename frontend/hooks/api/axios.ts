@@ -1,5 +1,9 @@
-import axios from 'axios';
+import axios, { AxiosInstance } from 'axios';
 
-const fetcherGet = (url: string) => axios.get(url).then((res) => res.data);
+let axiosInstance: AxiosInstance = axios.create({
+  baseURL: 'http://127.0.0.1:5000',
+  timeout: 1000,
+  headers: { 'Content-Type': 'application/json' },
+});
 
-export { fetcherGet };
+export default axiosInstance;
