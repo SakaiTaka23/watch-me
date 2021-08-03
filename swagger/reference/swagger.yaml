@@ -223,15 +223,12 @@ paths:
                 name:
                   type: string
                   minLength: 1
-              required:
-                - name
             examples:
-              example-1:
+              メール・パスワード認証時:
                 value:
                   name: string
-              example-2:
-                value:
-                  name: string
+              プロパイダ認証時:
+                value: {}
         description: firebaseより得た要素を入れる
       description: |-
         ユーザーを新規登録
