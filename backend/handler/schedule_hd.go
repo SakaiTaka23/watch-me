@@ -31,8 +31,10 @@ func (handler *ScheduleHandler) CreateSchedule(c *fiber.Ctx) error {
 	schedule = request.ChangeStruct()
 	schedule.UserID = user.ID
 
-	handler.scheduleUsecase.CreateSchedule(schedule)
-	return c.JSON(schedule.ID)
+	id := handler.scheduleUsecase.CreateSchedule(schedule)
+	return c.JSON(fiber.Map{
+		"id": id,
+	})
 }
 
 func (handler *ScheduleHandler) DeleteSchedule(c *fiber.Ctx) error {
