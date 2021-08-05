@@ -1,13 +1,14 @@
 import { Emoji } from 'emoji-mart';
 import { useRouter } from 'next/router';
-import useGetSchedules from '../../hooks/api/schedule/useGetSchedules';
+import useGetSchedules from '../../hooks/api/user/useGetSchedules';
 
 const GetUserSchedule = () => {
   const router = useRouter();
   const { username } = router.query;
   if (!username) return null;
   const user: string = Array.isArray(username) ? username['username'] : username;
-  const { schedules, isLoading, isError } = useGetSchedules(user);
+
+  const { schedules, isLoading, isError } = useGetSchedules(user, 2021, 8);
   console.log(schedules);
   if (isLoading) {
     return <h1>Loading</h1>;
