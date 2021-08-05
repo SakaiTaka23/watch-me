@@ -9,6 +9,6 @@ type UserRepository interface {
 	CreateUser(user *model.User) (string, error)
 	DeleteUser(id string)
 	FindFromName(name string) (*model.User, error)
-	ScheduleFromName(name string, year string, month string) ([]*model.Schedule, error)
+	ScheduleFromName(name string, year uint16, month uint8) ([]*model.Schedule, error)
 	UpdateUser(user *model.User) *model.User
 }
