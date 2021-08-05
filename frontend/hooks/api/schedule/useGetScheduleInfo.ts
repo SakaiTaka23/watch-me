@@ -3,7 +3,7 @@ import { Schedule } from '../../../types/model/schedule';
 import { fetcher } from '../axios';
 
 const useGetScheduleInfo = (id: string) => {
-  const { data, error } = useSWR(`/schedule/${id}`, fetcher);
+  const { data, error } = useSWR<Schedule, any>(`/schedule/${id}`, fetcher);
 
   return {
     info: data,
