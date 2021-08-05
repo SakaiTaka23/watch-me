@@ -5,6 +5,6 @@ const axiosInstance: AxiosInstance = axios.create({
   headers: { 'Content-Type': 'application/json' },
 });
 
-const fetcher = (url: string) => axios.get(url).then((res) => res.data);
+const fetcher = (url: string) => axiosInstance.get(url).then((res) => res.data);
 
 export { axiosInstance, fetcher };
