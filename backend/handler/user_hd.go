@@ -7,7 +7,6 @@ import (
 	"backend/handler/request"
 	"backend/usecase"
 	"log"
-	"strconv"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -72,18 +71,9 @@ func (handler *UserHandler) GetUserSchedule(c *fiber.Ctx) error {
 		log.Println(err)
 		return c.SendStatus(404)
 	}
-	yearS := c.Query("year")
-	var year uint16
-	tmp, _ := strconv.ParseUint(yearS, 10, 16)
-	year = uint16(tmp)
-
-	monthS := c.Query("month")
-	var month uint8
-	tmp, _ = strconv.ParseUint(monthS, 10, 8)
-	month = uint8(tmp)
-	period := query.Period{
-		Year:  year,
-		Month: month,
+	period := new(query.Period)
+	if err := c.QueryParser(period); err != nil {
+		return c.SendStatus(404)
 	}
 	if err := period.Validate(); err != nil {
 		log.Println(err)
