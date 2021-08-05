@@ -23,6 +23,7 @@ const GetUserSchedule = () => {
           <div key={index}>
             <Emoji emoji={schedule.emoji} size={64} />
             <h1>{schedule.title}</h1>
+            <h4>{schedule.id}</h4>
             <br />
           </div>
         );
