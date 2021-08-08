@@ -223,15 +223,12 @@ paths:
                 name:
                   type: string
                   minLength: 1
-              required:
-                - name
             examples:
-              example-1:
+              メール・パスワード認証時:
                 value:
                   name: string
-              example-2:
-                value:
-                  name: string
+              プロパイダ認証時:
+                value: {}
         description: firebaseより得た要素を入れる
       description: |-
         ユーザーを新規登録
@@ -645,9 +642,12 @@ components:
       name: year
       in: query
       schema:
-        type: string
+        type: number
         minLength: 2021
         maxLength: 2025
+        minimum: 2021
+        maximum: 2025
+        example: 2021
       description: 検索したい年
       required: true
     month:
@@ -655,9 +655,12 @@ components:
       in: query
       required: true
       schema:
-        type: string
+        type: number
         minLength: 1
         maxLength: 12
+        minimum: 1
+        maximum: 12
+        example: 8
       description: 検索したい月
 tags:
   - name: schedule

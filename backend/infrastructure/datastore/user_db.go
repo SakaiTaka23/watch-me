@@ -43,7 +43,7 @@ func (userRepo *UserRepository) FindFromName(name string) (*model.User, error) {
 	return user, nil
 }
 
-func (userRepo *UserRepository) ScheduleFromName(name string, year string, month string) ([]*model.Schedule, error) {
+func (userRepo *UserRepository) ScheduleFromName(name string, year uint16, month uint8) ([]*model.Schedule, error) {
 	var schedule []*model.Schedule
 	var user *model.User
 	if err := userRepo.MySQLHandler.Conn.Where("name = ?", name).Take(&user).Error; errors.Is(err, gorm.ErrRecordNotFound) {

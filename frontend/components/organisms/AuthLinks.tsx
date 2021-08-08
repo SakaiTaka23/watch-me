@@ -18,13 +18,16 @@ const AuthLinks = () => {
           .then((token) => {
             if (isNewUser) {
               console.log(token);
-              const data = {};
-              axios.post('user', data, {
-                headers: {
-                  'Content-Type': 'application/json',
-                  Authorization: `Bearer ${token}`,
-                },
-              });
+              axios.post(
+                'user',
+                {},
+                {
+                  headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                  },
+                }
+              );
             }
           });
 

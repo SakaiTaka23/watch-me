@@ -10,7 +10,7 @@ type UserUsecase interface {
 	CheckUnique(name string) bool
 	CreateUser(user *model.User) error
 	GetUserProfile(name string) (*model.User, error)
-	GetUserSchedule(name string, year string, month string) ([]*model.Schedule, error)
+	GetUserSchedule(name string, year uint16, month uint8) ([]*model.Schedule, error)
 	UpdateUser(user *model.User) (*model.User, error)
 }
 
@@ -43,7 +43,7 @@ func (usecase *userUsecase) GetUserProfile(name string) (*model.User, error) {
 	return usecase.userRepo.FindFromName(name)
 }
 
-func (usecase *userUsecase) GetUserSchedule(name string, year string, month string) ([]*model.Schedule, error) {
+func (usecase *userUsecase) GetUserSchedule(name string, year uint16, month uint8) ([]*model.Schedule, error) {
 	return usecase.userRepo.ScheduleFromName(name, year, month)
 }
 

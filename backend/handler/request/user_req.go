@@ -5,8 +5,7 @@ import (
 )
 
 type CreateUser struct {
-	Name  string `json:"name" validate:"required"`
-	Email string `json:"email" validate:"email"`
+	Name string `json:"name"`
 }
 
 type UpdateUser struct {
