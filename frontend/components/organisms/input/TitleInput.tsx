@@ -11,7 +11,7 @@ const TitleInput = () => {
       margin='normal'
       placeholder='Title *'
       fullWidth
-      {...register('title,', {
+      {...register('title', {
         required: true,
       })}
     />
