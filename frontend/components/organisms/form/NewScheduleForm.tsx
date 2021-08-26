@@ -45,7 +45,7 @@ const NewScheduleForm = () => {
         <FormProvider {...methods}>
           <form className={classes.form} onSubmit={methods.handleSubmit(handleClick)}>
             <TitleInput />
-            {/* <EmojiInput /> */}
+            <EmojiInput />
             {/* <PeriodInput /> */}
             <AboutInput />
             <PlaceInput />

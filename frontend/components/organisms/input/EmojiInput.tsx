@@ -1,4 +1,4 @@
-import { Box, Grid, IconButton, makeStyles, Modal, TextField, Typography } from '@material-ui/core';
+import { Box, IconButton, makeStyles, Modal, TextField, Typography } from '@material-ui/core';
 import { Emoji, Picker } from 'emoji-mart';
 import React, { useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
