@@ -1,4 +1,4 @@
-import { Box, IconButton, makeStyles, Modal, TextField, Typography } from '@material-ui/core';
+import { Box, Grid, IconButton, makeStyles, Modal, TextField, Typography } from '@material-ui/core';
 import { Emoji, Picker } from 'emoji-mart';
 import React, { useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
@@ -66,17 +66,12 @@ const EmojiInput = () => {
 
   return (
     <>
-      {/*
-      TODO
-      実際に選んだ絵文字のプレビュー機能も欲しいかな
-      絵文字のプレビューと絵文字を選ぶボタンはできれば横並びにしたいかな
-      */}
       <Box display='flex' alignItems='center' flexDirection='row'>
         <TextField
           value={emoji}
           variant='outlined'
           margin='normal'
-          placeholder='Please Pick An Emoji*'
+          placeholder='Please Pick An Emoji *'
           fullWidth
           InputProps={{ readOnly: true }}
           {...register('emoji', {
