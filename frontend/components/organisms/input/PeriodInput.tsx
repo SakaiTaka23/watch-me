@@ -73,9 +73,6 @@ const PeriodInput = () => {
         InputLabelProps={{
           shrink: true,
         }}
-        inputProps={{
-          step: 300,
-        }}
         {...register('start_time')}
         onChange={handleStartTimeChange}
       />
@@ -85,9 +82,6 @@ const PeriodInput = () => {
         defaultValue={`${dt.getHours() + 1}:${dt.getMinutes()}`}
         InputLabelProps={{
           shrink: true,
-        }}
-        inputProps={{
-          step: 300,
         }}
         {...register('end_time')}
         onChange={handleEndTimeChange}
