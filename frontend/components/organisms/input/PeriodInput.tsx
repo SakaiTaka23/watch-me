@@ -11,9 +11,8 @@ const PeriodInput = () => {
     formState: { errors },
   } = useFormContext();
   const [year, setYear] = useState(2021);
-  const [day, setDay] = useState(new Date());
-  const [startTime, setStartTime] = useState(new Date());
-  const [endTime, setEndTime] = useState(new Date());
+  const dt = new Date();
+  const [day, setDay] = useState(dt);
 
   const handleYearChange = (e: ChangeEvent<HTMLInputElement>) => {
     const y = e.target.value;
@@ -26,6 +25,14 @@ const PeriodInput = () => {
     setValue('date', date.getDate());
   };
 
+  const handleStartTimeChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setValue('start_time', e.target.value);
+  };
+
+  const handleEndTimeChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setValue('end_time', e.target.value);
+  };
+
   useEffect(() => {
     setValue('year', year);
   }, [year]);
@@ -34,11 +41,12 @@ const PeriodInput = () => {
     const date = new Date();
     setValue('month', date.getMonth() + 1);
     setValue('date', date.getDate());
+    setValue('start_time', `${date.getHours()}:${date.getMinutes()}`);
+    setValue('end_time', `${date.getHours() + 1}:${date.getMinutes()}`);
   }, []);
 
   return (
     <>
-      {/* 2021~2025の間の範囲に収まるべき */}
       <TextField
         type='number'
         defaultValue={year}
@@ -55,27 +63,35 @@ const PeriodInput = () => {
       )}
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <DatePicker disableToolbar variant='inline' format='MM/dd' value={day} onChange={handleDateChange} />
-        <input type='hidden' {...register('month')} />
-        <input type='hidden' {...register('date')} />
-
-        <TimePicker
-          showTodayButton
-          todayLabel='now'
-          ampm={false}
-          value={startTime}
-          minutesStep={5}
-          onChange={setStartTime}
-        />
-
-        <TimePicker
-          showTodayButton
-          todayLabel='now'
-          ampm={false}
-          value={endTime}
-          minutesStep={5}
-          onChange={setEndTime}
-        />
       </MuiPickersUtilsProvider>
+      <input type='hidden' {...register('month')} />
+      <input type='hidden' {...register('date')} />
+
+      <TextField
+        type='time'
+        defaultValue={`${dt.getHours()}:${dt.getMinutes()}`}
+        InputLabelProps={{
+          shrink: true,
+        }}
+        inputProps={{
+          step: 300,
+        }}
+        {...register('start_time')}
+        onChange={handleStartTimeChange}
+      />
+
+      <TextField
+        type='time'
+        defaultValue={`${dt.getHours() + 1}:${dt.getMinutes()}`}
+        InputLabelProps={{
+          shrink: true,
+        }}
+        inputProps={{
+          step: 300,
+        }}
+        {...register('end_time')}
+        onChange={handleEndTimeChange}
+      />
     </>
   );
 };
