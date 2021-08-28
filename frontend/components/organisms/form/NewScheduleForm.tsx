@@ -44,12 +44,12 @@ const NewScheduleForm = () => {
       <div className={classes.paper}>
         <FormProvider {...methods}>
           <form className={classes.form} onSubmit={methods.handleSubmit(handleClick)}>
-            <TitleInput />
-            <EmojiInput />
-            {/* <PeriodInput /> */}
-            <AboutInput />
-            <PlaceInput />
-            <URLInput />
+            {/* <TitleInput />
+            <EmojiInput /> */}
+            <PeriodInput />
+            {/* <AboutInput /> */}
+            {/* <PlaceInput />
+            <URLInput /> */}
             <SubmitButton />
           </form>
         </FormProvider>
