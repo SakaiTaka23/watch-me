@@ -31,8 +31,8 @@ func (s *CreateSchedule) ChangeStruct() *model.Schedule {
 	var schedule model.Schedule
 	schedule.About = s.About
 	schedule.Emoji = s.Emoji
-	schedule.StartDate, _ = time.Parse("2006/01/02 15:00", s.StartDate)
-	schedule.EndDate, _ = time.Parse("2006/01/02 15:00", s.EndDate)
+	schedule.StartDate, _ = time.Parse("2006/01/02T15:00", s.StartDate)
+	schedule.EndDate, _ = time.Parse("2006/01/02T15:00", s.EndDate)
 	schedule.Place = s.Place
 	schedule.Title = s.Title
 	schedule.URL = s.URL
