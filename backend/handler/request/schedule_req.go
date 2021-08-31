@@ -32,11 +32,7 @@ func (s *CreateSchedule) ChangeStruct() *model.Schedule {
 	schedule.About = s.About
 	schedule.Emoji = s.Emoji
 	schedule.StartDate, _ = time.Parse("2006/01/02 15:00", s.StartDate)
-	end, _ := time.Parse("2006/01/02 15:00", s.EndDate)
-	schedule.EndDate = &end
-	if schedule.EndDate.IsZero() {
-		schedule.EndDate = nil
-	}
+	schedule.EndDate, _ = time.Parse("2006/01/02 15:00", s.EndDate)
 	schedule.Place = s.Place
 	schedule.Title = s.Title
 	schedule.URL = s.URL
