@@ -27,15 +27,10 @@ func (scheduleRepo *ScheduleRepository) DeleteSchedule(id string) {
 	scheduleRepo.MySQLHandler.Conn.Where("id = ?", id).Delete(&model.Schedule{})
 }
 
-func (scheduleRepo *ScheduleRepository) GetScheduleInfo(id string, title string) (*model.Schedule, error) {
+func (scheduleRepo *ScheduleRepository) GetScheduleInfo(schedule_id string, user_id string) (*model.Schedule, error) {
 	var schedule model.Schedule
-	var user model.User
 
-	if err := scheduleRepo.MySQLHandler.Conn.First(&user, "schedule_title = ?", title).Error; errors.Is(err, gorm.ErrRecordNotFound) {
-		return nil, err
-	}
-
-	if err := scheduleRepo.MySQLHandler.Conn.Where("id = ?", id).Where("user_id = ?", user.ID).First(&schedule).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+	if err := scheduleRepo.MySQLHandler.Conn.Where("id = ?", schedule_id).Where("user_id = ?", user_id).First(&schedule).Error; errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, err
 	}
 	return &schedule, nil

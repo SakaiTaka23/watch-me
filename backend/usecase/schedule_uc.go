@@ -34,5 +34,9 @@ func (usecase *scheduleUsecase) DeleteSchedule(id string) {
 }
 
 func (usecase *scheduleUsecase) FindSchedule(id string, title string) (*model.Schedule, error) {
-	return usecase.scheduleRepo.GetScheduleInfo(id, title)
+	userID, err := usecase.userRepo.IDFromTitle(title)
+	if err != nil {
+		return nil, err
+	}
+	return usecase.scheduleRepo.GetScheduleInfo(id, userID)
 }
