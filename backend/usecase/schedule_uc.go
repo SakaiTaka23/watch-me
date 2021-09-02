@@ -15,10 +15,11 @@ type ScheduleUsecase interface {
 
 type scheduleUsecase struct {
 	scheduleRepo repository.ScheduleRepository
+	userRepo     repository.UserRepository
 }
 
-func NewScheduleUsecase(scheduleRepo repository.ScheduleRepository) ScheduleUsecase {
-	scheduleUsecase := scheduleUsecase{scheduleRepo: scheduleRepo}
+func NewScheduleUsecase(scheduleRepo repository.ScheduleRepository, userRepo repository.UserRepository) ScheduleUsecase {
+	scheduleUsecase := scheduleUsecase{scheduleRepo: scheduleRepo, userRepo: userRepo}
 	return &scheduleUsecase
 }
 
