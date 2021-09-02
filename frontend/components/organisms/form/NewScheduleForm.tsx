@@ -1,6 +1,7 @@
 import { Container, makeStyles } from '@material-ui/core';
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import useCreateSchedule from '../../../hooks/api/schedule/useCreateSchedule';
 import SubmitButton from '../../molecules/SubmitButton';
 import AboutInput from '../input/AboutInput';
 import EmojiInput from '../input/EmojiInput';
@@ -29,27 +30,29 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const handleClick = (data: any) => {
-  console.log('clicked');
-  console.log(data);
-  // createSchedule(testAllSchedule);
-  // console.log(error);
-};
-
 const NewScheduleForm = () => {
   const classes = useStyles();
   const methods = useForm();
+  const { createSchedule, id, error } = useCreateSchedule();
+
+  const handleClick = (data: any) => {
+    console.log(data);
+    createSchedule(data);
+    console.log(error);
+    // エラーがなかった場合スケジュールページへリダイレクトする
+  };
+
   return (
     <Container maxWidth='md'>
       <div className={classes.paper}>
         <FormProvider {...methods}>
           <form className={classes.form} onSubmit={methods.handleSubmit(handleClick)}>
-            {/* <TitleInput />
-            <EmojiInput /> */}
+            <TitleInput />
+            <EmojiInput />
             <PeriodInput />
-            {/* <AboutInput /> */}
-            {/* <PlaceInput />
-            <URLInput /> */}
+            <AboutInput />
+            <PlaceInput />
+            <URLInput />
             <SubmitButton />
           </form>
         </FormProvider>

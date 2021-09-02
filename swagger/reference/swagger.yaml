@@ -72,10 +72,10 @@ paths:
                   maxLength: 20
                 start_time:
                   type: string
-                  example: "2021-07-28T15:00"
+                  example: '2021-07-28T15:00'
                 end_time:
                   type: string
-                  example: "2021-07-28T15:00"
+                  example: '2021-07-28T15:00'
                 place:
                   type: string
                   minLength: 1
@@ -111,7 +111,7 @@ paths:
           idを除いたスケジュールモデルを想定
           idはバックエンドで生成
           emojiに関しては作成時のフォームでは必須にはしない。埋められていない場合はフロントエンド側でランダムに一つ決めて送信する
-  '/schedule/{schedule}':
+  '/schedule/{user}/{schedule}':
     parameters:
       - schema:
           type: string
@@ -121,6 +121,11 @@ paths:
         in: path
         required: true
         description: スケジュールのuid
+      - schema:
+          type: string
+        name: user
+        in: path
+        required: true
     delete:
       summary: delete schedule
       tags:
@@ -157,18 +162,15 @@ paths:
               examples:
                 example-1:
                   value:
-                    id: 6ba7b810-9dad-11d1-80b4-00c04fd430c8
+                    id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
                     about: string
                     emoji: string
-                    year: 2021
-                    month: 1
-                    day: 1
-                    start_time: '11:00'
-                    end_time: '17:00'
+                    start_time: '2021-07-28T15:00'
+                    end_time: '2021-07-28T15:00'
                     place: string
                     title: string
                     url: 'http://example.com'
-                    user_id: 6ba7b810-9dad-11d1-80b4-00c04fd430c8
+                    user_id: a169451c-8525-4352-b8ca-070dd449a1a5
         '404':
           description: Not Found
       description: スケジュールの情報を取得する
@@ -267,16 +269,18 @@ paths:
       tags:
         - user
         - sns
-  '/user/{username}':
+  '/user/{title}/{id}':
     parameters:
       - schema:
           type: string
-          maxLength: 30
-          minLength: 1
-        name: username
+        name: title
         in: path
         required: true
-        description: ユーザー名
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
     get:
       summary: Get User Schedule by User ID
       tags:
@@ -401,12 +405,10 @@ components:
         start_time:
           type: string
           minLength: 1
-          pattern: '^([01][0-9]|2[0-3]):[0-5][0-9]$'
           example: '11:00'
         end_time:
           type: string
           minLength: 1
-          pattern: '^([01][0-9]|2[0-3]):[0-5][0-9]$'
           example: '17:00'
         place:
           type: string

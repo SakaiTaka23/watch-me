@@ -31,7 +31,7 @@ func (usecase *userUsecase) CreateUser(user *model.User) error {
 	if user.Name == "" {
 		user.Name = "ユーザー" + user.ID
 	}
-	user.ScheduleTitle = "マイスケジュール"
+	user.ScheduleTitle = "myschedule" + user.ID
 	_, err := usecase.userRepo.CreateUser(user)
 	if err != nil {
 		return err
