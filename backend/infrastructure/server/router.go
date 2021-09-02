@@ -21,10 +21,10 @@ func SetRouter(app *fiber.App) *fiber.App {
 	user.Post("/", userHandler.CreateUser)
 	user.Patch("/", userHandler.UpdateUser)
 
-	app.Get("/schedule/:user/:schedule", scheduleHandler.GetSchedule)
+	app.Get("/schedule/:title/:schedule", scheduleHandler.GetSchedule)
 	schedule := app.Group("/schedule", authMiddleware)
 	schedule.Post("/", scheduleHandler.CreateSchedule)
-	schedule.Delete("/:user/:schedule", scheduleHandler.DeleteSchedule)
+	schedule.Delete("/:title/:schedule", scheduleHandler.DeleteSchedule)
 
 	return app
 }
