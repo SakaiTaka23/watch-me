@@ -41,7 +41,8 @@ func (handler *ScheduleHandler) CreateSchedule(c *fiber.Ctx) error {
 
 func (handler *ScheduleHandler) DeleteSchedule(c *fiber.Ctx) error {
 	param := params.Schedule{
-		UID: c.Params("schedule"),
+		User: c.Params("user"),
+		UID:  c.Params("schedule"),
 	}
 	if err := param.Validate(); err != nil {
 		return c.SendStatus(404)
@@ -52,12 +53,13 @@ func (handler *ScheduleHandler) DeleteSchedule(c *fiber.Ctx) error {
 
 func (handler *ScheduleHandler) GetSchedule(c *fiber.Ctx) error {
 	param := params.Schedule{
-		UID: c.Params("schedule"),
+		User: c.Params("user"),
+		UID:  c.Params("schedule"),
 	}
 	if err := param.Validate(); err != nil {
 		return c.SendStatus(404)
 	}
-	schedule, err := handler.scheduleUsecase.FindSchedule(param.UID)
+	schedule, err := handler.scheduleUsecase.FindSchedule(param.UID, param.User)
 	if err != nil {
 		return c.SendStatus(404)
 	}
