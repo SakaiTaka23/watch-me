@@ -30,8 +30,7 @@ func InjectUserUsecase() usecase.UserUsecase {
 
 func InjectScheduleUsecase() usecase.ScheduleUsecase {
 	scheduleRepo := InjectScheduleRepository()
-	userRepo := InjectUserRepository()
-	return usecase.NewScheduleUsecase(scheduleRepo, userRepo)
+	return usecase.NewScheduleUsecase(scheduleRepo)
 }
 
 func InjectUserHandler() handler.UserHandler {
