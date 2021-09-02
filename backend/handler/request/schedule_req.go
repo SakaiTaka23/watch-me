@@ -2,7 +2,7 @@ package request
 
 import (
 	"backend/entity/model"
-	"time"
+	"regexp"
 
 	"github.com/go-playground/validator/v10"
 )
@@ -11,8 +11,11 @@ type CreateSchedule struct {
 	ID        string `json:"id"`
 	About     string `json:"about" validate:"omitempty,min=1,max=250"`
 	Emoji     string `json:"emoji" validate:"required,min=1,max=20"`
-	StartDate string `json:"start_time" validate:"required"`
-	EndDate   string `json:"end_time" validate:"omitempty"`
+	Year      uint16 `json:"year" validate:"required,min=2021,max=2025"`
+	Month     uint8  `json:"month" validate:"required,min=1,max=12"`
+	Day       uint8  `json:"day" validate:"required,min=1,max=31"`
+	StartTime string `json:"start_time" validate:"required,is-time"`
+	EndTime   string `json:"end_time" validate:"omitempty,is-time"`
 	Place     string `json:"place" validate:"omitempty,min=1,max=50"`
 	Title     string `json:"title" validate:"required,min=1,max=20"`
 	URL       string `json:"url" validate:"omitempty,url"`
@@ -21,6 +24,7 @@ type CreateSchedule struct {
 
 func (s *CreateSchedule) Validate() error {
 	validate := validator.New()
+	_ = validate.RegisterValidation("is-time", isTime)
 	if err := validate.Struct(s); err != nil {
 		return err
 	}
@@ -28,13 +32,12 @@ func (s *CreateSchedule) Validate() error {
 }
 
 func (s *CreateSchedule) ChangeStruct() *model.Schedule {
-	var schedule model.Schedule
-	schedule.About = s.About
-	schedule.Emoji = s.Emoji
-	schedule.StartDate, _ = time.Parse("2006/01/02T15:00", s.StartDate)
-	schedule.EndDate, _ = time.Parse("2006/01/02T15:00", s.EndDate)
-	schedule.Place = s.Place
-	schedule.Title = s.Title
-	schedule.URL = s.URL
+	schedule := model.Schedule(*s)
 	return &schedule
+}
+
+func isTime(fl validator.FieldLevel) bool {
+	str := fl.Field().String()
+	re := regexp.MustCompile(`^([01][0-9]|2[0-3]):[0-5][0-9]$`)
+	return re.MatchString(str)
 }
