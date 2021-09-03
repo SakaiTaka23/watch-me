@@ -1,4 +1,4 @@
-import { Typography } from '@material-ui/core';
+import { Box, Grid, Typography } from '@material-ui/core';
 import { Emoji } from 'emoji-mart';
 import { GetServerSideProps } from 'next';
 import React, { FC } from 'react';
@@ -9,14 +9,23 @@ type Props = {
   id: string;
 };
 
+const defaultProps = {
+  m: 2,
+  p: 5,
+  border: 2,
+  borderRadius: 16,
+};
+
 const info = {
   id: '497f6eca-6276-4993-bfeb-53cbbbba6f08',
-  about: 'string',
+  about: `Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque quaerat labore
+      veniam molestias distinctio temporibus error blanditiis culpa illum fuga?
+      Exercitationem quidem veniam deleniti consequatur incidunt nobis dolores repellendus debitis!`,
   emoji: 'leg',
   start_time: '2021-07-28T15:00',
   end_time: '2021-07-28T15:00',
-  place: 'string',
-  title: 'string',
+  place: 'YouTube',
+  title: 'title',
   url: 'http://example.com',
   user_id: 'a169451c-8525-4352-b8ca-070dd449a1a5',
 };
@@ -26,14 +35,35 @@ const Index: FC<Props> = ({ schedule_title, id }) => {
   // const { info, isLoading, isError } = useGetScheduleInfo(id, schedule_title);
 
   return (
-    <div>
-      <Emoji emoji={info.emoji} size={64} />
-      <Typography>{info.title}</Typography>
-      <Typography>{`${info.start_time}〜${info?.end_time}`}</Typography>
-      <Typography>{info?.place}</Typography>
-      <Typography>{info?.url}</Typography>
-      <Typography>{info?.about}</Typography>
-    </div>
+    <Grid container direction='column' justifyContent='center' alignContent='center' wrap='wrap'>
+      <Grid item xs={8}>
+        <Box display='flex' justifyContent='center'>
+          <Emoji emoji={info.emoji} size={128} />
+        </Box>
+      </Grid>
+      <Grid item xs={8}>
+        <Box display='flex' justifyContent='center'>
+          <Typography variant='h3'>{info.title}</Typography>
+        </Box>
+      </Grid>
+      <Grid item xs={8}>
+        <Box {...defaultProps}>
+          <Typography variant='h5'>{`Starts : ${info.start_time}`}</Typography>
+          <Typography variant='h5'>{`Ends : ${info?.end_time ?? '未定'}`}</Typography>
+        </Box>
+      </Grid>
+      <Grid item xs={8}>
+        <Box {...defaultProps}>
+          <Typography variant='h5'>{info?.place}</Typography>
+          <Typography variant='h5'>{info?.url}</Typography>
+        </Box>
+      </Grid>
+      <Grid item xs={8}>
+        <Box {...defaultProps}>
+          <Typography variant='h5'>{info?.about}</Typography>
+        </Box>
+      </Grid>
+    </Grid>
   );
 };
 
