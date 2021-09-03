@@ -16,17 +16,31 @@ const defaultProps = {
   borderRadius: 16,
 };
 
+// const info = {
+//   id: '497f6eca-6276-4993-bfeb-53cbbbba6f08',
+//   about: `Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque quaerat labore
+//       veniam molestias distinctio temporibus error blanditiis culpa illum fuga?
+//       Exercitationem quidem veniam deleniti consequatur incidunt nobis dolores repellendus debitis!`,
+//   emoji: 'leg',
+//   start_time: '2021-07-28T15:00',
+//   end_time: '2021-07-28T15:00',
+//   place: 'YouTube',
+//   title: 'title',
+//   url: 'http://example.com',
+//   user_id: 'a169451c-8525-4352-b8ca-070dd449a1a5',
+// };
+
 const info = {
   id: '497f6eca-6276-4993-bfeb-53cbbbba6f08',
   about: `Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque quaerat labore
-      veniam molestias distinctio temporibus error blanditiis culpa illum fuga?
-      Exercitationem quidem veniam deleniti consequatur incidunt nobis dolores repellendus debitis!`,
+       veniam molestias distinctio temporibus error blanditiis culpa illum fuga?
+       Exercitationem quidem veniam deleniti consequatur incidunt nobis dolores repellendus debitis!`,
   emoji: 'leg',
   start_time: '2021-07-28T15:00',
-  end_time: '2021-07-28T15:00',
-  place: 'YouTube',
+  end_time: null,
+  place: null,
   title: 'title',
-  url: 'http://example.com',
+  url: null,
   user_id: 'a169451c-8525-4352-b8ca-070dd449a1a5',
 };
 
@@ -48,19 +62,31 @@ const Index: FC<Props> = ({ schedule_title, id }) => {
       </Grid>
       <Grid item xs={8}>
         <Box {...defaultProps}>
-          <Typography variant='h5'>{`Starts : ${info.start_time}`}</Typography>
-          <Typography variant='h5'>{`Ends : ${info?.end_time ?? '未定'}`}</Typography>
+          <Typography variant='h5'>Starts</Typography>
+          <hr />
+          <Typography variant='h5'>{info.start_time}</Typography>
+          <br />
+          <Typography variant='h5'>Ends</Typography>
+          <hr />
+          <Typography variant='h5'>{info?.end_time ?? '未定'}</Typography>
         </Box>
       </Grid>
       <Grid item xs={8}>
         <Box {...defaultProps}>
-          <Typography variant='h5'>{info?.place}</Typography>
-          <Typography variant='h5'>{info?.url}</Typography>
+          <Typography variant='h5'>Place</Typography>
+          <hr />
+          <Typography variant='h5'>{info?.place ?? '未記入'}</Typography>
+          <br />
+          <Typography variant='h5'>URL</Typography>
+          <hr />
+          <Typography variant='h5'>{info?.url ?? '未記入'}</Typography>
         </Box>
       </Grid>
       <Grid item xs={8}>
         <Box {...defaultProps}>
-          <Typography variant='h5'>{info?.about}</Typography>
+          <Typography variant='h5'>About</Typography>
+          <hr />
+          <Typography variant='h5'>{info?.about ?? '未記入'}</Typography>
         </Box>
       </Grid>
     </Grid>
