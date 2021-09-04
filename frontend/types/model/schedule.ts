@@ -7,6 +7,7 @@ type Schedule = {
   place?: string;
   title: string;
   url?: string;
+  user_id: string;
 };
 
 export type { Schedule };
