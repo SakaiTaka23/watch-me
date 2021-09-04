@@ -1,43 +1,99 @@
-import { Typography } from '@material-ui/core';
+import { Box, Grid, Typography } from '@material-ui/core';
 import { Emoji } from 'emoji-mart';
 import { GetServerSideProps } from 'next';
 import React, { FC } from 'react';
-import { Schedule } from '../../../types/model/schedule';
+import useGetScheduleInfo from '../../../hooks/api/schedule/useGetScheduleInfo';
 
 type Props = {
-  schedule: Schedule;
+  schedule_title: string;
+  id: string;
 };
 
-const Index: FC<Props> = ({ schedule }) => {
+const defaultProps = {
+  display: 'flex',
+  justifyContent: 'center',
+  flexDirection: 'column',
+  m: 2,
+  p: 5,
+  border: 2,
+  borderRadius: 16,
+};
+
+const info = {
+  id: '497f6eca-6276-4993-bfeb-53cbbbba6f08',
+  about: `Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque quaerat labore
+      veniam molestias distinctio temporibus error blanditiis culpa illum fuga?
+      Exercitationem quidem veniam deleniti consequatur incidunt nobis dolores repellendus debitis!`,
+  emoji: 'leg',
+  start_time: '2021-07-28T15:00',
+  end_time: '2021-07-28T15:00',
+  place: 'YouTube',
+  title: 'title',
+  url: 'http://example.com',
+  user_id: 'a169451c-8525-4352-b8ca-070dd449a1a5',
+};
+
+const Index: FC<Props> = ({ schedule_title, id }) => {
+  console.log(schedule_title, id);
+  // const { info, isLoading, isError } = useGetScheduleInfo(id, schedule_title);
+
   return (
-    <div>
-      <Emoji emoji={schedule.emoji} size={64} />
-      <Typography>{schedule.title}</Typography>
-      <Typography>{`${schedule.start_time}〜${schedule?.end_time}`}</Typography>
-      <Typography>{schedule?.place}</Typography>
-      <Typography>{schedule?.url}</Typography>
-      <Typography>{schedule?.about}</Typography>
-    </div>
+    <Grid container direction='column' justifyContent='center' alignContent='center'>
+      <Grid item xs={8}>
+        <Box display='flex' justifyContent='center'>
+          <Emoji emoji={info.emoji} size={128} />
+        </Box>
+      </Grid>
+      <Grid item xs={8}>
+        <Box display='flex' justifyContent='center'>
+          <Typography variant='h3'>{info.title}</Typography>
+        </Box>
+      </Grid>
+      <Grid item xs={8}>
+        <Box {...defaultProps}>
+          <Typography variant='h5'>Starts</Typography>
+          <hr />
+          <Typography variant='h5'>{info.start_time}</Typography>
+          <br />
+          <Typography variant='h5'>Ends</Typography>
+          <hr />
+          <Typography variant='h5'>{info?.end_time ?? '未定'}</Typography>
+        </Box>
+      </Grid>
+      <Grid item xs={8}>
+        <Box {...defaultProps}>
+          <Typography variant='h5'>Place</Typography>
+          <hr />
+          <Typography variant='h5'>{info?.place ?? '未記入'}</Typography>
+          <br />
+          <Typography variant='h5'>URL</Typography>
+          <hr />
+          <Typography variant='h5'>{info?.url ?? '未記入'}</Typography>
+        </Box>
+      </Grid>
+      <Grid item xs={8}>
+        <Box {...defaultProps}>
+          <Typography variant='h5'>About</Typography>
+          <hr />
+          <Typography variant='h5'>{info?.about ?? '未記入'}</Typography>
+        </Box>
+      </Grid>
+    </Grid>
   );
 };
 
 export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
   const { schedule_title, id } = context.params;
-  console.log(schedule_title, id);
-  const schedule = {
-    id: '122344',
-    about: 'string',
-    emoji: 'leg',
-    start_time: '2021-08-31T15:00',
-    end_time: '2021-08-31T16:30',
-    place: 'YouTube',
-    title: 'log',
-    url: 'https://youtube.com/',
-    user_id: '1234',
-  };
+  if (Array.isArray(schedule_title) || Array.isArray(id)) {
+    return {
+      notFound: true,
+    };
+  }
+
   return {
     props: {
-      schedule,
+      schedule_title: schedule_title,
+      id: id,
     },
   };
 };
