@@ -269,20 +269,28 @@ paths:
       tags:
         - user
         - sns
-  '/user/{title}/{id}':
+  '/user/{title}/{year}/{month}':
     parameters:
       - schema:
           type: string
         name: title
         in: path
         required: true
+        description: ユーザーのスケジュールのタイトル
       - schema:
           type: string
-        name: id
+        name: year
         in: path
         required: true
+        description: 検索する年
+      - schema:
+          type: string
+        name: month
+        in: path
+        required: true
+        description: 検索する月
     get:
-      summary: Get User Schedule by User ID
+      summary: Get User Schedule by User Title
       tags:
         - user
         - schedule
@@ -291,13 +299,31 @@ paths:
           $ref: '#/components/responses/UserSchedule'
         '404':
           description: Not Found
+        '':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Schedule'
+              examples:
+                example-1:
+                  value:
+                    - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      about: string
+                      emoji: string
+                      start_time: '2021-07-28T15:00'
+                      end_time: '2021-07-28T15:00'
+                      place: string
+                      title: string
+                      url: 'http://example.com'
+                      user_id: a169451c-8525-4352-b8ca-070dd449a1a5
+          description: スケジュール一覧を返す
       operationId: get-user-username
       description: |-
-        ユーザーネームからスケジュールを返す
-        スケジュールに関してはクエリで指定された年・月のもののみ返す
-      parameters:
-        - $ref: '#/components/parameters/year'
-        - $ref: '#/components/parameters/month'
+        ユーザーのスケジュールタイトルからスケジュールを返す
+        年・月をつけつけてその期間に始まるスケジュールのみ返す
+      parameters: []
       security: []
   '/user/{username}/info':
     parameters:
