@@ -14,7 +14,7 @@ func SetRouter(app *fiber.App) *fiber.App {
 	userHandler := injector.InjectUserHandler()
 	scheduleHandler := injector.InjectScheduleHandler()
 
-	app.Get("/user/:username", userHandler.GetUserSchedule)
+	app.Get("/user/:title/:year/:month", userHandler.GetUserSchedule)
 	app.Get("/user/:username/info", userHandler.GetUserProfile)
 	app.Get("/user/:username/unique", userHandler.CheckUnique)
 	user := app.Group("/user", authMiddleware)
