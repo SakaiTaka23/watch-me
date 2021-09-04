@@ -7,9 +7,9 @@ type User struct {
 }
 
 type UserSchedule struct {
-	Title string `validate:"required,gte=1,let=30"`
-	Year  string `validate:"required,gte=4,let=4"`
-	Month string `validate:"required,gte=1,let=2"`
+	Title string `validate:"required,gte=1,lte=30"`
+	Year  string `validate:"required,len=4"`
+	Month string `validate:"required,gte=1,lte=2"`
 }
 
 func (u *User) Validate() error {
