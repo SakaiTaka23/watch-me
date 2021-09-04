@@ -51,13 +51,15 @@ func (userRepo *UserRepository) IDFromTitle(id string) (string, error) {
 	return user.ID, nil
 }
 
-func (userRepo *UserRepository) ScheduleFromName(name string, year uint16, month uint8) ([]*model.Schedule, error) {
+func (userRepo *UserRepository) ScheduleFromName(name string, period string) ([]*model.Schedule, error) {
 	var schedule []*model.Schedule
-	var user *model.User
-	if err := userRepo.MySQLHandler.Conn.Where("name = ?", name).Take(&user).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+	uid, err := userRepo.IDFromTitle(name)
+	if err != nil {
 		return nil, err
 	}
-	userRepo.MySQLHandler.Conn.Where("user_id = ?", user.ID).Where("year = ?", year).Where("month = ?", month).Find(&schedule)
+	if err := userRepo.MySQLHandler.Conn.Raw("SELECT * FROM schedules WHERE user_id = ? WHERE DATE_FORMAT(start_date, '%Y%m') = ?", uid, period).Scan(&schedule).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, err
+	}
 	return schedule, nil
 }
 
