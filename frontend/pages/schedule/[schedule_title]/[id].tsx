@@ -85,7 +85,6 @@ const Index: FC<Props> = ({ schedule_title, id }) => {
 export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
   const { schedule_title, id } = context.params;
   if (Array.isArray(schedule_title) || Array.isArray(id)) {
-    console.log(schedule_title, id);
     return {
       notFound: true,
     };
