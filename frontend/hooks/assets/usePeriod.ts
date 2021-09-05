@@ -5,6 +5,11 @@ const usePeriod = () => {
   const [year, setYear] = useState(date.getFullYear());
   const [month, setMonth] = useState(date.getMonth() + 1);
 
+  const ShowToday = () => {
+    setYear(date.getFullYear());
+    setMonth(date.getMonth() + 1);
+  };
+
   const NextYear = () => {
     const next = year + 1;
     if (next != 2026) {
@@ -46,6 +51,7 @@ const usePeriod = () => {
   return {
     year,
     month,
+    ShowToday,
     changeMonth,
     NextMonth,
     PreMonth,
