@@ -18,7 +18,7 @@ const TimeFormat = (schedule: Schedule) => {
     (start_time.getMinutes() < 10 ? '0' : '') + start_time.getMinutes()
   }`;
   const end_time = new Date(schedule?.end_time);
-  if (end_time == null) {
+  if (Number.isNaN(end_time.getDate())) {
     return start_format;
   } else {
     const end_format = `${end_time.getHours()}:${(end_time.getMinutes() < 10 ? '0' : '') + end_time.getMinutes()}`;
