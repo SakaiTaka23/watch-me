@@ -1,19 +1,24 @@
-import { ListItem, ListItemAvatar, ListItemText, Typography } from '@material-ui/core';
+import { Box, Grid, Typography } from '@material-ui/core';
 import { Emoji } from 'emoji-mart';
 import React, { FC } from 'react';
-import { Schedule } from '../../../types/model/schedule';
+import TimeFormat, { Schedule } from '../../../types/model/schedule';
 
 const ScheduleCard: FC<Schedule> = (schedule) => {
+  const month = new Date(schedule.start_time).getMonth();
+  const period = TimeFormat(schedule);
   return (
-    <ListItem alignItems='flex-start'>
-      <ListItemAvatar>
+    <Grid item>
+      <Grid container direction='row' justifyContent='space-around' alignItems='center'>
+        <Typography variant='h1'>{month}</Typography>
+        <Grid item xs={6}>
+          <Box display='flex' flexDirection='column'>
+            <Typography variant='h5'>{schedule.title}</Typography>
+            <Typography variant='subtitle1'>{period}</Typography>
+          </Box>
+        </Grid>
         <Emoji emoji={schedule.emoji} size={64} />
-      </ListItemAvatar>
-      <ListItemText
-        primary={`${schedule.title}`}
-        secondary={<Typography>{`${schedule.start_time}~${schedule?.end_time ?? ''}`}</Typography>}
-      />
-    </ListItem>
+      </Grid>
+    </Grid>
   );
 };
 

@@ -1,4 +1,4 @@
-import { List, makeStyles } from '@material-ui/core';
+import { Grid, makeStyles } from '@material-ui/core';
 import { GetServerSideProps } from 'next';
 import { FC, useState } from 'react';
 import ScheduleCard from '../../components/organisms/card/ScheduleCard';
@@ -22,7 +22,7 @@ const schedules: Schedule[] = [
     about: 'about',
     emoji: 'leg',
     start_time: '2021-07-28T15:00',
-    end_time: '2021-07-28T15:00',
+    end_time: '',
     place: 'place',
     title: 'title',
     url: 'http://example.com',
@@ -42,7 +42,6 @@ const schedules: Schedule[] = [
 ];
 
 const GetUserSchedule: FC<Props> = ({ schedule_title }) => {
-  const classes = useStyles();
   const date = new Date();
   const [year, setYear] = useState(date.getFullYear());
   const [month, setMonth] = useState(date.getMonth());
@@ -50,11 +49,11 @@ const GetUserSchedule: FC<Props> = ({ schedule_title }) => {
   console.log(schedules);
 
   return (
-    <List className={classes.root}>
+    <Grid container direction='column' spacing={2}>
       {schedules.map((schedule, i) => {
         return <ScheduleCard key={i} {...schedule} />;
       })}
-    </List>
+    </Grid>
   );
 };
 
