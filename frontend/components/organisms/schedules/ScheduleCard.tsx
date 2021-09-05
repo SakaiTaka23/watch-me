@@ -3,7 +3,11 @@ import { Emoji } from 'emoji-mart';
 import React, { FC } from 'react';
 import TimeFormat, { Schedule } from '../../../types/model/schedule';
 
-const ScheduleCard: FC<Schedule> = (schedule) => {
+type Props = {
+  schedule: Schedule;
+};
+
+const ScheduleCard: FC<Props> = ({ schedule }) => {
   const month = new Date(schedule.start_time).getMonth();
   const period = TimeFormat(schedule);
   return (

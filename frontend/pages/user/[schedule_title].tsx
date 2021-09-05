@@ -1,7 +1,8 @@
 import { Grid, makeStyles } from '@material-ui/core';
 import { GetServerSideProps } from 'next';
 import { FC, useState } from 'react';
-import ScheduleCard from '../../components/organisms/card/ScheduleCard';
+import ScheduleCard from '../../components/organisms/schedules/ScheduleCard';
+import ScheduleList from '../../components/organisms/schedules/ScheduleList';
 import useGetSchedules from '../../hooks/api/user/useGetSchedules';
 import { Schedule } from '../../types/model/schedule';
 
@@ -18,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
 
 const schedules: Schedule[] = [
   {
-    id: '497f6eca-6276-4993-bfeb-53cbbbba6f08',
+    id: '497f6eca-6276-4993-bfeb-53cbbbba6f07',
     about: 'about',
     emoji: 'leg',
     start_time: '2021-07-28T15:00',
@@ -46,15 +47,8 @@ const GetUserSchedule: FC<Props> = ({ schedule_title }) => {
   const [year, setYear] = useState(date.getFullYear());
   const [month, setMonth] = useState(date.getMonth());
   // const { schedules, isLoading, isError } = useGetSchedules(schedule_title, year, month);
-  console.log(schedules);
 
-  return (
-    <Grid container direction='column' spacing={2}>
-      {schedules.map((schedule, i) => {
-        return <ScheduleCard key={i} {...schedule} />;
-      })}
-    </Grid>
-  );
+  return <ScheduleList schedule_title={schedule_title} schedules={schedules} />;
 };
 
 export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
