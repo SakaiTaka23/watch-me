@@ -1,57 +1,48 @@
+import { List, makeStyles } from '@material-ui/core';
 import { GetServerSideProps } from 'next';
 import { FC, useState } from 'react';
+import ScheduleCard from '../../components/organisms/card/ScheduleCard';
 import useGetSchedules from '../../hooks/api/user/useGetSchedules';
+import { Schedule } from '../../types/model/schedule';
 
 type Props = {
   schedule_title: string;
 };
 
-const schedules = [
+const useStyles = makeStyles((theme) => ({
+  root: {
+    width: '100%',
+    backgroundColor: theme.palette.background.paper,
+  },
+}));
+
+const schedules: Schedule[] = [
   {
     id: '497f6eca-6276-4993-bfeb-53cbbbba6f08',
-    about: 'string',
-    emoji: 'string',
-    year: 2021,
-    month: 1,
-    day: 1,
-    start_time: '11:00',
-    end_time: '17:00',
-    place: 'string',
-    title: 'string',
+    about: 'about',
+    emoji: 'leg',
+    start_time: '2021-07-28T15:00',
+    end_time: '2021-07-28T15:00',
+    place: 'place',
+    title: 'title',
     url: 'http://example.com',
     user_id: 'a169451c-8525-4352-b8ca-070dd449a1a5',
   },
   {
     id: '497f6eca-6276-4993-bfeb-53cbbbba6f08',
-    about: 'string',
-    emoji: 'string',
-    year: 2021,
-    month: 1,
-    day: 1,
-    start_time: '11:00',
-    end_time: '17:00',
-    place: 'string',
-    title: 'string',
-    url: 'http://example.com',
-    user_id: 'a169451c-8525-4352-b8ca-070dd449a1a5',
-  },
-  {
-    id: '497f6eca-6276-4993-bfeb-53cbbbba6f08',
-    about: 'string',
-    emoji: 'string',
-    year: 2021,
-    month: 1,
-    day: 1,
-    start_time: '11:00',
-    end_time: '17:00',
-    place: 'string',
-    title: 'string',
+    about: 'about',
+    emoji: 'leg',
+    start_time: '2021-07-28T15:00',
+    end_time: '2021-07-28T15:00',
+    place: 'place',
+    title: 'title',
     url: 'http://example.com',
     user_id: 'a169451c-8525-4352-b8ca-070dd449a1a5',
   },
 ];
 
 const GetUserSchedule: FC<Props> = ({ schedule_title }) => {
+  const classes = useStyles();
   const date = new Date();
   const [year, setYear] = useState(date.getFullYear());
   const [month, setMonth] = useState(date.getMonth());
@@ -59,9 +50,11 @@ const GetUserSchedule: FC<Props> = ({ schedule_title }) => {
   console.log(schedules);
 
   return (
-    <>
-      <h1>ok</h1>
-    </>
+    <List className={classes.root}>
+      {schedules.map((schedule, i) => {
+        return <ScheduleCard key={i} {...schedule} />;
+      })}
+    </List>
   );
 };
 
