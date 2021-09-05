@@ -1,7 +1,5 @@
-import { Grid, makeStyles } from '@material-ui/core';
 import { GetServerSideProps } from 'next';
 import { FC, useState } from 'react';
-import ScheduleCard from '../../components/organisms/schedules/ScheduleCard';
 import ScheduleList from '../../components/organisms/schedules/ScheduleList';
 import useGetSchedules from '../../hooks/api/user/useGetSchedules';
 import { Schedule } from '../../types/model/schedule';
@@ -9,13 +7,6 @@ import { Schedule } from '../../types/model/schedule';
 type Props = {
   schedule_title: string;
 };
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    width: '100%',
-    backgroundColor: theme.palette.background.paper,
-  },
-}));
 
 const schedules: Schedule[] = [
   {
