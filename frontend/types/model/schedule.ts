@@ -1,5 +1,5 @@
 type Schedule = {
-  id?: string;
+  id: string;
   about?: string;
   emoji: string;
   start_time: string;
