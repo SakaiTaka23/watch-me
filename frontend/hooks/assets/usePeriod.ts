@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from 'react';
+import { useState } from 'react';
 
 const usePeriod = () => {
   const date = new Date();
@@ -24,8 +24,8 @@ const usePeriod = () => {
     }
   };
 
-  const changeMonth = (e: ChangeEvent<HTMLInputElement>) => {
-    setMonth(Number(e.target.value));
+  const changeMonth = (mon: number) => {
+    setMonth(mon);
   };
 
   const NextMonth = () => {
