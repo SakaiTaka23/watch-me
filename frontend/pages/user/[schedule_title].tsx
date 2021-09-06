@@ -1,7 +1,9 @@
 import { GetServerSideProps } from 'next';
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import ScheduleList from '../../components/organisms/schedules/ScheduleList';
+import Selector from '../../components/organisms/selector/Selector';
 import useGetSchedules from '../../hooks/api/user/useGetSchedules';
+import usePeriod from '../../hooks/assets/usePeriod';
 import { Schedule } from '../../types/model/schedule';
 
 type Props = {
@@ -34,12 +36,15 @@ const schedules: Schedule[] = [
 ];
 
 const GetUserSchedule: FC<Props> = ({ schedule_title }) => {
-  const date = new Date();
-  const [year, setYear] = useState(date.getFullYear());
-  const [month, setMonth] = useState(date.getMonth());
+  const { year, month } = usePeriod();
   // const { schedules, isLoading, isError } = useGetSchedules(schedule_title, year, month);
 
-  return <ScheduleList schedule_title={schedule_title} schedules={schedules} />;
+  return (
+    <>
+      <Selector />
+      <ScheduleList schedule_title={schedule_title} schedules={schedules} />
+    </>
+  );
 };
 
 export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
