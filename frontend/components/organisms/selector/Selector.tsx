@@ -22,7 +22,9 @@ const Selector = () => {
           </Button>
         </div>
       </Grid>
-      <MonthButton />
+      <Box my={3}>
+        <MonthButton />
+      </Box>
     </div>
   );
 };

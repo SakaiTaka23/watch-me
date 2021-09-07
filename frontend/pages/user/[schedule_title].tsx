@@ -1,3 +1,4 @@
+import { Box } from '@material-ui/core';
 import { GetServerSideProps } from 'next';
 import { FC } from 'react';
 import ScheduleList from '../../components/organisms/schedules/ScheduleList';
@@ -12,7 +13,9 @@ type Props = {
 const GetUserSchedule: FC<Props> = ({ schedule_title }) => {
   return (
     <PeriodProvider>
-      <Selector />
+      <Box mt={5} mb={4}>
+        <Selector />
+      </Box>
       <ScheduleList schedule_title={schedule_title} />
     </PeriodProvider>
   );
