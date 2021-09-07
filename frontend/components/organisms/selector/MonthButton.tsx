@@ -1,9 +1,9 @@
-import { Box, Button, ButtonGroup, TextField } from '@material-ui/core';
+import { Box, Button, ButtonGroup } from '@material-ui/core';
 import React from 'react';
-import usePeriod from '../../../hooks/assets/usePeriod';
+import { usePeriod } from '../../../hooks/assets/usePeriod';
 
 const MonthButton = () => {
-  const { month, changeMonth } = usePeriod();
+  const { dispatch, period } = usePeriod();
   const months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
   return (
     <Box display='flex' flexDirection='row' flexWrap='wrap'>
@@ -11,9 +11,11 @@ const MonthButton = () => {
         {months.map((m) => {
           return (
             <Button
-              color={month === m ? 'secondary' : 'primary'}
+              color={period.month === m ? 'secondary' : 'primary'}
               key={m}
-              onClick={() => changeMonth(m)}
+              onClick={() => {
+                dispatch({ type: 'change', month: m });
+              }}
             >{`${m}月`}</Button>
           );
         })}

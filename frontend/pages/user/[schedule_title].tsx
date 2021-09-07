@@ -3,7 +3,7 @@ import { FC } from 'react';
 import ScheduleList from '../../components/organisms/schedules/ScheduleList';
 import Selector from '../../components/organisms/selector/Selector';
 import useGetSchedules from '../../hooks/api/user/useGetSchedules';
-import usePeriod from '../../hooks/assets/usePeriod';
+import { PeriodProvider } from '../../hooks/assets/usePeriod';
 import { Schedule } from '../../types/model/schedule';
 
 type Props = {
@@ -36,14 +36,13 @@ const schedules: Schedule[] = [
 ];
 
 const GetUserSchedule: FC<Props> = ({ schedule_title }) => {
-  const { year, month } = usePeriod();
   // const { schedules, isLoading, isError } = useGetSchedules(schedule_title, year, month);
 
   return (
-    <>
+    <PeriodProvider>
       <Selector />
       <ScheduleList schedule_title={schedule_title} schedules={schedules} />
-    </>
+    </PeriodProvider>
   );
 };
 

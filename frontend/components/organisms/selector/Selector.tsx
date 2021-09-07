@@ -1,19 +1,19 @@
 import { Button, Typography } from '@material-ui/core';
 import { ArrowBack, ArrowForward } from '@material-ui/icons';
 import React from 'react';
-import usePeriod from '../../../hooks/assets/usePeriod';
+import { usePeriod } from '../../../hooks/assets/usePeriod';
 import MonthButton from './MonthButton';
 
 const Selector = () => {
-  const { year, month, ShowToday, NextMonth, PreMonth } = usePeriod();
+  const { period, dispatch } = usePeriod();
   return (
     <div>
-      <Button onClick={() => ShowToday()}>今日</Button>
-      <Typography variant='h5'>{`${year}年${month}月`}</Typography>
-      <Button onClick={PreMonth}>
+      <Button onClick={() => dispatch({ type: 'today' })}>今日</Button>
+      <Typography variant='h5'>{`${period.year}年${period.month}月`}</Typography>
+      <Button onClick={() => dispatch({ type: 'pre_month' })}>
         <ArrowBack />
       </Button>
-      <Button onClick={NextMonth}>
+      <Button onClick={() => dispatch({ type: 'next_month' })}>
         <ArrowForward />
       </Button>
       <MonthButton />
