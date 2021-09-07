@@ -6,7 +6,7 @@ const MonthButton = () => {
   const { dispatch, period } = usePeriod();
   const months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
   return (
-    <Box display='flex' flexDirection='row' flexWrap='wrap'>
+    <Box display='flex' flexDirection='row' flexWrap='wrap' justifyContent='center'>
       <ButtonGroup variant='contained' color='primary' aria-label='outlined primary button group'>
         {months.map((m) => {
           return (
