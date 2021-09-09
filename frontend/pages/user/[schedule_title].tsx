@@ -4,7 +4,6 @@ import { FC } from 'react';
 import ScheduleList from '../../components/organisms/schedules/ScheduleList';
 import Selector from '../../components/organisms/selector/Selector';
 import ProfileCard from '../../components/organisms/user/ProfileCard';
-import useGetSchedules from '../../hooks/api/user/useGetSchedules';
 import { PeriodProvider } from '../../hooks/assets/usePeriod';
 
 type Props = {
