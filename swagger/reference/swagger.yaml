@@ -323,18 +323,17 @@ paths:
       description: |-
         ユーザーのスケジュールタイトルからスケジュールを返す
         年・月をつけつけてその期間に始まるスケジュールのみ返す
+
+        該当する値がない場合は空の配列を返す
       parameters: []
       security: []
-  '/user/{username}/info':
+  '/user/{schedule_title}/info':
     parameters:
       - schema:
           type: string
-          minLength: 1
-          maxLength: 30
-        name: username
+        name: schedule_title
         in: path
         required: true
-        description: ユーザー名
     get:
       summary: user get info
       tags:
@@ -621,6 +620,8 @@ components:
                   title: string
                   url: 'http://example.com'
                   user_id: a169451c-8525-4352-b8ca-070dd449a1a5
+            example-2:
+              value: []
   parameters:
     year:
       name: year
