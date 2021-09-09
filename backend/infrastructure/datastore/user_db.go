@@ -57,7 +57,7 @@ func (userRepo *UserRepository) ScheduleFromName(title string, period string) ([
 	if err != nil {
 		return nil, err
 	}
-	if err := userRepo.MySQLHandler.Conn.Raw("SELECT * FROM schedules WHERE user_id = ? AND DATE_FORMAT(start_date, '%Y%m') = ?", uid, period).Scan(&schedule).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+	if err := userRepo.MySQLHandler.Conn.Where("user_id = ?", uid).Where("DATE_FORMAT(start_date, '%Y%m') = ?", period).Find(&schedule).Error; errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, err
 	}
 	return schedule, nil
