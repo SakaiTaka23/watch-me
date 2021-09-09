@@ -1,39 +1,30 @@
-import { Divider, Grid, Link } from '@material-ui/core';
+import { Box, Divider, Grid, Link, Typography } from '@material-ui/core';
 import React, { FC } from 'react';
-import { Schedule } from '../../../types/model/schedule';
+import useGetSchedules from '../../../hooks/api/user/useGetSchedules';
+import { usePeriod } from '../../../hooks/assets/usePeriod';
 import ScheduleCard from './ScheduleCard';
+import ScheduleIcon from '@material-ui/icons/Schedule';
 
 type Props = {
   schedule_title: string;
 };
 
-const schedules: Schedule[] = [
-  {
-    id: '497f6eca-6276-4993-bfeb-53cbbbba6f07',
-    about: 'about',
-    emoji: 'leg',
-    start_time: '2021-07-28T15:00',
-    end_time: '',
-    place: 'place',
-    title: 'title',
-    url: 'http://example.com',
-    user_id: 'a169451c-8525-4352-b8ca-070dd449a1a5',
-  },
-  {
-    id: '497f6eca-6276-4993-bfeb-53cbbbba6f08',
-    about: 'about',
-    emoji: 'leg',
-    start_time: '2021-07-28T15:00',
-    end_time: '2021-07-28T15:00',
-    place: 'place',
-    title: 'title',
-    url: 'http://example.com',
-    user_id: 'a169451c-8525-4352-b8ca-070dd449a1a5',
-  },
-];
-
 const ScheduleList: FC<Props> = ({ schedule_title }) => {
-  // const { schedules, isLoading, isError } = useGetSchedules(schedule_title, year, month);
+  const { period } = usePeriod();
+  const { schedules, isLoading } = useGetSchedules(schedule_title, period.year, period.month);
+
+  if (isLoading) {
+    return <div>Loading</div>;
+  }
+
+  if (schedules.length === 0) {
+    return (
+      <Box display='flex' justifyContent='center' alignItems='center'>
+        <Typography variant='body1'>組まれている予定はありません</Typography>
+        <ScheduleIcon />
+      </Box>
+    );
+  }
 
   return (
     <Grid container direction='column' spacing={2}>
