@@ -2,8 +2,8 @@ import useSWR from 'swr';
 import { User } from '../../../types/model/user';
 import { fetcher } from '../axios';
 
-const useGetUserInformation = (username: string) => {
-  const { data, error } = useSWR<User, any>(`user/${username}/info`, fetcher);
+const useGetUserInformation = (schedule_title: string) => {
+  const { data, error } = useSWR<User, any>(`user/${schedule_title}/info`, fetcher);
 
   return {
     userInfo: data,
