@@ -3,6 +3,7 @@ import { GetServerSideProps } from 'next';
 import { FC } from 'react';
 import ScheduleList from '../../components/organisms/schedules/ScheduleList';
 import Selector from '../../components/organisms/selector/Selector';
+import ProfileCard from '../../components/organisms/user/ProfileCard';
 import useGetSchedules from '../../hooks/api/user/useGetSchedules';
 import { PeriodProvider } from '../../hooks/assets/usePeriod';
 
@@ -12,12 +13,17 @@ type Props = {
 
 const GetUserSchedule: FC<Props> = ({ schedule_title }) => {
   return (
-    <PeriodProvider>
-      <Box mt={5} mb={4}>
-        <Selector />
+    <>
+      <Box mt={5} mb={2}>
+        <ProfileCard schedule_title={schedule_title} />
       </Box>
-      <ScheduleList schedule_title={schedule_title} />
-    </PeriodProvider>
+      <PeriodProvider>
+        <Box mt={5} mb={4}>
+          <Selector />
+        </Box>
+        <ScheduleList schedule_title={schedule_title} />
+      </PeriodProvider>
+    </>
   );
 };
 
