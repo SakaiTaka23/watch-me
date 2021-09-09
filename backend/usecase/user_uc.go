@@ -7,9 +7,9 @@ import (
 )
 
 type UserUsecase interface {
-	CheckUnique(name string) bool
+	CheckUnique(schedule_title string) bool
 	CreateUser(user *model.User) error
-	GetUserProfile(name string) (*model.User, error)
+	GetUserProfile(schedule_title string) (*model.User, error)
 	GetUserSchedule(title string, year string, month string) ([]*model.Schedule, error)
 	UpdateUser(user *model.User) (*model.User, error)
 }
@@ -23,8 +23,8 @@ func NewUserUsecase(userRepo repository.UserRepository) UserUsecase {
 	return &userUsecase
 }
 
-func (usecase *userUsecase) CheckUnique(name string) bool {
-	return usecase.userRepo.CheckUnique(name)
+func (usecase *userUsecase) CheckUnique(schedule_title string) bool {
+	return usecase.userRepo.CheckUnique(schedule_title)
 }
 
 func (usecase *userUsecase) CreateUser(user *model.User) error {
@@ -39,8 +39,8 @@ func (usecase *userUsecase) CreateUser(user *model.User) error {
 	return err
 }
 
-func (usecase *userUsecase) GetUserProfile(name string) (*model.User, error) {
-	return usecase.userRepo.FindFromName(name)
+func (usecase *userUsecase) GetUserProfile(schedule_title string) (*model.User, error) {
+	return usecase.userRepo.FindFromName(schedule_title)
 }
 
 func (usecase *userUsecase) GetUserSchedule(title string, year string, month string) ([]*model.Schedule, error) {

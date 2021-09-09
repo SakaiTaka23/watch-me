@@ -21,12 +21,12 @@ func NewUserHandler(userUsecase usecase.UserUsecase) UserHandler {
 
 func (handler *UserHandler) CheckUnique(c *fiber.Ctx) error {
 	username := params.User{
-		UserName: c.Params("username"),
+		ScheduleTitle: c.Params("schedule_title"),
 	}
 	if err := username.Validate(); err != nil {
 		return c.SendStatus(400)
 	}
-	result := handler.userUsecase.CheckUnique(username.UserName)
+	result := handler.userUsecase.CheckUnique(username.ScheduleTitle)
 	return c.JSON(fiber.Map{
 		"result": result,
 	})
@@ -50,12 +50,12 @@ func (handler *UserHandler) CreateUser(c *fiber.Ctx) error {
 
 func (handler *UserHandler) GetUserProfile(c *fiber.Ctx) error {
 	username := params.User{
-		UserName: c.Params("username"),
+		ScheduleTitle: c.Params("schedule_title"),
 	}
 	if err := username.Validate(); err != nil {
 		return c.SendStatus(404)
 	}
-	userInfo, err := handler.userUsecase.GetUserProfile(username.UserName)
+	userInfo, err := handler.userUsecase.GetUserProfile(username.ScheduleTitle)
 	if err != nil {
 		return c.SendStatus(404)
 	}

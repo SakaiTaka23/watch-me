@@ -5,11 +5,11 @@ import (
 )
 
 type UserRepository interface {
-	CheckUnique(name string) bool
+	CheckUnique(schedule_title string) bool
 	CreateUser(user *model.User) (string, error)
 	DeleteUser(id string)
-	FindFromName(name string) (*model.User, error)
+	FindFromName(schedule_title string) (*model.User, error)
 	IDFromTitle(id string) (string, error)
-	ScheduleFromName(name string, period string) ([]*model.Schedule, error)
+	ScheduleFromName(schedule_title string, period string) ([]*model.Schedule, error)
 	UpdateUser(user *model.User) *model.User
 }
