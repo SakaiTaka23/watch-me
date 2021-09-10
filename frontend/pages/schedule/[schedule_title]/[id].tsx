@@ -1,6 +1,7 @@
 import { Box, Grid, Typography } from '@material-ui/core';
 import { Emoji } from 'emoji-mart';
 import { GetServerSideProps } from 'next';
+import { useRouter } from 'next/router';
 import React, { FC } from 'react';
 import useGetScheduleInfo from '../../../hooks/api/schedule/useGetScheduleInfo';
 
@@ -19,23 +20,18 @@ const defaultProps = {
   borderRadius: 16,
 };
 
-const info = {
-  id: '497f6eca-6276-4993-bfeb-53cbbbba6f08',
-  about: `Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque quaerat labore
-      veniam molestias distinctio temporibus error blanditiis culpa illum fuga?
-      Exercitationem quidem veniam deleniti consequatur incidunt nobis dolores repellendus debitis!`,
-  emoji: 'leg',
-  start_time: '2021-07-28T15:00',
-  end_time: '2021-07-28T15:00',
-  place: 'YouTube',
-  title: 'title',
-  url: 'http://example.com',
-  user_id: 'a169451c-8525-4352-b8ca-070dd449a1a5',
-};
-
 const Index: FC<Props> = ({ schedule_title, id }) => {
-  console.log(schedule_title, id);
-  // const { info, isLoading, isError } = useGetScheduleInfo(id, schedule_title);
+  const router = useRouter();
+  const { info, isLoading, isError } = useGetScheduleInfo(id, schedule_title);
+
+  if (isLoading) {
+    return <div>Loading</div>;
+  }
+
+  if (isError) {
+    router.push('/404');
+    return null;
+  }
 
   return (
     <Grid container direction='column' justifyContent='center' alignContent='center'>

@@ -269,20 +269,28 @@ paths:
       tags:
         - user
         - sns
-  '/user/{title}/{id}':
+  '/user/{title}/{year}/{month}':
     parameters:
       - schema:
           type: string
         name: title
         in: path
         required: true
+        description: ユーザーのスケジュールのタイトル
       - schema:
           type: string
-        name: id
+        name: year
         in: path
         required: true
+        description: 検索する年
+      - schema:
+          type: string
+        name: month
+        in: path
+        required: true
+        description: 検索する月
     get:
-      summary: Get User Schedule by User ID
+      summary: Get User Schedule by User Title
       tags:
         - user
         - schedule
@@ -291,24 +299,41 @@ paths:
           $ref: '#/components/responses/UserSchedule'
         '404':
           description: Not Found
+        '':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Schedule'
+              examples:
+                example-1:
+                  value:
+                    - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      about: string
+                      emoji: string
+                      start_time: '2021-07-28T15:00'
+                      end_time: '2021-07-28T15:00'
+                      place: string
+                      title: string
+                      url: 'http://example.com'
+                      user_id: a169451c-8525-4352-b8ca-070dd449a1a5
+          description: スケジュール一覧を返す
       operationId: get-user-username
       description: |-
-        ユーザーネームからスケジュールを返す
-        スケジュールに関してはクエリで指定された年・月のもののみ返す
-      parameters:
-        - $ref: '#/components/parameters/year'
-        - $ref: '#/components/parameters/month'
+        ユーザーのスケジュールタイトルからスケジュールを返す
+        年・月をつけつけてその期間に始まるスケジュールのみ返す
+
+        該当する値がない場合は空の配列を返す
+      parameters: []
       security: []
-  '/user/{username}/info':
+  '/user/{schedule_title}/info':
     parameters:
       - schema:
           type: string
-          minLength: 1
-          maxLength: 30
-        name: username
+        name: schedule_title
         in: path
         required: true
-        description: ユーザー名
     get:
       summary: user get info
       tags:
@@ -321,21 +346,23 @@ paths:
       operationId: get-user-username-info
       description: そのユーザーに関する基本的な情報を返す
       security: []
-  '/user/{username}/unique':
+  '/user/{schedule_title}/unique':
     parameters:
       - schema:
           type: string
-        name: username
+        name: schedule_title
         in: path
         required: true
-        description: ユーザー名
     get:
-      summary: check unique username
+      summary: check unique schedule_title
       tags:
         - user
       responses:
         '200':
-          description: 判定結果
+          description: |-
+            判定結果
+
+            バリデーションで落ちた場合であっても200を返すがその場合判定は行わず必ずfalseを返す
           content:
             application/json:
               schema:
@@ -358,9 +385,9 @@ paths:
                     result: false
         '400':
           description: ユーザー名がない場合・長すぎる場合に返す
-      operationId: get-user-username-unique
+      operationId: get-user-title-unique
       description: |-
-        ユーザー名を入れそのユーザー名が既に存在しているかどうかを判定し返す
+        schedle_titleを入れそれが既に存在しているかどうかを判定し返す
         結果によらずステータスは200を返す
       security: []
 components:
@@ -589,15 +616,14 @@ components:
                 - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
                   about: string
                   emoji: string
-                  year: 2021
-                  month: 1
-                  day: 1
-                  start_time: '11:00'
-                  end_time: '17:00'
+                  start_time: '2021-07-28T15:00'
+                  end_time: '2021-07-28T15:00'
                   place: string
                   title: string
                   url: 'http://example.com'
                   user_id: a169451c-8525-4352-b8ca-070dd449a1a5
+            example-2:
+              value: []
   parameters:
     year:
       name: year

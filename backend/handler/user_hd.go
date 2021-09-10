@@ -3,7 +3,6 @@ package handler
 import (
 	"backend/entity/model"
 	"backend/handler/params"
-	"backend/handler/query"
 	"backend/handler/request"
 	"backend/usecase"
 	"log"
@@ -20,14 +19,16 @@ func NewUserHandler(userUsecase usecase.UserUsecase) UserHandler {
 	return userHandler
 }
 
-func (handler *UserHandler) CheckUnique(c *fiber.Ctx) error {
+func (handler *UserHandler) CheckUniqueTitle(c *fiber.Ctx) error {
 	username := params.User{
-		UserName: c.Params("username"),
+		ScheduleTitle: c.Params("schedule_title"),
 	}
 	if err := username.Validate(); err != nil {
-		return c.SendStatus(400)
+		return c.JSON(fiber.Map{
+			"result": false,
+		})
 	}
-	result := handler.userUsecase.CheckUnique(username.UserName)
+	result := handler.userUsecase.CheckUniqueTitle(username.ScheduleTitle)
 	return c.JSON(fiber.Map{
 		"result": result,
 	})
@@ -51,12 +52,12 @@ func (handler *UserHandler) CreateUser(c *fiber.Ctx) error {
 
 func (handler *UserHandler) GetUserProfile(c *fiber.Ctx) error {
 	username := params.User{
-		UserName: c.Params("username"),
+		ScheduleTitle: c.Params("schedule_title"),
 	}
 	if err := username.Validate(); err != nil {
 		return c.SendStatus(404)
 	}
-	userInfo, err := handler.userUsecase.GetUserProfile(username.UserName)
+	userInfo, err := handler.userUsecase.GetUserProfile(username.ScheduleTitle)
 	if err != nil {
 		return c.SendStatus(404)
 	}
@@ -64,22 +65,17 @@ func (handler *UserHandler) GetUserProfile(c *fiber.Ctx) error {
 }
 
 func (handler *UserHandler) GetUserSchedule(c *fiber.Ctx) error {
-	username := params.User{
-		UserName: c.Params("username"),
+	request := params.UserSchedule{
+		Title: c.Params("title"),
+		Year:  c.Params("year"),
+		Month: c.Params("month"),
 	}
-	if err := username.Validate(); err != nil {
+	if err := request.Validate(); err != nil {
 		log.Println(err)
-		return c.SendStatus(404)
+		return c.SendStatus(400)
 	}
-	period := new(query.Period)
-	if err := c.QueryParser(period); err != nil {
-		return c.SendStatus(404)
-	}
-	if err := period.Validate(); err != nil {
-		log.Println(err)
-		return c.SendStatus(404)
-	}
-	schedule, err := handler.userUsecase.GetUserSchedule(username.UserName, period.Year, period.Month)
+
+	schedule, err := handler.userUsecase.GetUserSchedule(request.Title, request.Year, request.Month)
 	if err != nil {
 		return c.SendStatus(404)
 	}

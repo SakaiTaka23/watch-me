@@ -14,17 +14,17 @@ func SetRouter(app *fiber.App) *fiber.App {
 	userHandler := injector.InjectUserHandler()
 	scheduleHandler := injector.InjectScheduleHandler()
 
-	app.Get("/user/:username", userHandler.GetUserSchedule)
-	app.Get("/user/:username/info", userHandler.GetUserProfile)
-	app.Get("/user/:username/unique", userHandler.CheckUnique)
+	app.Get("/user/:title/:year/:month", userHandler.GetUserSchedule)
+	app.Get("/user/:schedule_title/info", userHandler.GetUserProfile)
+	app.Get("/user/:schedule_title/unique", userHandler.CheckUniqueTitle)
 	user := app.Group("/user", authMiddleware)
 	user.Post("/", userHandler.CreateUser)
 	user.Patch("/", userHandler.UpdateUser)
 
-	app.Get("/schedule/:title/:schedule", scheduleHandler.GetSchedule)
+	app.Get("/schedule/:schedule_title/:schedule", scheduleHandler.GetSchedule)
 	schedule := app.Group("/schedule", authMiddleware)
 	schedule.Post("/", scheduleHandler.CreateSchedule)
-	schedule.Delete("/:title/:schedule", scheduleHandler.DeleteSchedule)
+	schedule.Delete("/:schedule_title/:schedule", scheduleHandler.DeleteSchedule)
 
 	return app
 }
