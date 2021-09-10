@@ -19,14 +19,16 @@ func NewUserHandler(userUsecase usecase.UserUsecase) UserHandler {
 	return userHandler
 }
 
-func (handler *UserHandler) CheckUnique(c *fiber.Ctx) error {
+func (handler *UserHandler) CheckUniqueTitle(c *fiber.Ctx) error {
 	username := params.User{
 		ScheduleTitle: c.Params("schedule_title"),
 	}
 	if err := username.Validate(); err != nil {
-		return c.SendStatus(400)
+		return c.JSON(fiber.Map{
+			"result": false,
+		})
 	}
-	result := handler.userUsecase.CheckUnique(username.ScheduleTitle)
+	result := handler.userUsecase.CheckUniqueTitle(username.ScheduleTitle)
 	return c.JSON(fiber.Map{
 		"result": result,
 	})

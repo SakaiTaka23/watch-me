@@ -18,7 +18,7 @@ func NewUserRepository(sqlHandler mysql.MySQLHandler) repository.UserRepository 
 	return &userRepository
 }
 
-func (userRepo *UserRepository) CheckUnique(schedule_title string) bool {
+func (userRepo *UserRepository) CheckUniqueTitle(schedule_title string) bool {
 	count := int64(0)
 	userRepo.MySQLHandler.Conn.Model(&model.User{}).Where("schedule_title = ?", schedule_title).Count(&count)
 	return count <= 0

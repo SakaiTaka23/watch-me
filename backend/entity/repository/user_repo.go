@@ -5,7 +5,7 @@ import (
 )
 
 type UserRepository interface {
-	CheckUnique(schedule_title string) bool
+	CheckUniqueTitle(schedule_title string) bool
 	CreateUser(user *model.User) (string, error)
 	DeleteUser(id string)
 	FindFromName(schedule_title string) (*model.User, error)

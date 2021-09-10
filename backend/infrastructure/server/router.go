@@ -16,7 +16,7 @@ func SetRouter(app *fiber.App) *fiber.App {
 
 	app.Get("/user/:title/:year/:month", userHandler.GetUserSchedule)
 	app.Get("/user/:schedule_title/info", userHandler.GetUserProfile)
-	app.Get("/user/:schedule_title/unique", userHandler.CheckUnique)
+	app.Get("/user/:schedule_title/unique", userHandler.CheckUniqueTitle)
 	user := app.Group("/user", authMiddleware)
 	user.Post("/", userHandler.CreateUser)
 	user.Patch("/", userHandler.UpdateUser)
