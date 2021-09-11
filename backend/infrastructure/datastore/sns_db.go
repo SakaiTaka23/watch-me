@@ -1,8 +1,12 @@
 package datastore
 
 import (
+	"backend/entity/model"
 	"backend/entity/repository"
 	"backend/infrastructure/datastore/mysql"
+	"errors"
+
+	"gorm.io/gorm"
 )
 
 type SNSRepository struct {
@@ -14,7 +18,14 @@ func NewSNSRepository(sqlHandler mysql.MySQLHandler) repository.SNSRepository {
 	return &snsRepository
 }
 
-// func (snsRepo *SNSRepository) FindFromID(id string) (*model.SNS, error) {
-// }
+func (snsRepo *SNSRepository) FindFromID(id string) ([]*model.SNS, error) {
+	var sns []*model.SNS
+	if err := snsRepo.MySQLHandler.Conn.Where("user_id = ?", id).Find(&sns).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, err
+	}
+	return sns, nil
+}
 
-// func (snsRepo *SNSRepository) UpdateSNS(sns *model.SNS) (*model.SNS, error)
+// func (snsRepo *SNSRepository) UpdateSNS(sns *model.SNS) (*model.SNS, error) {
+// 	if err := snsRepo.MySQLHandler.Conn.Select("url")
+// }

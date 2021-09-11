@@ -1,8 +1,12 @@
 package usecase
 
-import "backend/entity/repository"
+import (
+	"backend/entity/model"
+	"backend/entity/repository"
+)
 
 type SNSUsecase interface {
+	EditSNS(id string) ([]*model.SNS, error)
 }
 
 type snsUsecase struct {
@@ -11,5 +15,9 @@ type snsUsecase struct {
 
 func NewSNSUsecase(snsRepo repository.SNSRepository) SNSUsecase {
 	snsUsecase := snsUsecase{snsRepo: snsRepo}
-	return snsUsecase
+	return &snsUsecase
+}
+
+func (usecase *snsUsecase) EditSNS(id string) ([]*model.SNS, error) {
+	return usecase.snsRepo.FindFromID(id)
 }
