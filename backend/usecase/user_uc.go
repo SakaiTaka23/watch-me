@@ -3,7 +3,6 @@ package usecase
 import (
 	"backend/entity/model"
 	"backend/entity/repository"
-	"errors"
 )
 
 type UserUsecase interface {
@@ -53,8 +52,5 @@ func (usecase *userUsecase) GetUserSchedule(title string, year string, month str
 }
 
 func (usecase *userUsecase) UpdateUser(user *model.User) (*model.User, error) {
-	if !usecase.CheckUniqueTitle(user.Name) {
-		return nil, errors.New("not an unique username")
-	}
-	return usecase.userRepo.UpdateUser(user), nil
+	return usecase.userRepo.UpdateUser(user)
 }

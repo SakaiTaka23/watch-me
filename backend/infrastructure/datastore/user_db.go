@@ -46,7 +46,7 @@ func (userRepo *UserRepository) FindFromName(schedule_title string) (*model.User
 func (userRepo *UserRepository) IDFromTitle(id string) (string, error) {
 	var user *model.User
 	if err := userRepo.MySQLHandler.Conn.Select("ID").Where("schedule_title = ?", id).First(&user).Error; errors.Is(err, gorm.ErrRecordNotFound) {
-		return "", err
+		return "", nil
 	}
 	return user.ID, nil
 }
@@ -63,7 +63,9 @@ func (userRepo *UserRepository) ScheduleFromName(title string, period string) ([
 	return schedule, nil
 }
 
-func (userRepo *UserRepository) UpdateUser(user *model.User) *model.User {
-	userRepo.MySQLHandler.Conn.Preload("SNS").Select("name", "schedule_title").Where("id = ?", user.ID).Updates(model.User{Name: user.Name, ScheduleTitle: user.ScheduleTitle}).First(&user)
-	return user
+func (userRepo *UserRepository) UpdateUser(user *model.User) (*model.User, error) {
+	if err := userRepo.MySQLHandler.Conn.Preload("SNS").Select("name", "schedule_title").Where("id = ?", user.ID).Updates(model.User{Name: user.Name, ScheduleTitle: user.ScheduleTitle}).First(&user).Error; err != nil {
+		return nil, errors.New("update failed")
+	}
+	return user, nil
 }
