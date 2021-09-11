@@ -64,7 +64,7 @@ func (userRepo *UserRepository) ScheduleFromName(title string, period string) ([
 }
 
 func (userRepo *UserRepository) UpdateUser(user *model.User) (*model.User, error) {
-	if err := userRepo.MySQLHandler.Conn.Preload("SNS").Select("name", "schedule_title").Where("id = ?", user.ID).Updates(model.User{Name: user.Name, ScheduleTitle: user.ScheduleTitle}).First(&user).Error; err != nil {
+	if err := userRepo.MySQLHandler.Conn.Select("name", "schedule_title").Where("id = ?", user.ID).Updates(model.User{Name: user.Name, ScheduleTitle: user.ScheduleTitle}).First(&user).Error; err != nil {
 		return nil, errors.New("update failed")
 	}
 	return user, nil

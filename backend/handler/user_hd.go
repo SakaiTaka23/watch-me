@@ -93,7 +93,6 @@ func (handler *UserHandler) UpdateUser(c *fiber.Ctx) error {
 	}
 	user.Name = request.UserName
 	user.ScheduleTitle = request.ScheduleTitle
-	user.SNS = request.ToSNS()
 	_, err := handler.userUsecase.UpdateUser(&user)
 	if err != nil {
 		return c.SendStatus(409)
