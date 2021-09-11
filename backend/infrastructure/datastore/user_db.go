@@ -35,6 +35,14 @@ func (userRepo *UserRepository) DeleteUser(id string) {
 	userRepo.MySQLHandler.Conn.Delete(&model.User{}, id)
 }
 
+func (userRepo *UserRepository) FindFromID(id string) (*model.User, error) {
+	var user *model.User
+	if err := userRepo.MySQLHandler.Conn.Where("id = ?", id).First(&user).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, err
+	}
+	return user, nil
+}
+
 func (userRepo *UserRepository) FindFromName(schedule_title string) (*model.User, error) {
 	var user *model.User
 	if err := userRepo.MySQLHandler.Conn.Preload("SNS").Where("schedule_title = ?", schedule_title).First(&user).Error; errors.Is(err, gorm.ErrRecordNotFound) {
