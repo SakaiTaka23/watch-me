@@ -231,6 +231,10 @@ paths:
         '409':
           description: 既に存在する名前が出たときにコンフリクト
       description: |
+        更新できる内容
+        ・ユーザーのスケジュールタイトル
+        ・名前
+
         ユーザーのスケジュールタイトル・名前の更新を行う
       security:
         - Firebase: []
@@ -253,22 +257,31 @@ paths:
                   type: string
                   minLength: 1
                   maxLength: 20
-              required:
-                - name
-                - title
             examples:
-              両方変更:
+              変更:
                 value:
                   name: string
                   title: string
-              名前のみを変更:
-                value:
-                  name: string
-                  title: default value
-        description: 両方を更新する場合片方を更新する場合どちらであっても両方の情報を送信する
+        description: 変更箇所によらず全ての情報を送信する
       tags:
         - user
-        - sns
+    get:
+      summary: ''
+      operationId: get-user-edit
+      responses:
+        '200':
+          description: ユーザーの情報
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+      tags:
+        - user
+      description: |-
+        ユーザーを更新するために必要な情報を返す
+        認証必須で認証トークンのidを参照する
+      security:
+        - Firebase: []
   '/user/{title}/{year}/{month}':
     parameters:
       - schema:
@@ -390,6 +403,55 @@ paths:
         schedle_titleを入れそれが既に存在しているかどうかを判定し返す
         結果によらずステータスは200を返す
       security: []
+  /sns:
+    patch:
+      summary: update user sns
+      operationId: patch-update-sns
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SNS'
+              examples:
+                一つのみ:
+                  value:
+                    - id: '1'
+                      url: 'http://example.com'
+                2つ:
+                  value:
+                    - id: '1'
+                      url: 'http://example.com'
+                    - id: '1'
+                      url: 'http://example.com'
+      tags:
+        - sns
+      description: ユーザーのSNS情報を更新する
+    get:
+      summary: edit sns
+      operationId: get-sns-edit
+      responses:
+        '200':
+          description: 登録されたSNS一覧
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SNS'
+              examples:
+                example-1:
+                  value:
+                    - id: '1'
+                      url: 'http://example.com'
+      tags:
+        - sns
+      description: そのユーザのSNS情報を返す
+      security:
+        - Firebase: []
 components:
   schemas:
     Schedule:
@@ -539,10 +601,6 @@ components:
               schedule_title:
                 type: string
                 minLength: 1
-              sns:
-                type: array
-                items:
-                  $ref: '#/components/schemas/SNS'
             required:
               - id
               - name
