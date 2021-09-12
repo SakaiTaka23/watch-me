@@ -30,6 +30,7 @@ func SetRouter(app *fiber.App) *fiber.App {
 
 	sns := app.Group("/sns", authMiddleware)
 	sns.Get("/", snsHandler.EditSNS)
+	sns.Patch("/", snsHandler.UpdateSNS)
 
 	return app
 }

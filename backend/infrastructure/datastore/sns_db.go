@@ -26,8 +26,8 @@ func (snsRepo *SNSRepository) FindFromID(id string) ([]*model.SNS, error) {
 	return sns, nil
 }
 
-func (snsRepo *SNSRepository) UpdateSNS(sns []*model.SNS) ([]*model.SNS, error) {
-	if err := snsRepo.MySQLHandler.Conn.Select("url").Updates(&sns).Error; err != nil {
+func (snsRepo *SNSRepository) UpdateSNS(sns *model.SNS) (*model.SNS, error) {
+	if err := snsRepo.MySQLHandler.Conn.Update("url", sns.URL).Error; err != nil {
 		return nil, errors.New("update failed")
 	}
 	return sns, nil
