@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const UpdateForm: FC = () => {
+const UserUpdateForm: FC = () => {
   const classes = useStyles();
   const methods = useForm();
   const { userInfo, isLoading } = useUserEdit();
@@ -57,4 +57,4 @@ const UpdateForm: FC = () => {
   );
 };
 
-export default UpdateForm;
+export default UserUpdateForm;

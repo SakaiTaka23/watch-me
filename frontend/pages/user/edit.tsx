@@ -1,8 +1,8 @@
 import React from 'react';
-import UpdateForm from '../../components/organisms/form/UpdateForm';
+import UserUpdateForm from '../../components/organisms/form/UserUpdateForm';
 
 const Edit = () => {
-  return <UpdateForm />;
+  return <UserUpdateForm />;
 };
 
 export default Edit;
