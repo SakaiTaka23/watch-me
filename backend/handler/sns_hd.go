@@ -27,6 +27,7 @@ func (handler *SNSHandler) EditSNS(c *fiber.Ctx) error {
 }
 
 func (handler *SNSHandler) UpdateSNS(c *fiber.Ctx) error {
+	id := c.Locals("user").(model.User).ID
 	request := new(request.UpdateSNS)
 	if err := c.BodyParser(request); err != nil {
 		return c.SendStatus(400)
@@ -35,7 +36,7 @@ func (handler *SNSHandler) UpdateSNS(c *fiber.Ctx) error {
 		return c.SendStatus(400)
 	}
 	sns := request.SNS
-	_, err := handler.snsUsecase.UpdateSNS(sns)
+	_, err := handler.snsUsecase.UpdateSNS(id, sns)
 	if err != nil {
 		return c.SendStatus(409)
 	}

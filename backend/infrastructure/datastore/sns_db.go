@@ -18,17 +18,22 @@ func NewSNSRepository(sqlHandler mysql.MySQLHandler) repository.SNSRepository {
 	return &snsRepository
 }
 
-func (snsRepo *SNSRepository) FindFromID(id string) ([]*model.SNS, error) {
-	var sns []*model.SNS
-	if err := snsRepo.MySQLHandler.Conn.Where("user_id = ?", id).Find(&sns).Error; errors.Is(err, gorm.ErrRecordNotFound) {
-		return nil, err
+func (snsRepo *SNSRepository) CreateALL(user_id string, sns []*model.SNS) []*model.SNS {
+	for _, s := range sns {
+		s.UserID = user_id
+		snsRepo.MySQLHandler.Conn.Create(&sns)
 	}
-	return sns, nil
+	return sns
 }
 
-func (snsRepo *SNSRepository) UpdateSNS(sns *model.SNS) (*model.SNS, error) {
-	if err := snsRepo.MySQLHandler.Conn.Update("url", sns.URL).Error; err != nil {
-		return nil, errors.New("update failed")
+func (snsRepo *SNSRepository) DeleteALL(user_id string) {
+	snsRepo.MySQLHandler.Conn.Where("user_id = ?", user_id).Delete(model.SNS{})
+}
+
+func (snsRepo *SNSRepository) FindFromID(user_id string) ([]*model.SNS, error) {
+	var sns []*model.SNS
+	if err := snsRepo.MySQLHandler.Conn.Where("user_id = ?", user_id).Find(&sns).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, err
 	}
 	return sns, nil
 }

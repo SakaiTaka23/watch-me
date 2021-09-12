@@ -6,8 +6,8 @@ import (
 )
 
 type SNSUsecase interface {
-	EditSNS(id string) ([]*model.SNS, error)
-	UpdateSNS([]*model.SNS) ([]*model.SNS, error)
+	EditSNS(user_id string) ([]*model.SNS, error)
+	UpdateSNS(user_id string, sns []*model.SNS) ([]*model.SNS, error)
 }
 
 type snsUsecase struct {
@@ -19,17 +19,12 @@ func NewSNSUsecase(snsRepo repository.SNSRepository) SNSUsecase {
 	return &snsUsecase
 }
 
-func (usecase *snsUsecase) EditSNS(id string) ([]*model.SNS, error) {
-	return usecase.snsRepo.FindFromID(id)
+func (usecase *snsUsecase) EditSNS(user_id string) ([]*model.SNS, error) {
+	return usecase.snsRepo.FindFromID(user_id)
 }
 
-func (usecase *snsUsecase) UpdateSNS(sns []*model.SNS) ([]*model.SNS, error) {
-	var err error
-	for _, s := range sns {
-		_, err = usecase.snsRepo.UpdateSNS(s)
-		if err != nil {
-			return nil, err
-		}
-	}
+func (usecase *snsUsecase) UpdateSNS(user_id string, sns []*model.SNS) ([]*model.SNS, error) {
+	usecase.snsRepo.DeleteALL(user_id)
+	usecase.snsRepo.CreateALL(user_id, sns)
 	return sns, nil
 }
