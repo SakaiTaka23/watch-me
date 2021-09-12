@@ -8,7 +8,7 @@ import (
 )
 
 type UpdateSNS struct {
-	SNS []*model.SNS `json:"sns" validate:"required,dive,gt=1,lte=5,url"`
+	SNS []*model.SNS `json:"sns" validate:"required,gt=1,lte=5,dive,url"`
 }
 
 func (u *UpdateSNS) Validate() error {
