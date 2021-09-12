@@ -2,7 +2,7 @@ import React from 'react';
 import UpdateForm from '../../components/organisms/form/UpdateForm';
 
 const Edit = () => {
-  return <UpdateForm schedule_title='test' />;
+  return <UpdateForm />;
 };
 
 export default Edit;
