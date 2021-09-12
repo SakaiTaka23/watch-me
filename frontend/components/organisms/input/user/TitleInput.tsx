@@ -21,8 +21,10 @@ const TitleInput: FC<Props> = ({ schedule_title }) => {
   return (
     <>
       <TextField
+        label='schedule title'
         variant='outlined'
         margin='normal'
+        fullWidth
         defaultValue={schedule_title}
         {...register('schedule_title', { required: true, min: 1, max: 20 })}
         onChange={handleTitle}

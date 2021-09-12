@@ -21,8 +21,10 @@ const NameInput: FC<Props> = ({ name }) => {
   return (
     <>
       <TextField
+        label='name'
         variant='outlined'
         margin='normal'
+        fullWidth
         defaultValue={name}
         {...register('name', { required: true, min: 1, max: 30 })}
         onChange={handleName}
