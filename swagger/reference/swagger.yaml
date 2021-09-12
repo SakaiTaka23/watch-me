@@ -429,7 +429,12 @@ paths:
                       url: 'http://example.com'
       tags:
         - sns
-      description: ユーザーのSNS情報を更新する
+      description: |-
+        ユーザーのSNS情報を更新する
+
+        更新できるSNSの数は一以上５以下であること
+      security:
+        - Firebase: []
     get:
       summary: edit sns
       operationId: get-sns-edit
