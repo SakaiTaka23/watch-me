@@ -1,9 +1,11 @@
-import { Box, Container, makeStyles, TextField, Typography } from '@material-ui/core';
+import { Container, makeStyles } from '@material-ui/core';
 import React, { FC } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import useGetUserInformation from '../../../hooks/api/user/useGetUserInformation';
+import useUserEdit from '../../../hooks/api/user/useUserEdit';
 import useUpdateUser from '../../../hooks/api/user/useUpdateUser';
-import SNSList from '../sns/SNSList';
+import SubmitButton from '../../molecules/SubmitButton';
+import TitleInput from '../input/user/TitleInput';
+import NameInput from '../input/user/NameInput';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -25,36 +27,29 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-type Props = {
-  schedule_title: string;
-};
-
-const UpdateForm: FC<Props> = ({ schedule_title }) => {
+const UpdateForm: FC = () => {
   const classes = useStyles();
   const methods = useForm();
-  const { userInfo, isLoading } = useGetUserInformation(schedule_title);
+  const { userInfo, isLoading } = useUserEdit();
   const { updateUser } = useUpdateUser();
 
   const handleClick = (data: any) => {
-    updateUser(data.name, data.title);
+    updateUser(data.name, data.schedule_title);
   };
 
   if (isLoading) {
     return <div>Loading</div>;
   }
+  methods.setValue('name', userInfo.name);
 
   return (
     <Container>
       <div className={classes.paper}>
         <FormProvider {...methods}>
           <form className={classes.form} onSubmit={methods.handleSubmit(handleClick)}>
-            <TextField
-              variant='outlined'
-              margin='normal'
-              value={userInfo.schedule_title}
-              {...methods.register('schedule_title')}
-            />
-            <TextField variant='outlined' margin='normal' value={userInfo.name} {...methods.register('name')} />
+            <TitleInput schedule_title={userInfo.schedule_title} />
+            <NameInput name={userInfo.name} />
+            <SubmitButton />
           </form>
         </FormProvider>
       </div>
