@@ -1,4 +1,4 @@
-import { TextField, Typography } from '@material-ui/core';
+import { Button, TextField, Typography } from '@material-ui/core';
 import React, { FC, useEffect } from 'react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import { SNS } from '../../../types/model/sns';
@@ -8,14 +8,17 @@ type Props = {
 };
 
 const SNSUpdateInput: FC<Props> = ({ sns }) => {
-  const { register, control } = useFormContext();
+  const {
+    register,
+    control,
+    formState: { errors },
+  } = useFormContext();
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'sns',
   });
 
   useEffect(() => {
-    console.log(sns);
     fields.push(...sns);
     console.log(fields);
   }, []);
@@ -23,15 +26,24 @@ const SNSUpdateInput: FC<Props> = ({ sns }) => {
   return (
     <>
       <Typography>SNS</Typography>
-      <button type='button' onClick={() => append({ url: 'url appended' })}>
+      <Button type='button' onClick={() => append({})}>
         append
-      </button>
+      </Button>
       {fields.map((field, index) => (
         <div key={field.id}>
-          <input placeholder='url' {...register(`sns.${index}.url` as const)} />
-          <button type='button' onClick={() => remove(index)}>
+          <input
+            placeholder='url'
+            {...register(`sns.${index}.url` as const, {
+              required: 'SNS must be filled of deleted',
+              pattern: {
+                value: /https?:\/\/[\w/:%#\$&\?\(\)~\.=\+\-]+/,
+                message: 'must be valid url',
+              },
+            })}
+          />
+          <Button type='button' onClick={() => remove(index)}>
             remove
-          </button>
+          </Button>
         </div>
       ))}
     </>
