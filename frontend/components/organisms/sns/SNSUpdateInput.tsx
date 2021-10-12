@@ -15,9 +15,9 @@ const SNSUpdateInput: FC<Props> = ({ sns }) => {
   });
 
   useEffect(() => {
-    append({ sns: { sns } });
+    console.log(sns);
+    fields.push(...sns);
     console.log(fields);
-    console.log('appended');
   }, []);
 
   return (
