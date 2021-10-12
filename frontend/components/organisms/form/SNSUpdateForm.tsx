@@ -3,7 +3,9 @@ import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import useSNSEdit from '../../../hooks/api/sns/useSNSEdit';
 import useSNSUpdate from '../../../hooks/api/sns/useSNSUpdate';
+import { SNS } from '../../../types/model/sns';
 import SubmitButton from '../../molecules/SubmitButton';
+import SNSUpdateInput from '../sns/SNSUpdateInput';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -25,11 +27,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const userSNS: SNS[] = [
+  { id: '1', url: 'url1' },
+  { id: '2', url: 'url2' },
+];
+
 const SNSUpdateForm = () => {
   const classes = useStyles();
   const methods = useForm();
-  const { userSNS, isLoading } = useSNSEdit();
-  const { updateSNS } = useSNSUpdate();
+  // const { userSNS, isLoading } = useSNSEdit();
+  // const { updateSNS } = useSNSUpdate();
 
   const handleClick = (data: any) => {
     console.log(data);
@@ -41,6 +48,7 @@ const SNSUpdateForm = () => {
       <div className={classes.paper}>
         <FormProvider {...methods}>
           <form className={classes.form} onSubmit={methods.handleSubmit(handleClick)}>
+            <SNSUpdateInput sns={userSNS} />
             <SubmitButton />
           </form>
         </FormProvider>
