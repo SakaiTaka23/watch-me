@@ -413,26 +413,53 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/SNS'
+                description: ''
+                type: object
+                x-examples:
+                  example-1:
+                    sns:
+                      - url: 'http://github.com'
+                properties:
+                  sns:
+                    type: array
+                    uniqueItems: true
+                    minItems: 1
+                    items:
+                      type: object
+                      properties:
+                        url:
+                          type: string
+                          minLength: 1
+                          format: uri
+                      required:
+                        - url
+                required:
+                  - sns
               examples:
-                一つのみ:
+                一つ更新:
                   value:
-                    - id: '1'
-                      url: 'http://example.com'
-                2つ:
+                    sns:
+                      - url: 'http://example.com'
+                SNS情報全削除:
+                  value: {}
+                五つ更新:
                   value:
-                    - id: '1'
-                      url: 'http://example.com'
-                    - id: '1'
-                      url: 'http://example.com'
+                    sns:
+                      - url: 'http://example.com'
+                      - url: 'http://example.com'
+                      - url: 'http://example.com'
+                      - url: 'http://example.com'
+                      - url: 'http://example.com'
       tags:
         - sns
       description: |-
         ユーザーのSNS情報を更新する
 
-        更新できるSNSの数は一以上５以下であること
+        更新できるSNSの数は0以上５以下であること
+
+        SNS情報はURLであることが必須であるがそのURLの場所は気にしない　重複も気にしない
+
+        内部では更新する際該当ユーザーのSNS情報を全て消してから全て追加している
       security:
         - Firebase: []
     get:
