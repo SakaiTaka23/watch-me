@@ -5,7 +5,7 @@ import UserUpdateForm from '../../components/organisms/form/UserUpdateForm';
 const Edit = () => {
   return (
     <>
-      {/* <UserUpdateForm /> */}
+      <UserUpdateForm />
       <SNSUpdateForm />
     </>
   );
