@@ -422,7 +422,7 @@ paths:
                 properties:
                   sns:
                     type: array
-                    uniqueItems: true
+                    uniqueItems: false
                     minItems: 1
                     items:
                       type: object
@@ -433,8 +433,6 @@ paths:
                           format: uri
                       required:
                         - url
-                required:
-                  - sns
               examples:
                 一つ更新:
                   value:
