@@ -28,8 +28,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const userSNS: SNS[] = [
-  { id: '1', url: 'url1' },
-  { id: '2', url: 'url2' },
+  { id: '1', url: 'https://mui.com/' },
+  { id: '2', url: 'https://react-hook-form.com/' },
 ];
 
 const SNSUpdateForm = () => {
