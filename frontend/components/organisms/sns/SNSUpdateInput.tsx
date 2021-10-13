@@ -23,10 +23,16 @@ const SNSUpdateInput: FC<Props> = ({ sns }) => {
     console.log(fields);
   }, []);
 
+  const appendForm = () => {
+    if (fields.length < 5) {
+      append({});
+    }
+  };
+
   return (
     <>
       <Typography>SNS</Typography>
-      <Button type='button' onClick={() => append({})}>
+      <Button type='button' onClick={() => appendForm()}>
         append
       </Button>
       {fields.map((field, index) => (
