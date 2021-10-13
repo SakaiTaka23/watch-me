@@ -1,6 +1,6 @@
-import { Button, TextField, Typography } from '@material-ui/core';
+import { Button, Input, TextField, Typography } from '@material-ui/core';
 import React, { FC, useEffect } from 'react';
-import { useFieldArray, useFormContext } from 'react-hook-form';
+import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
 import { SNS } from '../../../types/model/sns';
 
 type Props = {
@@ -20,7 +20,6 @@ const SNSUpdateInput: FC<Props> = ({ sns }) => {
 
   useEffect(() => {
     fields.push(...sns);
-    console.log(fields);
   }, []);
 
   const appendForm = () => {
@@ -37,16 +36,19 @@ const SNSUpdateInput: FC<Props> = ({ sns }) => {
       </Button>
       {fields.map((field, index) => (
         <div key={field.id}>
-          <input
-            placeholder='url'
-            {...register(`sns.${index}.url` as const, {
-              required: 'SNS must be filled of deleted',
-              pattern: {
-                value: /https?:\/\/[\w/:%#\$&\?\(\)~\.=\+\-]+/,
-                message: 'must be valid url',
-              },
-            })}
+          <Controller
+            name={`sns.${index}.url`}
+            control={control}
+            defaultValue={field['url']}
+            rules={{
+              required: 'SNS must be filled or deleted',
+              pattern: { value: /https?:\/\/[\w/:%#\$&\?\(\)~\.=\+\-]+/, message: 'must be valid url' },
+            }}
+            render={({ field }) => <TextField {...field} />}
           />
+          <Typography color='error' variant='overline'>
+            {errors?.['sns']?.[index]?.['url']?.['message']}
+          </Typography>
           <Button type='button' onClick={() => remove(index)}>
             remove
           </Button>
