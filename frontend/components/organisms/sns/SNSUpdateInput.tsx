@@ -18,8 +18,10 @@ const SNSUpdateInput: FC<Props> = ({ sns }) => {
   });
 
   useEffect(() => {
-    fields.push(...sns);
-  }, []);
+    if (sns) {
+      fields.push(...sns);
+    }
+  }, [sns]);
 
   const appendForm = () => {
     if (fields.length < 5) {
@@ -43,7 +45,9 @@ const SNSUpdateInput: FC<Props> = ({ sns }) => {
               required: 'URL must be filled or deleted',
               pattern: { value: /https?:\/\/[\w/:%#\$&\?\(\)~\.=\+\-]+/, message: 'must be valid url' },
             }}
-            render={({ field }) => <TextField variant='outlined' margin='normal' fullWidth {...field} />}
+            render={({ field }) => (
+              <TextField variant='outlined' margin='normal' placeholder='url' fullWidth {...field} />
+            )}
           />
           <Typography color='error' variant='overline'>
             {errors?.['sns']?.[index]?.['url']?.['message']}
