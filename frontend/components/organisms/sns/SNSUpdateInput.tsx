@@ -1,4 +1,4 @@
-import { Button, Input, TextField, Typography } from '@material-ui/core';
+import { Button, TextField, Typography } from '@material-ui/core';
 import React, { FC, useEffect } from 'react';
 import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
 import { SNS } from '../../../types/model/sns';
@@ -9,7 +9,6 @@ type Props = {
 
 const SNSUpdateInput: FC<Props> = ({ sns }) => {
   const {
-    register,
     control,
     formState: { errors },
   } = useFormContext();
@@ -39,12 +38,12 @@ const SNSUpdateInput: FC<Props> = ({ sns }) => {
           <Controller
             name={`sns.${index}.url`}
             control={control}
-            defaultValue={field['url']}
+            defaultValue={field?.['url'] ?? ''}
             rules={{
-              required: 'SNS must be filled or deleted',
+              required: 'URL must be filled or deleted',
               pattern: { value: /https?:\/\/[\w/:%#\$&\?\(\)~\.=\+\-]+/, message: 'must be valid url' },
             }}
-            render={({ field }) => <TextField {...field} />}
+            render={({ field }) => <TextField variant='outlined' margin='normal' fullWidth {...field} />}
           />
           <Typography color='error' variant='overline'>
             {errors?.['sns']?.[index]?.['url']?.['message']}
