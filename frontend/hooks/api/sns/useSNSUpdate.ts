@@ -10,8 +10,7 @@ const useSNSUpdate = () => {
   const headers = { headers: { Authorization: `Bearer ${token}` } };
 
   const updateSNS = (sns: SNS[]) => {
-    const data = { sns: sns };
-    axiosInstance.patch('/sns', data, headers).catch((e: AxiosError) => {
+    axiosInstance.patch('/sns', sns, headers).catch((e: AxiosError) => {
       setError(e);
     });
   };
