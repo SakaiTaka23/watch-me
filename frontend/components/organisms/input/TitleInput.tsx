@@ -17,11 +17,13 @@ const TitleInput = () => {
         fullWidth
         {...register('title', {
           required: 'title is required',
+          min: 1,
+          max: 100,
         })}
       />
       {errors.title && (
         <Typography color='error' variant='overline'>
-          {errors.title.message}
+          title must be 1 to 100 words
         </Typography>
       )}
     </>
