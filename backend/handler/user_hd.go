@@ -50,6 +50,16 @@ func (handler *UserHandler) CreateUser(c *fiber.Ctx) error {
 	return c.SendStatus(200)
 }
 
+func (handler *UserHandler) EditUser(c *fiber.Ctx) error {
+	id := c.Locals("user").(model.User).ID
+	var user *model.User
+	user, err := handler.userUsecase.EditUser(id)
+	if err != nil {
+		return c.SendStatus(404)
+	}
+	return c.JSON(user)
+}
+
 func (handler *UserHandler) GetUserProfile(c *fiber.Ctx) error {
 	username := params.User{
 		ScheduleTitle: c.Params("schedule_title"),
@@ -93,7 +103,6 @@ func (handler *UserHandler) UpdateUser(c *fiber.Ctx) error {
 	}
 	user.Name = request.UserName
 	user.ScheduleTitle = request.ScheduleTitle
-	user.SNS = request.ToSNS()
 	_, err := handler.userUsecase.UpdateUser(&user)
 	if err != nil {
 		return c.SendStatus(409)

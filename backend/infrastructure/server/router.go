@@ -13,11 +13,13 @@ func SetRouter(app *fiber.App) *fiber.App {
 
 	userHandler := injector.InjectUserHandler()
 	scheduleHandler := injector.InjectScheduleHandler()
+	snsHandler := injector.InjectSNSHandler()
 
 	app.Get("/user/:title/:year/:month", userHandler.GetUserSchedule)
 	app.Get("/user/:schedule_title/info", userHandler.GetUserProfile)
 	app.Get("/user/:schedule_title/unique", userHandler.CheckUniqueTitle)
 	user := app.Group("/user", authMiddleware)
+	user.Get("/", userHandler.EditUser)
 	user.Post("/", userHandler.CreateUser)
 	user.Patch("/", userHandler.UpdateUser)
 
@@ -25,6 +27,10 @@ func SetRouter(app *fiber.App) *fiber.App {
 	schedule := app.Group("/schedule", authMiddleware)
 	schedule.Post("/", scheduleHandler.CreateSchedule)
 	schedule.Delete("/:schedule_title/:schedule", scheduleHandler.DeleteSchedule)
+
+	sns := app.Group("/sns", authMiddleware)
+	sns.Get("/", snsHandler.EditSNS)
+	sns.Patch("/", snsHandler.UpdateSNS)
 
 	return app
 }

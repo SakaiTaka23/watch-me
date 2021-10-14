@@ -35,6 +35,14 @@ func (userRepo *UserRepository) DeleteUser(id string) {
 	userRepo.MySQLHandler.Conn.Delete(&model.User{}, id)
 }
 
+func (userRepo *UserRepository) FindFromID(id string) (*model.User, error) {
+	var user *model.User
+	if err := userRepo.MySQLHandler.Conn.Where("id = ?", id).First(&user).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, err
+	}
+	return user, nil
+}
+
 func (userRepo *UserRepository) FindFromName(schedule_title string) (*model.User, error) {
 	var user *model.User
 	if err := userRepo.MySQLHandler.Conn.Preload("SNS").Where("schedule_title = ?", schedule_title).First(&user).Error; errors.Is(err, gorm.ErrRecordNotFound) {
@@ -64,7 +72,7 @@ func (userRepo *UserRepository) ScheduleFromName(title string, period string) ([
 }
 
 func (userRepo *UserRepository) UpdateUser(user *model.User) (*model.User, error) {
-	if err := userRepo.MySQLHandler.Conn.Preload("SNS").Select("name", "schedule_title").Where("id = ?", user.ID).Updates(model.User{Name: user.Name, ScheduleTitle: user.ScheduleTitle}).First(&user).Error; err != nil {
+	if err := userRepo.MySQLHandler.Conn.Select("name", "schedule_title").Where("id = ?", user.ID).Updates(model.User{Name: user.Name, ScheduleTitle: user.ScheduleTitle}).First(&user).Error; err != nil {
 		return nil, errors.New("update failed")
 	}
 	return user, nil
