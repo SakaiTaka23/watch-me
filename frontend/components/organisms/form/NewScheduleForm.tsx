@@ -1,4 +1,5 @@
 import { Container, makeStyles } from '@material-ui/core';
+import { useRouter } from 'next/router';
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import useCreateSchedule from '../../../hooks/api/schedule/useCreateSchedule';
@@ -33,13 +34,16 @@ const useStyles = makeStyles((theme) => ({
 const NewScheduleForm = () => {
   const classes = useStyles();
   const methods = useForm();
-  const { createSchedule, id, error } = useCreateSchedule();
+  const router = useRouter();
+  const { createSchedule, created, error } = useCreateSchedule();
 
   const handleClick = (data: any) => {
     console.log(data);
     createSchedule(data);
     console.log(error);
-    // エラーがなかった場合スケジュールページへリダイレクトする
+    if (error === null) {
+      router.push(`/schedule/${created.title}/${created.id}`);
+    }
   };
 
   return (

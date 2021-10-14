@@ -4,8 +4,13 @@ import { Schedule } from '../../../types/model/schedule';
 import { AuthContext } from '../../firebase/authContext';
 import { axiosInstance } from '../axios';
 
+type Response = {
+  id: string;
+  title: string;
+};
+
 const useCreateSchedule = () => {
-  const [id, setId] = useState('');
+  const [created, setCreated] = useState<Response>();
   const [error, setError] = useState<AxiosError>(null);
   const { token } = useContext(AuthContext);
   const headers = { headers: { Authorization: `Bearer ${token}` } };
@@ -14,14 +19,14 @@ const useCreateSchedule = () => {
     axiosInstance
       .post('/schedule', schedule, headers)
       .then((res) => {
-        setId(res.data.id);
+        setCreated({ id: res.data.id, title: res.data.title });
       })
       .catch((e: AxiosError) => {
         setError(e);
       });
   };
 
-  return { createSchedule, id, error };
+  return { createSchedule, created, error };
 };
 
 export default useCreateSchedule;
