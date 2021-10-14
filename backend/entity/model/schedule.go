@@ -1,6 +1,11 @@
 package model
 
-import "time"
+import (
+	"time"
+
+	"github.com/google/uuid"
+	"gorm.io/gorm"
+)
 
 type Schedule struct {
 	ID        string    `json:"id"`
@@ -12,4 +17,10 @@ type Schedule struct {
 	Title     string    `json:"title" gorm:"not null"`
 	URL       string    `json:"url" gorm:"default:NULL"`
 	UserID    string    `json:"user_id"`
+}
+
+func (s *Schedule) BeforeCreate(tx *gorm.DB) (err error) {
+	id, _ := uuid.NewUUID()
+	s.ID = id.String()
+	return
 }
