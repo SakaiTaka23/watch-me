@@ -1,4 +1,4 @@
-import { Container, makeStyles } from '@material-ui/core';
+import { Container, makeStyles, Typography } from '@material-ui/core';
 import React, { FC } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import useUserEdit from '../../../hooks/api/user/useUserEdit';
@@ -47,6 +47,7 @@ const UserUpdateForm: FC = () => {
       <div className={classes.paper}>
         <FormProvider {...methods}>
           <form className={classes.form} onSubmit={methods.handleSubmit(handleClick)}>
+            <Typography variant='h5'>User</Typography>
             <TitleInput schedule_title={userInfo.schedule_title} />
             <NameInput name={userInfo.name} />
             <SubmitButton />
