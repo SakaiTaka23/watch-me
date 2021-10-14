@@ -23,6 +23,7 @@ func SetRouter(app *fiber.App) *fiber.App {
 	user.Post("/", userHandler.CreateUser)
 	user.Patch("/", userHandler.UpdateUser)
 
+<<<<<<< HEAD
 	app.Get("/schedule/:schedule_title/:schedule", scheduleHandler.GetSchedule)
 	schedule := app.Group("/schedule", authMiddleware)
 	schedule.Post("/", scheduleHandler.CreateSchedule)
@@ -31,6 +32,12 @@ func SetRouter(app *fiber.App) *fiber.App {
 	sns := app.Group("/sns", authMiddleware)
 	sns.Get("/", snsHandler.EditSNS)
 	sns.Patch("/", snsHandler.UpdateSNS)
+=======
+	app.Get("/schedule/:schedule", scheduleHandler.GetSchedule)
+	schedule := app.Group("/schedule", authMiddleware)
+	schedule.Post("/", scheduleHandler.CreateSchedule)
+	schedule.Delete("/:schedule", scheduleHandler.DeleteSchedule)
+>>>>>>> 43da25f451d429c1b0b8bdc52184ac7f820b4b8e
 
 	return app
 }

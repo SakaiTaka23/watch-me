@@ -51,6 +51,7 @@ func (userRepo *UserRepository) FindFromName(schedule_title string) (*model.User
 	return user, nil
 }
 
+<<<<<<< HEAD
 func (userRepo *UserRepository) IDFromTitle(id string) (string, error) {
 	var user *model.User
 	if err := userRepo.MySQLHandler.Conn.Select("ID").Where("schedule_title = ?", id).First(&user).Error; errors.Is(err, gorm.ErrRecordNotFound) {
@@ -60,6 +61,9 @@ func (userRepo *UserRepository) IDFromTitle(id string) (string, error) {
 }
 
 func (userRepo *UserRepository) ScheduleFromName(title string, period string) ([]*model.Schedule, error) {
+=======
+func (userRepo *UserRepository) ScheduleFromName(name string, year uint16, month uint8) ([]*model.Schedule, error) {
+>>>>>>> 43da25f451d429c1b0b8bdc52184ac7f820b4b8e
 	var schedule []*model.Schedule
 	uid, err := userRepo.IDFromTitle(title)
 	if err != nil {

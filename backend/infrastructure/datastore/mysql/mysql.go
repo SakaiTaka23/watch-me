@@ -17,7 +17,7 @@ func Connect() *MySQLHandler {
 	protocol := "tcp(db:3306)"
 	dbname := os.Getenv("DB_DATABASE")
 
-	dsn := user + ":" + pass + "@" + protocol + "/" + dbname + "?charset=utf8&parseTime=true"
+	dsn := user + ":" + pass + "@" + protocol + "/" + dbname + "?charset=utf8"
 	connection, err := gorm.Open(mysql.New(mysql.Config{
 		DSN:               dsn,
 		DefaultStringSize: 256,
