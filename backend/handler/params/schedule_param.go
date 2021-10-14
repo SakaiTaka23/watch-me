@@ -3,7 +3,8 @@ package params
 import "github.com/go-playground/validator/v10"
 
 type Schedule struct {
-	UID string `validate:"required,uuid"`
+	User string `validate:"required"`
+	UID  string `validate:"required,uuid"`
 }
 
 func (s *Schedule) Validate() error {
