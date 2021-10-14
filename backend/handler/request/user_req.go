@@ -9,8 +9,8 @@ type CreateUser struct {
 }
 
 type UpdateUser struct {
-	UserName      string `json:"name" validate:"required,min=1,max=30,alphanum"`
-	ScheduleTitle string `json:"title" validate:"required,min=1,max=20"`
+	UserName      string `json:"name" validate:"required,min=1,max=30"`
+	ScheduleTitle string `json:"schedule_title" validate:"required,min=1,max=20,alphanum"`
 }
 
 func (c *CreateUser) Validate() error {

@@ -3,7 +3,7 @@ import { SNS } from './sns';
 type User = {
   id: string;
   name: string;
-  title: string;
+  schedule_title: string;
   sns: SNS[];
 };
 

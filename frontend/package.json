@@ -8,10 +8,13 @@
     "start": "next start"
   },
   "dependencies": {
+    "@date-io/date-fns": "1.x",
     "@material-ui/core": "^4.12.3",
     "@material-ui/icons": "^4.11.2",
+    "@material-ui/pickers": "^3.3.10",
     "@types/emoji-mart": "^3.0.5",
     "axios": "^0.21.1",
+    "date-fns": "^2.23.0",
     "emoji-mart": "^3.0.1",
     "firebase": "^8.8.1",
     "next": "11.0.1",

@@ -23,6 +23,11 @@ func InjectScheduleRepository() repository.ScheduleRepository {
 	return datastore.NewScheduleRepository(sqlHandler)
 }
 
+func InjectSNSRepository() repository.SNSRepository {
+	sqlHandler := InjectDB()
+	return datastore.NewSNSRepository(sqlHandler)
+}
+
 func InjectUserUsecase() usecase.UserUsecase {
 	userRepo := InjectUserRepository()
 	return usecase.NewUserUsecase(userRepo)
@@ -30,7 +35,13 @@ func InjectUserUsecase() usecase.UserUsecase {
 
 func InjectScheduleUsecase() usecase.ScheduleUsecase {
 	scheduleRepo := InjectScheduleRepository()
-	return usecase.NewScheduleUsecase(scheduleRepo)
+	userRepo := InjectUserRepository()
+	return usecase.NewScheduleUsecase(scheduleRepo, userRepo)
+}
+
+func InjectSNSUsecase() usecase.SNSUsecase {
+	snsRepo := InjectSNSRepository()
+	return usecase.NewSNSUsecase(snsRepo)
 }
 
 func InjectUserHandler() handler.UserHandler {
@@ -41,4 +52,9 @@ func InjectUserHandler() handler.UserHandler {
 func InjectScheduleHandler() handler.ScheduleHandler {
 	scheduleUsecase := InjectScheduleUsecase()
 	return handler.NewScheduleHandler(scheduleUsecase)
+}
+
+func InjectSNSHandler() handler.SNSHandler {
+	snsUsecase := InjectSNSUsecase()
+	return handler.NewSNSHandler(snsUsecase)
 }

@@ -37,7 +37,7 @@ paths:
               examples:
                 example-1:
                   value:
-                    id: string-uid
+                    id: string
         '401':
           description: Unauthorized
       operationId: create-schedule
@@ -70,26 +70,12 @@ paths:
                   type: string
                   minLength: 1
                   maxLength: 20
-                year:
-                  type: number
-                  minimum: 2021
-                  maximum: 2025
-                month:
-                  type: number
-                  minimum: 1
-                  maximum: 12
-                day:
-                  type: number
-                  minimum: 1
-                  maximum: 31
                 start_time:
                   type: string
-                  example: '11:00'
-                  pattern: '^([01][0-9]|2[0-3]):[0-5][0-9]$'
+                  example: '2021-07-28T15:00'
                 end_time:
                   type: string
-                  pattern: '^([01][0-9]|2[0-3]):[0-5][0-9]$'
-                  example: '15:00'
+                  example: '2021-07-28T15:00'
                 place:
                   type: string
                   minLength: 1
@@ -104,9 +90,6 @@ paths:
                   format: uri
               required:
                 - emoji
-                - year
-                - month
-                - day
                 - start_time
                 - title
             examples:
@@ -114,27 +97,21 @@ paths:
                 value:
                   about: string
                   emoji: string
-                  year: 2021
-                  month: 8
-                  day: 20
-                  start_time: '14:15'
-                  end_time: '14:15'
+                  start_time: '2021-07-28T15:00'
+                  end_time: '2021-07-28T16:30'
                   place: string
                   title: string
                   url: 'http://example.com'
               最低限の要素のみの場合:
                 value:
                   emoji: string
-                  year: 2021
-                  month: 8
-                  day: 20
-                  start_time: '14:15'
+                  start_time: '2021-07-28T15:00'
                   title: string
         description: |-
           idを除いたスケジュールモデルを想定
           idはバックエンドで生成
           emojiに関しては作成時のフォームでは必須にはしない。埋められていない場合はフロントエンド側でランダムに一つ決めて送信する
-  '/schedule/{schedule}':
+  '/schedule/{user}/{schedule}':
     parameters:
       - schema:
           type: string
@@ -144,6 +121,11 @@ paths:
         in: path
         required: true
         description: スケジュールのuid
+      - schema:
+          type: string
+        name: user
+        in: path
+        required: true
     delete:
       summary: delete schedule
       tags:
@@ -180,18 +162,15 @@ paths:
               examples:
                 example-1:
                   value:
-                    id: 6ba7b810-9dad-11d1-80b4-00c04fd430c8
+                    id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
                     about: string
                     emoji: string
-                    year: 2021
-                    month: 1
-                    day: 1
-                    start_time: '11:00'
-                    end_time: '17:00'
+                    start_time: '2021-07-28T15:00'
+                    end_time: '2021-07-28T15:00'
                     place: string
                     title: string
                     url: 'http://example.com'
-                    user_id: 6ba7b810-9dad-11d1-80b4-00c04fd430c8
+                    user_id: a169451c-8525-4352-b8ca-070dd449a1a5
         '404':
           description: Not Found
       description: スケジュールの情報を取得する
@@ -252,6 +231,10 @@ paths:
         '409':
           description: 既に存在する名前が出たときにコンフリクト
       description: |
+        更新できる内容
+        ・ユーザーのスケジュールタイトル
+        ・名前
+
         ユーザーのスケジュールタイトル・名前の更新を行う
       security:
         - Firebase: []
@@ -274,34 +257,53 @@ paths:
                   type: string
                   minLength: 1
                   maxLength: 20
-              required:
-                - name
-                - title
             examples:
-              両方変更:
+              変更:
                 value:
                   name: string
                   title: string
-              名前のみを変更:
-                value:
-                  name: string
-                  title: default value
-        description: 両方を更新する場合片方を更新する場合どちらであっても両方の情報を送信する
+        description: 変更箇所によらず全ての情報を送信する
       tags:
         - user
-        - sns
-  '/user/{username}':
+    get:
+      summary: ''
+      operationId: get-user-edit
+      responses:
+        '200':
+          description: ユーザーの情報
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+      tags:
+        - user
+      description: |-
+        ユーザーを更新するために必要な情報を返す
+        認証必須で認証トークンのidを参照する
+      security:
+        - Firebase: []
+  '/user/{title}/{year}/{month}':
     parameters:
       - schema:
           type: string
-          maxLength: 30
-          minLength: 1
-        name: username
+        name: title
         in: path
         required: true
-        description: ユーザー名
+        description: ユーザーのスケジュールのタイトル
+      - schema:
+          type: string
+        name: year
+        in: path
+        required: true
+        description: 検索する年
+      - schema:
+          type: string
+        name: month
+        in: path
+        required: true
+        description: 検索する月
     get:
-      summary: Get User Schedule by User ID
+      summary: Get User Schedule by User Title
       tags:
         - user
         - schedule
@@ -310,24 +312,41 @@ paths:
           $ref: '#/components/responses/UserSchedule'
         '404':
           description: Not Found
+        '':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Schedule'
+              examples:
+                example-1:
+                  value:
+                    - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
+                      about: string
+                      emoji: string
+                      start_time: '2021-07-28T15:00'
+                      end_time: '2021-07-28T15:00'
+                      place: string
+                      title: string
+                      url: 'http://example.com'
+                      user_id: a169451c-8525-4352-b8ca-070dd449a1a5
+          description: スケジュール一覧を返す
       operationId: get-user-username
       description: |-
-        ユーザーネームからスケジュールを返す
-        スケジュールに関してはクエリで指定された年・月のもののみ返す
-      parameters:
-        - $ref: '#/components/parameters/year'
-        - $ref: '#/components/parameters/month'
+        ユーザーのスケジュールタイトルからスケジュールを返す
+        年・月をつけつけてその期間に始まるスケジュールのみ返す
+
+        該当する値がない場合は空の配列を返す
+      parameters: []
       security: []
-  '/user/{username}/info':
+  '/user/{schedule_title}/info':
     parameters:
       - schema:
           type: string
-          minLength: 1
-          maxLength: 30
-        name: username
+        name: schedule_title
         in: path
         required: true
-        description: ユーザー名
     get:
       summary: user get info
       tags:
@@ -340,21 +359,23 @@ paths:
       operationId: get-user-username-info
       description: そのユーザーに関する基本的な情報を返す
       security: []
-  '/user/{username}/unique':
+  '/user/{schedule_title}/unique':
     parameters:
       - schema:
           type: string
-        name: username
+        name: schedule_title
         in: path
         required: true
-        description: ユーザー名
     get:
-      summary: check unique username
+      summary: check unique schedule_title
       tags:
         - user
       responses:
         '200':
-          description: 判定結果
+          description: |-
+            判定結果
+
+            バリデーションで落ちた場合であっても200を返すがその場合判定は行わず必ずfalseを返す
           content:
             application/json:
               schema:
@@ -377,11 +398,90 @@ paths:
                     result: false
         '400':
           description: ユーザー名がない場合・長すぎる場合に返す
-      operationId: get-user-username-unique
+      operationId: get-user-title-unique
       description: |-
-        ユーザー名を入れそのユーザー名が既に存在しているかどうかを判定し返す
+        schedle_titleを入れそれが既に存在しているかどうかを判定し返す
         結果によらずステータスは200を返す
       security: []
+  /sns:
+    patch:
+      summary: update user sns
+      operationId: patch-update-sns
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                description: ''
+                type: object
+                x-examples:
+                  example-1:
+                    sns:
+                      - url: 'http://github.com'
+                properties:
+                  sns:
+                    type: array
+                    uniqueItems: false
+                    minItems: 1
+                    items:
+                      type: object
+                      properties:
+                        url:
+                          type: string
+                          minLength: 1
+                          format: uri
+                      required:
+                        - url
+              examples:
+                一つ更新:
+                  value:
+                    sns:
+                      - url: 'http://example.com'
+                SNS情報全削除:
+                  value: {}
+                五つ更新:
+                  value:
+                    sns:
+                      - url: 'http://example.com'
+                      - url: 'http://example.com'
+                      - url: 'http://example.com'
+                      - url: 'http://example.com'
+                      - url: 'http://example.com'
+      tags:
+        - sns
+      description: |-
+        ユーザーのSNS情報を更新する
+
+        更新できるSNSの数は0以上５以下であること
+
+        SNS情報はURLであることが必須であるがそのURLの場所は気にしない　重複も気にしない
+
+        内部では更新する際該当ユーザーのSNS情報を全て消してから全て追加している
+      security:
+        - Firebase: []
+    get:
+      summary: edit sns
+      operationId: get-sns-edit
+      responses:
+        '200':
+          description: 登録されたSNS一覧
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SNS'
+              examples:
+                example-1:
+                  value:
+                    - id: '1'
+                      url: 'http://example.com'
+      tags:
+        - sns
+      description: そのユーザのSNS情報を返す
+      security:
+        - Firebase: []
 components:
   schemas:
     Schedule:
@@ -402,11 +502,8 @@ components:
         - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
           about: string
           emoji: string
-          year: 2021
-          month: 1
-          day: 1
-          start_time: '11:00'
-          end_time: '17:00'
+          start_time: '2021-07-28T15:00'
+          end_time: '2021-07-28T15:00'
           place: string
           title: string
           url: 'http://example.com'
@@ -424,27 +521,13 @@ components:
         emoji:
           type: string
           minLength: 1
-        year:
-          type: number
-          minimum: 2021
-          maximum: 2025
-        month:
-          type: number
-          minimum: 1
-          maximum: 12
-        day:
-          type: number
-          minimum: 1
-          maximum: 31
         start_time:
           type: string
           minLength: 1
-          pattern: '^([01][0-9]|2[0-3]):[0-5][0-9]$'
           example: '11:00'
         end_time:
           type: string
           minLength: 1
-          pattern: '^([01][0-9]|2[0-3]):[0-5][0-9]$'
           example: '17:00'
         place:
           type: string
@@ -462,9 +545,6 @@ components:
           format: uuid
       required:
         - emoji
-        - year
-        - month
-        - day
         - start_time
         - title
         - user_id
@@ -551,10 +631,6 @@ components:
               schedule_title:
                 type: string
                 minLength: 1
-              sns:
-                type: array
-                items:
-                  $ref: '#/components/schemas/SNS'
             required:
               - id
               - name
@@ -628,15 +704,14 @@ components:
                 - id: 497f6eca-6276-4993-bfeb-53cbbbba6f08
                   about: string
                   emoji: string
-                  year: 2021
-                  month: 1
-                  day: 1
-                  start_time: '11:00'
-                  end_time: '17:00'
+                  start_time: '2021-07-28T15:00'
+                  end_time: '2021-07-28T15:00'
                   place: string
                   title: string
                   url: 'http://example.com'
                   user_id: a169451c-8525-4352-b8ca-070dd449a1a5
+            example-2:
+              value: []
   parameters:
     year:
       name: year
