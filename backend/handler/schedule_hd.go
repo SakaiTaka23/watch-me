@@ -73,7 +73,5 @@ func (handler *ScheduleHandler) UserSchedule(c *fiber.Ctx) error {
 	}
 
 	schedules := handler.scheduleUsecase.FindFromUserID(userID, page)
-	return c.JSON(fiber.Map{
-		"schedules": schedules,
-	})
+	return c.JSON(schedules)
 }
