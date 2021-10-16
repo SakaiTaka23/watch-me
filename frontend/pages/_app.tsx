@@ -2,6 +2,7 @@ import { createTheme, CssBaseline, ThemeProvider, useMediaQuery } from '@materia
 import axios from 'axios';
 import { AppProps } from 'next/app';
 import { useEffect, useMemo } from 'react';
+import Header from '../components/organisms/header/Header';
 import { AuthProvider } from '../hooks/firebase/authContext';
 import '../styles/globals.css';
 
@@ -31,6 +32,7 @@ const App = ({ Component, pageProps }: AppProps) => {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <AuthProvider>
+        <Header />
         <Component {...pageProps} />
       </AuthProvider>
     </ThemeProvider>
