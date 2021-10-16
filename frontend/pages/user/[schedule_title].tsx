@@ -2,8 +2,7 @@ import { Box } from '@material-ui/core';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
-import ScheduleList from '../../components/organisms/schedules/ScheduleList';
-import Selector from '../../components/organisms/selector/Selector';
+import SchedulePeriod from '../../components/organisms/schedules/SchedulePeriod';
 import ProfileCard from '../../components/organisms/user/ProfileCard';
 import useGetUserInformation from '../../hooks/api/user/useGetUserInformation';
 import { PeriodProvider } from '../../hooks/assets/usePeriod';
@@ -30,10 +29,7 @@ const GetUserSchedule: FC<Props> = ({ schedule_title }) => {
         <ProfileCard userInfo={userInfo} />
       </Box>
       <PeriodProvider>
-        <Box mt={5} mb={4}>
-          <Selector />
-        </Box>
-        <ScheduleList schedule_title={schedule_title} />
+        <SchedulePeriod schedule_title={schedule_title} />
       </PeriodProvider>
     </>
   );

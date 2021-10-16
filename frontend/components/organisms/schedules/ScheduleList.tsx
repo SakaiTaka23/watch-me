@@ -1,22 +1,15 @@
 import { Box, Divider, Grid, Link, Typography } from '@material-ui/core';
 import React, { FC } from 'react';
-import useGetSchedules from '../../../hooks/api/user/useGetSchedules';
-import { usePeriod } from '../../../hooks/assets/usePeriod';
 import ScheduleCard from './ScheduleCard';
 import ScheduleIcon from '@material-ui/icons/Schedule';
+import { Schedule } from '../../../types/model/schedule';
 
 type Props = {
   schedule_title: string;
+  schedules: Schedule[];
 };
 
-const ScheduleList: FC<Props> = ({ schedule_title }) => {
-  const { period } = usePeriod();
-  const { schedules, isLoading } = useGetSchedules(schedule_title, period.year, period.month);
-
-  if (isLoading) {
-    return <div>Loading</div>;
-  }
-
+const ScheduleList: FC<Props> = ({ schedule_title, schedules }) => {
   if (schedules.length === 0) {
     return (
       <Box display='flex' justifyContent='center' alignItems='center'>
