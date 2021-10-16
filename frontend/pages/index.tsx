@@ -15,10 +15,16 @@ const Index = () => {
 
   return (
     <div>
-      <pre>{user ? user.displayName + 'でログインしています' : 'ログインしていません'}</pre>
-      <button onClick={() => Logout()}>Logout</button>
+      {user ? (
+        <>
+          <pre>{user.displayName + 'でログインしています'}</pre>
+          <button onClick={() => Logout()}>Logout</button>
 
-      <ScheduleList schedule_title={data.title} schedules={data.schedules} />
+          <ScheduleList schedule_title={data.title} schedules={data.schedules} />
+        </>
+      ) : (
+        <h1>ログインしていません</h1>
+      )}
     </div>
   );
 };
