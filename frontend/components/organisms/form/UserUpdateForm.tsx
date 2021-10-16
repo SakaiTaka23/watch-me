@@ -6,6 +6,7 @@ import useUpdateUser from '../../../hooks/api/user/useUpdateUser';
 import SubmitButton from '../../molecules/SubmitButton';
 import TitleInput from '../input/user/TitleInput';
 import NameInput from '../input/user/NameInput';
+import Loading from '../loading/Loading';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -38,7 +39,7 @@ const UserUpdateForm: FC = () => {
   };
 
   if (isLoading) {
-    return <div>Loading</div>;
+    return <Loading />;
   }
   methods.setValue('name', userInfo.name);
 

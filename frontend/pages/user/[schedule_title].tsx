@@ -2,6 +2,7 @@ import { Box } from '@material-ui/core';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
+import Loading from '../../components/organisms/loading/Loading';
 import SchedulePeriod from '../../components/organisms/schedules/SchedulePeriod';
 import ProfileCard from '../../components/organisms/user/ProfileCard';
 import useGetUserInformation from '../../hooks/api/user/useGetUserInformation';
@@ -16,7 +17,7 @@ const GetUserSchedule: FC<Props> = ({ schedule_title }) => {
   const { userInfo, isLoading, isError } = useGetUserInformation(schedule_title);
 
   if (isLoading) {
-    return <h1>loading</h1>;
+    return <Loading />;
   }
 
   if (isError) {

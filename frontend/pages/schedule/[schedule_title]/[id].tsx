@@ -3,6 +3,7 @@ import { Emoji } from 'emoji-mart';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import React, { FC } from 'react';
+import Loading from '../../../components/organisms/loading/Loading';
 import useGetScheduleInfo from '../../../hooks/api/schedule/useGetScheduleInfo';
 
 type Props = {
@@ -25,7 +26,7 @@ const Index: FC<Props> = ({ schedule_title, id }) => {
   const { info, isLoading, isError } = useGetScheduleInfo(id, schedule_title);
 
   if (isLoading) {
-    return <div>Loading</div>;
+    return <Loading />;
   }
 
   if (isError) {
