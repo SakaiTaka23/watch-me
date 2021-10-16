@@ -32,7 +32,7 @@ const useFirebase = () => {
                 Authorization: `Bearer ${token}`,
               },
             });
-            router.replace('/private');
+            router.push('/');
           });
       })
       .catch((error) => {
@@ -49,9 +49,14 @@ const useFirebase = () => {
   };
 
   const SignIn = async (email: string, password: string) => {
-    await firebaseAuth.signInWithEmailAndPassword(email, password).catch((error) => {
-      alert(error);
-    });
+    await firebaseAuth
+      .signInWithEmailAndPassword(email, password)
+      .then(() => {
+        router.push('/');
+      })
+      .catch((error) => {
+        alert(error);
+      });
   };
 
   return {
