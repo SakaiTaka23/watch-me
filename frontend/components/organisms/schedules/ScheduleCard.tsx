@@ -13,7 +13,7 @@ const ScheduleCard: FC<Props> = ({ schedule }) => {
   return (
     <Grid item>
       <Grid container direction='row' justifyContent='space-around' alignItems='center'>
-        <Typography variant='h1'>{month}</Typography>
+        <Typography variant='h1'>{month + 1}</Typography>
         <Grid item xs={6}>
           <Box display='flex' flexDirection='column'>
             <Typography variant='h5'>{schedule.title}</Typography>

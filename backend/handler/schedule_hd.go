@@ -5,6 +5,7 @@ import (
 	"backend/handler/params"
 	"backend/handler/request"
 	"backend/usecase"
+	"strconv"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -62,4 +63,18 @@ func (handler *ScheduleHandler) GetSchedule(c *fiber.Ctx) error {
 		return c.SendStatus(404)
 	}
 	return c.JSON(schedule)
+}
+
+func (handler *ScheduleHandler) UserSchedule(c *fiber.Ctx) error {
+	userID := c.Locals("user").(model.User).ID
+	page, err := strconv.Atoi(c.Query("page", "1"))
+	if err != nil {
+		return c.SendStatus(400)
+	}
+
+	schedule_title, schedules := handler.scheduleUsecase.FindFromUserID(userID, page)
+	return c.JSON(fiber.Map{
+		"title":     schedule_title,
+		"schedules": schedules,
+	})
 }

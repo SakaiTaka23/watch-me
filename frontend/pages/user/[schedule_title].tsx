@@ -2,10 +2,9 @@ import { Box } from '@material-ui/core';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
-import ScheduleList from '../../components/organisms/schedules/ScheduleList';
-import Selector from '../../components/organisms/selector/Selector';
+import SchedulePeriod from '../../components/organisms/schedules/SchedulePeriod';
 import ProfileCard from '../../components/organisms/user/ProfileCard';
-import useUniqueUser from '../../hooks/api/user/useUniqueUser';
+import useGetUserInformation from '../../hooks/api/user/useGetUserInformation';
 import { PeriodProvider } from '../../hooks/assets/usePeriod';
 
 type Props = {
@@ -14,25 +13,23 @@ type Props = {
 
 const GetUserSchedule: FC<Props> = ({ schedule_title }) => {
   const router = useRouter();
-  const { isUnique, isLoading } = useUniqueUser(schedule_title);
+  const { userInfo, isLoading, isError } = useGetUserInformation(schedule_title);
+
   if (isLoading) {
-    return <div>Loading</div>;
+    return <h1>loading</h1>;
   }
-  if (isUnique.result) {
+
+  if (isError) {
     router.push('/404');
-    return null;
   }
 
   return (
     <>
       <Box mt={5} mb={2}>
-        <ProfileCard schedule_title={schedule_title} />
+        <ProfileCard userInfo={userInfo} />
       </Box>
       <PeriodProvider>
-        <Box mt={5} mb={4}>
-          <Selector />
-        </Box>
-        <ScheduleList schedule_title={schedule_title} />
+        <SchedulePeriod schedule_title={schedule_title} />
       </PeriodProvider>
     </>
   );

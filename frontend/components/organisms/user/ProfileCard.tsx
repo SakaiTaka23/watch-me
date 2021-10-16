@@ -1,19 +1,13 @@
 import { Box, Typography } from '@material-ui/core';
 import React, { FC } from 'react';
-import useGetUserInformation from '../../../hooks/api/user/useGetUserInformation';
+import { User } from '../../../types/model/user';
 import SNSList from '../sns/SNSList';
 
 type Props = {
-  schedule_title: string;
+  userInfo: User;
 };
 
-const ProfileCard: FC<Props> = ({ schedule_title }) => {
-  const { userInfo, isLoading, isError } = useGetUserInformation(schedule_title);
-
-  if (isLoading) {
-    return <div>Loading</div>;
-  }
-
+const ProfileCard: FC<Props> = ({ userInfo }) => {
   return (
     <Box display='flex' justifyContent='center'>
       <div>

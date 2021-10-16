@@ -8,6 +8,7 @@ import (
 type ScheduleUsecase interface {
 	CreateSchedule(schedule *model.Schedule) (string, string)
 	DeleteSchedule(id string)
+	FindFromUserID(user_id string, page int) (string, *[]model.Schedule)
 	FindSchedule(id string) (*model.Schedule, error)
 }
 
@@ -29,6 +30,12 @@ func (usecase *scheduleUsecase) CreateSchedule(schedule *model.Schedule) (string
 
 func (usecase *scheduleUsecase) DeleteSchedule(id string) {
 	usecase.scheduleRepo.DeleteSchedule(id)
+}
+
+func (usecase *scheduleUsecase) FindFromUserID(user_id string, page int) (string, *[]model.Schedule) {
+	user, _ := usecase.userRepo.FindFromID(user_id)
+	schedules := usecase.scheduleRepo.FindFromUserID(user_id, page)
+	return user.ScheduleTitle, schedules
 }
 
 func (usecase *scheduleUsecase) FindSchedule(id string) (*model.Schedule, error) {
