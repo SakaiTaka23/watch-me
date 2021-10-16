@@ -1,11 +1,20 @@
-import { AppBar, Box, makeStyles, Toolbar, Typography } from '@material-ui/core';
-import React, { useContext } from 'react';
+import { AppBar, Box, Button, makeStyles, Modal, Toolbar, Typography } from '@material-ui/core';
+import React, { useContext, useState } from 'react';
 import { AuthContext } from '../../../hooks/firebase/authContext';
 import Link from 'next/link';
+import { useFirebase } from '../../../hooks/firebase/useFirebase';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
+  },
+  paper: {
+    position: 'absolute',
+    width: 400,
+    backgroundColor: theme.palette.background.paper,
+    border: '2px solid #000',
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
   },
   title: {
     flexGrow: 1,
@@ -15,6 +24,17 @@ const useStyles = makeStyles(() => ({
 const Header = () => {
   const classes = useStyles();
   const { user } = useContext(AuthContext);
+  const { Logout } = useFirebase();
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <Box className={classes.root} mb={3}>
       <AppBar position='static'>
@@ -33,11 +53,17 @@ const Header = () => {
                   </Typography>
                 </Link>
               </Box>
-              <Link href='logout' passHref>
+              <button onClick={handleOpen}>
                 <Typography variant='subtitle1'>
                   <a>LOGOUT</a>
                 </Typography>
-              </Link>
+              </button>
+              <Modal open={open} onClose={handleClose} closeAfterTransition>
+                <div className={classes.paper}>
+                  <Typography>LOGOUT?</Typography>
+                  <Button onClick={() => Logout()}>Confirm</Button>
+                </div>
+              </Modal>
             </>
           ) : (
             <>
