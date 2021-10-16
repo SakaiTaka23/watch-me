@@ -1,19 +1,24 @@
 import React, { useContext } from 'react';
-import useGetUserSchedule from '../hooks/api/schedule/useGetUserSchedules';
+import ScheduleList from '../components/organisms/schedules/ScheduleList';
+import useGetUserSchedules from '../hooks/api/schedule/useGetUserSchedules';
 import { AuthContext } from '../hooks/firebase/authContext';
 import { useFirebase } from '../hooks/firebase/useFirebase';
 
 const Index = () => {
   const { user } = useContext(AuthContext);
   const { Logout } = useFirebase();
-  const { schedules, isLoading, isError } = useGetUserSchedule();
+  const { data, isLoading } = useGetUserSchedules();
 
-  console.log(schedules);
+  if (isLoading) {
+    return <h1>loading</h1>;
+  }
 
   return (
     <div>
       <pre>{user ? user.displayName + 'でログインしています' : 'ログインしていません'}</pre>
       <button onClick={() => Logout()}>Logout</button>
+
+      <ScheduleList schedule_title={data.title} schedules={data.schedules} />
     </div>
   );
 };
