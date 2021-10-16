@@ -41,11 +41,17 @@ const Header = () => {
             </>
           ) : (
             <>
-              <Link href='signin'>
-                <a>SIGN IN</a>
-              </Link>
+              <Box display='flex' mx={3}>
+                <Link href='signin' passHref>
+                  <Typography variant='subtitle1'>
+                    <a>SIGN IN</a>
+                  </Typography>
+                </Link>
+              </Box>
               <Link href='signup'>
-                <a>SIGN UP</a>
+                <Typography variant='subtitle1'>
+                  <a>SIGN UP</a>
+                </Typography>
               </Link>
             </>
           )}
