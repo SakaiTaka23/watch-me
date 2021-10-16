@@ -29,7 +29,7 @@ func (scheduleRepo *ScheduleRepository) DeleteSchedule(id string) {
 
 func (scheduleRepo *ScheduleRepository) FindFromUserID(user_id string, page int) *[]model.Schedule {
 	var schedules []model.Schedule
-	scheduleRepo.MySQLHandler.Conn.Where("user_id = ?", user_id).Scopes(paginate(page, 20)).Find(&schedules)
+	scheduleRepo.MySQLHandler.Conn.Where("user_id = ?", user_id).Order("start_date desc").Scopes(paginate(page, 20)).Find(&schedules)
 	return &schedules
 }
 
