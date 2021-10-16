@@ -53,11 +53,9 @@ const Header = () => {
                   </Typography>
                 </Link>
               </Box>
-              <button onClick={handleOpen}>
-                <Typography variant='subtitle1'>
-                  <a>LOGOUT</a>
-                </Typography>
-              </button>
+              <Button onClick={handleOpen}>
+                <Typography variant='subtitle1'>LOGOUT</Typography>
+              </Button>
               <Modal open={open} onClose={handleClose} closeAfterTransition>
                 <div className={classes.paper}>
                   <Typography>LOGOUT?</Typography>
