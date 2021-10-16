@@ -66,13 +66,13 @@ const Header = () => {
           ) : (
             <>
               <Box display='flex' mx={3}>
-                <Link href='signin' passHref>
+                <Link href='/signin' passHref>
                   <Typography variant='subtitle1'>
                     <a>SIGN IN</a>
                   </Typography>
                 </Link>
               </Box>
-              <Link href='signup'>
+              <Link href='/signup'>
                 <Typography variant='subtitle1'>
                   <a>SIGN UP</a>
                 </Typography>
