@@ -5,6 +5,7 @@ import (
 	"backend/handler/params"
 	"backend/handler/request"
 	"backend/usecase"
+	"log"
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
@@ -48,6 +49,25 @@ func (handler *ScheduleHandler) DeleteSchedule(c *fiber.Ctx) error {
 	}
 	handler.scheduleUsecase.DeleteSchedule(param.UID)
 	return c.SendStatus(200)
+}
+
+func (handler *ScheduleHandler) EditSchedule(c *fiber.Ctx) error {
+	userID := c.Locals("user").(model.User).ID
+	param := params.Schedule{
+		User: "default",
+		UID:  c.Params("schedule"),
+	}
+	if err := param.Validate(); err != nil {
+		return c.SendStatus(400)
+	}
+	log.Println(param.UID, userID)
+	schedule, err := handler.scheduleUsecase.FindFromUserIDAndScheduleTitle(param.UID, userID)
+	if err != nil {
+		return c.SendStatus(404)
+	}
+	return c.JSON(fiber.Map{
+		"schedule": schedule,
+	})
 }
 
 func (handler *ScheduleHandler) GetSchedule(c *fiber.Ctx) error {

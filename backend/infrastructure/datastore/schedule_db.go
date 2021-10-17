@@ -33,6 +33,14 @@ func (scheduleRepo *ScheduleRepository) FindFromUserID(user_id string, page int)
 	return &schedules
 }
 
+func (scheduleRepo *ScheduleRepository) FindFromUserIDAndScheduleTitle(id string, user_id string) (*model.Schedule, error) {
+	var schedule model.Schedule
+	if err := scheduleRepo.MySQLHandler.Conn.Where("id = ?", id).Where("user_id = ?", user_id).First(&schedule).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, err
+	}
+	return &schedule, nil
+}
+
 func (scheduleRepo *ScheduleRepository) GetScheduleInfo(id string) (*model.Schedule, error) {
 	var schedule model.Schedule
 	if err := scheduleRepo.MySQLHandler.Conn.Where("id = ?", id).First(&schedule).Error; errors.Is(err, gorm.ErrRecordNotFound) {
