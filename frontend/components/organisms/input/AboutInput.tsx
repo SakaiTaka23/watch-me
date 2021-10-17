@@ -1,32 +1,45 @@
 import { TextField, Typography } from '@material-ui/core';
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, FC, useEffect } from 'react';
 import { useState } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { Controller, useFormContext } from 'react-hook-form';
 
-const AboutInput = () => {
+type Props = {
+  defaultValue?: string;
+};
+
+const AboutInput: FC<Props> = ({ defaultValue = '' }) => {
   const {
-    register,
+    control,
+    setValue,
     formState: { errors },
   } = useFormContext();
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(defaultValue.length);
 
-  const countWord = (e: ChangeEvent<HTMLInputElement>) => {
-    setCount(e.target.value.length);
-  };
+  useEffect(() => {
+    setValue('about', defaultValue);
+  }, [defaultValue]);
 
   return (
     <>
-      <TextField
-        variant='outlined'
-        margin='normal'
-        placeholder='About'
-        minRows='5'
-        maxRows='5'
-        helperText={`${count} / 250`}
-        multiline
-        fullWidth
-        {...register('about', { maxLength: 250 })}
-        onChange={countWord}
+      <Controller
+        control={control}
+        defaultValue=''
+        name='about'
+        rules={{ maxLength: 250 }}
+        render={({ field }) => (
+          <TextField
+            {...field}
+            variant='outlined'
+            margin='normal'
+            placeholder='About'
+            minRows='5'
+            maxRows='5'
+            helperText={`${count} / 250`}
+            multiline
+            fullWidth
+            onChange={(e) => field.onChange(setCount(e.target.value.length))}
+          />
+        )}
       />
       {errors.about && (
         <Typography color='error' variant='overline'>
