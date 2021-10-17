@@ -3,8 +3,8 @@ import { Emoji } from 'emoji-mart';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import React, { FC } from 'react';
-import Loading from '../../../components/organisms/loading/Loading';
-import useGetScheduleInfo from '../../../hooks/api/schedule/useGetScheduleInfo';
+import Loading from '../../../../components/organisms/loading/Loading';
+import useGetScheduleInfo from '../../../../hooks/api/schedule/useGetScheduleInfo';
 
 type Props = {
   schedule_title: string;
