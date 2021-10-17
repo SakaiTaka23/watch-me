@@ -11,7 +11,7 @@ const useEditSchedule = (schedule_id: string) => {
   const { data, error } = useSWR<Schedule, any>(`schedule/${schedule_id}/edit`, fetcher);
 
   return {
-    data: data,
+    schedule: data,
     isLoading: !error && !data,
     isError: error,
   };
