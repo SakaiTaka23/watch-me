@@ -49,6 +49,11 @@ func (scheduleRepo *ScheduleRepository) GetScheduleInfo(id string) (*model.Sched
 	return &schedule, nil
 }
 
+func (scheduleRepo *ScheduleRepository) UpdateSchedule(schedule *model.Schedule) error {
+	err := scheduleRepo.MySQLHandler.Conn.Where("id = ?", schedule.ID).Where("user_id = ?", schedule.UserID).Save(&schedule).Error
+	return err
+}
+
 func paginate(page int, pageSize int) func(db *gorm.DB) *gorm.DB {
 	return func(db *gorm.DB) *gorm.DB {
 		offset := (page - 1) * pageSize

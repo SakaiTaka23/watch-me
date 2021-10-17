@@ -98,3 +98,25 @@ func (handler *ScheduleHandler) UserSchedule(c *fiber.Ctx) error {
 		"schedules": schedules,
 	})
 }
+
+func (handler *ScheduleHandler) UpdateSchedule(c *fiber.Ctx) error {
+	var request request.CreateSchedule
+	userID := c.Locals("user").(model.User).ID
+	scheduleID := c.Params("schedule")
+
+	if err := c.BodyParser(&request); err != nil {
+		return c.SendStatus(400)
+	}
+	if err := request.Validate(); err != nil {
+		return c.SendStatus(400)
+	}
+	schedule := request.ChangeStruct()
+	schedule.ID = scheduleID
+	schedule.UserID = userID
+
+	err := handler.scheduleUsecase.UpdateSchedule(schedule)
+	if err != nil {
+		return c.SendStatus(404)
+	}
+	return c.SendStatus(200)
+}
