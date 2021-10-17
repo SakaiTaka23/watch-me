@@ -1,25 +1,32 @@
 import { TextField, Typography } from '@material-ui/core';
-import React from 'react';
-import { useFormContext } from 'react-hook-form';
+import React, { FC, useEffect } from 'react';
+import { Controller, useFormContext } from 'react-hook-form';
 
-const TitleInput = () => {
+type Props = {
+  defaultValue: string;
+};
+
+const TitleInput: FC<Props> = ({ defaultValue = '' }) => {
   const {
-    register,
+    control,
+    setValue,
     formState: { errors },
   } = useFormContext();
 
+  useEffect(() => {
+    setValue('title', defaultValue);
+  }, [defaultValue]);
+
   return (
     <>
-      <TextField
-        variant='outlined'
-        margin='normal'
-        placeholder='Title *'
-        fullWidth
-        {...register('title', {
-          required: 'title is required',
-          min: 1,
-          max: 100,
-        })}
+      <Controller
+        control={control}
+        defaultValue=''
+        name='title'
+        rules={{ required: 'title is required', min: 1, max: 100 }}
+        render={({ field }) => (
+          <TextField {...field} variant='outlined' margin='normal' placeholder='Title *' fullWidth />
+        )}
       />
       {errors.title && (
         <Typography color='error' variant='overline'>
