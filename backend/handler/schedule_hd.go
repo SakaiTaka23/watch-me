@@ -65,9 +65,7 @@ func (handler *ScheduleHandler) EditSchedule(c *fiber.Ctx) error {
 	if err != nil {
 		return c.SendStatus(404)
 	}
-	return c.JSON(fiber.Map{
-		"schedule": schedule,
-	})
+	return c.JSON(schedule)
 }
 
 func (handler *ScheduleHandler) GetSchedule(c *fiber.Ctx) error {
