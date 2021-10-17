@@ -4,6 +4,12 @@ import { FormProvider, useForm } from 'react-hook-form';
 import useEditSchedule from '../../../hooks/api/schedule/useEditSchedule';
 import useUpdateSchedule from '../../../hooks/api/schedule/useUpdateSchedule';
 import SubmitButton from '../../molecules/SubmitButton';
+import AboutInput from '../input/AboutInput';
+import EmojiInput from '../input/EmojiInput';
+import PeriodInput from '../input/PeriodInput';
+import PlaceInput from '../input/PlaceInput';
+import TitleInput from '../input/TitleInput';
+import URLInput from '../input/URLInput';
 import Loading from '../loading/Loading';
 
 type Props = {
@@ -51,6 +57,12 @@ const ScheduleUpdateForm: FC<Props> = ({ id }) => {
       <div className={classes.paper}>
         <FormProvider {...methods}>
           <form className={classes.form} onSubmit={methods.handleSubmit(handleClick)}>
+            <TitleInput />
+            <EmojiInput />
+            <PeriodInput />
+            <AboutInput />
+            <PlaceInput />
+            <URLInput />
             <SubmitButton />
           </form>
         </FormProvider>
