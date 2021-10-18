@@ -3,6 +3,7 @@ import React, { FC } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import useEditSchedule from '../../../hooks/api/schedule/useEditSchedule';
 import useUpdateSchedule from '../../../hooks/api/schedule/useUpdateSchedule';
+import { Schedule } from '../../../types/model/schedule';
 import SubmitButton from '../../molecules/SubmitButton';
 import AboutInput from '../input/AboutInput';
 import EmojiInput from '../input/EmojiInput';
@@ -39,17 +40,17 @@ const useStyles = makeStyles((theme) => ({
 const ScheduleUpdateForm: FC<Props> = ({ id }) => {
   const classes = useStyles();
   const { schedule, isLoading } = useEditSchedule(id);
-  const { updateSchedule } = useUpdateSchedule();
-  const methods = useForm({ defaultValues: schedule });
+  const { updateSchedule, error } = useUpdateSchedule();
+  const methods = useForm();
 
   if (isLoading) {
     return <Loading />;
   }
 
-  console.log(schedule);
-
-  const handleClick = (data: any) => {
+  const handleClick = (data: Schedule) => {
     console.log(data);
+    updateSchedule(id, data);
+    console.log(error);
   };
 
   return (
@@ -57,12 +58,12 @@ const ScheduleUpdateForm: FC<Props> = ({ id }) => {
       <div className={classes.paper}>
         <FormProvider {...methods}>
           <form className={classes.form} onSubmit={methods.handleSubmit(handleClick)}>
-            <TitleInput />
-            <EmojiInput />
-            <PeriodInput />
-            <AboutInput />
-            <PlaceInput />
-            <URLInput />
+            <TitleInput defaultValue={schedule.title} />
+            <EmojiInput defaultValue={schedule.emoji} />
+            <PeriodInput startDefaultValue={schedule.start_time} endDefaultValue={schedule.end_time} />
+            <AboutInput defaultValue={schedule?.about} />
+            <PlaceInput defaultValue={schedule?.place} />
+            <URLInput defaultValue={schedule?.url} />
             <SubmitButton />
           </form>
         </FormProvider>

@@ -10,8 +10,7 @@ const useUpdateSchedule = () => {
   const headers = { headers: { Authorization: `Bearer ${token}` } };
 
   const updateSchedule = (schedule_id: string, schedule: Schedule) => {
-    const data = { schedule };
-    axiosInstance.patch(`/schedule/${schedule_id}`, data, headers).catch((e: AxiosError) => {
+    axiosInstance.patch(`/schedule/${schedule_id}`, schedule, headers).catch((e: AxiosError) => {
       setError(e);
     });
   };
