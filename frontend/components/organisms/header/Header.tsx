@@ -53,6 +53,13 @@ const Header = () => {
                   </Typography>
                 </Link>
               </Box>
+              <Box display='flex' mx={3}>
+                <Link href='/schedule/new'>
+                  <Typography variant='subtitle1'>
+                    <a>NEW</a>
+                  </Typography>
+                </Link>
+              </Box>
               <Button onClick={handleOpen}>
                 <Typography variant='subtitle1'>LOGOUT</Typography>
               </Button>
