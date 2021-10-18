@@ -9,7 +9,9 @@ type ScheduleUsecase interface {
 	CreateSchedule(schedule *model.Schedule) (string, string)
 	DeleteSchedule(id string)
 	FindFromUserID(user_id string, page int) (string, *[]model.Schedule)
+	FindFromUserIDAndScheduleTitle(id string, user_id string) (*model.Schedule, error)
 	FindSchedule(id string) (*model.Schedule, error)
+	UpdateSchedule(schedule *model.Schedule) error
 }
 
 type scheduleUsecase struct {
@@ -38,6 +40,14 @@ func (usecase *scheduleUsecase) FindFromUserID(user_id string, page int) (string
 	return user.ScheduleTitle, schedules
 }
 
+func (usecase *scheduleUsecase) FindFromUserIDAndScheduleTitle(id string, user_id string) (*model.Schedule, error) {
+	return usecase.scheduleRepo.FindFromUserIDAndScheduleTitle(id, user_id)
+}
+
 func (usecase *scheduleUsecase) FindSchedule(id string) (*model.Schedule, error) {
 	return usecase.scheduleRepo.GetScheduleInfo(id)
+}
+
+func (usecase *scheduleUsecase) UpdateSchedule(schedule *model.Schedule) error {
+	return usecase.scheduleRepo.UpdateSchedule(schedule)
 }

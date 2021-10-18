@@ -1,9 +1,13 @@
 import { Box, IconButton, makeStyles, Modal, TextField, Typography } from '@material-ui/core';
 import { Emoji, Picker } from 'emoji-mart';
-import React, { useEffect, useState } from 'react';
-import { useFormContext } from 'react-hook-form';
+import React, { FC, useEffect, useState } from 'react';
+import { Controller, useFormContext } from 'react-hook-form';
 import 'emoji-mart/css/emoji-mart.css';
 import { EmojiEmotions } from '@material-ui/icons';
+
+type Props = {
+  defaultValue?: string;
+};
 
 const rand = () => {
   return Math.round(Math.random() * 20) - 10;
@@ -31,15 +35,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const EmojiInput = () => {
+const EmojiInput: FC<Props> = ({ defaultValue = '' }) => {
   const classes = useStyles();
   const {
-    register,
+    control,
     setValue,
     formState: { errors },
   } = useFormContext();
   const [modalStyle] = useState(getModalStyle);
-  const [emoji, setEmoji] = useState<string>('');
+  const [emoji, setEmoji] = useState<string>(defaultValue);
   const [open, setOpen] = React.useState(false);
 
   const handleOpen = () => {
@@ -67,16 +71,21 @@ const EmojiInput = () => {
   return (
     <>
       <Box display='flex' alignItems='center' flexDirection='row'>
-        <TextField
-          value={emoji}
-          variant='outlined'
-          margin='normal'
-          placeholder='Please Pick An Emoji *'
-          fullWidth
-          InputProps={{ readOnly: true }}
-          {...register('emoji', {
-            required: 'emoji is required',
-          })}
+        <Controller
+          control={control}
+          defaultValue=''
+          name='emoji'
+          rules={{ required: 'emoji is required' }}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              variant='outlined'
+              margin='normal'
+              placeholder='Pick An Emoji *'
+              fullWidth
+              InputProps={{ readOnly: true }}
+            />
+          )}
         />
         <Emoji emoji={emoji} size={30} />
         <IconButton color='primary' onClick={handleOpen}>

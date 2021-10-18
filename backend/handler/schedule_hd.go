@@ -5,6 +5,7 @@ import (
 	"backend/handler/params"
 	"backend/handler/request"
 	"backend/usecase"
+	"log"
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
@@ -50,6 +51,23 @@ func (handler *ScheduleHandler) DeleteSchedule(c *fiber.Ctx) error {
 	return c.SendStatus(200)
 }
 
+func (handler *ScheduleHandler) EditSchedule(c *fiber.Ctx) error {
+	userID := c.Locals("user").(model.User).ID
+	param := params.Schedule{
+		User: "default",
+		UID:  c.Params("schedule"),
+	}
+	if err := param.Validate(); err != nil {
+		return c.SendStatus(400)
+	}
+	log.Println(param.UID, userID)
+	schedule, err := handler.scheduleUsecase.FindFromUserIDAndScheduleTitle(param.UID, userID)
+	if err != nil {
+		return c.SendStatus(404)
+	}
+	return c.JSON(schedule)
+}
+
 func (handler *ScheduleHandler) GetSchedule(c *fiber.Ctx) error {
 	param := params.Schedule{
 		User: c.Params("schedule_title"),
@@ -77,4 +95,26 @@ func (handler *ScheduleHandler) UserSchedule(c *fiber.Ctx) error {
 		"title":     schedule_title,
 		"schedules": schedules,
 	})
+}
+
+func (handler *ScheduleHandler) UpdateSchedule(c *fiber.Ctx) error {
+	var request request.CreateSchedule
+	userID := c.Locals("user").(model.User).ID
+	scheduleID := c.Params("schedule")
+
+	if err := c.BodyParser(&request); err != nil {
+		return c.SendStatus(400)
+	}
+	if err := request.Validate(); err != nil {
+		return c.SendStatus(400)
+	}
+	schedule := request.ChangeStruct()
+	schedule.ID = scheduleID
+	schedule.UserID = userID
+
+	err := handler.scheduleUsecase.UpdateSchedule(schedule)
+	if err != nil {
+		return c.SendStatus(404)
+	}
+	return c.SendStatus(200)
 }

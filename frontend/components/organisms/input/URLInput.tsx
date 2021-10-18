@@ -1,22 +1,30 @@
 import { TextField, Typography } from '@material-ui/core';
-import React from 'react';
-import { useFormContext } from 'react-hook-form';
+import React, { FC, useEffect } from 'react';
+import { Controller, useFormContext } from 'react-hook-form';
 
-const URLInput = () => {
+type Props = {
+  defaultValue?: string;
+};
+
+const URLInput: FC<Props> = ({ defaultValue = '' }) => {
   const {
-    register,
+    control,
+    setValue,
     formState: { errors },
   } = useFormContext();
+
+  useEffect(() => {
+    setValue('url', defaultValue);
+  }, [defaultValue]);
+
   return (
     <>
-      <TextField
-        variant='outlined'
-        margin='normal'
-        placeholder='URL'
-        fullWidth
-        {...register('url', {
-          pattern: /https?:\/\/[\w/:%#\$&\?\(\)~\.=\+\-]+/,
-        })}
+      <Controller
+        control={control}
+        defaultValue=''
+        name='url'
+        rules={{ pattern: /https?:\/\/[\w/:%#\$&\?\(\)~\.=\+\-]+/ }}
+        render={({ field }) => <TextField {...field} variant='outlined' margin='normal' placeholder='URL' fullWidth />}
       />
       {errors.url && (
         <Typography color='error' variant='overline'>
