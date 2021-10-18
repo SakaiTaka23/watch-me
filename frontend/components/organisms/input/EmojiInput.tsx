@@ -6,7 +6,7 @@ import 'emoji-mart/css/emoji-mart.css';
 import { EmojiEmotions } from '@material-ui/icons';
 
 type Props = {
-  defaultValue: string;
+  defaultValue?: string;
 };
 
 const rand = () => {

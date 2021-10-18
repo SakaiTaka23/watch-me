@@ -3,7 +3,7 @@ import React, { FC, useEffect } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 
 type Props = {
-  defaultValue: string;
+  defaultValue?: string;
 };
 
 const TitleInput: FC<Props> = ({ defaultValue = '' }) => {
