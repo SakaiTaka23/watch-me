@@ -1,4 +1,5 @@
 import { Container, makeStyles } from '@material-ui/core';
+import { useRouter } from 'next/router';
 import React, { FC } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import useEditSchedule from '../../../hooks/api/schedule/useEditSchedule';
@@ -14,6 +15,7 @@ import URLInput from '../input/URLInput';
 import Loading from '../loading/Loading';
 
 type Props = {
+  schedule_title: string;
   id: string;
 };
 
@@ -37,11 +39,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ScheduleUpdateForm: FC<Props> = ({ id }) => {
+const ScheduleUpdateForm: FC<Props> = ({ id, schedule_title }) => {
   const classes = useStyles();
   const { schedule, isLoading } = useEditSchedule(id);
   const { updateSchedule, error } = useUpdateSchedule();
   const methods = useForm();
+  const router = useRouter();
 
   if (isLoading) {
     return <Loading />;
@@ -50,7 +53,11 @@ const ScheduleUpdateForm: FC<Props> = ({ id }) => {
   const handleClick = (data: Schedule) => {
     console.log(data);
     updateSchedule(id, data);
-    console.log(error);
+    if (error === null) {
+      router.push(`/schedule/${schedule_title}/${id}`);
+    } else {
+      console.log(error);
+    }
   };
 
   return (

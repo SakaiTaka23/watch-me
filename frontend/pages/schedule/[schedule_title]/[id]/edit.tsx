@@ -7,8 +7,8 @@ type Props = {
   id: string;
 };
 
-const edit: FC<Props> = ({ id }) => {
-  return <ScheduleUpdateForm id={id} />;
+const edit: FC<Props> = ({ id, schedule_title }) => {
+  return <ScheduleUpdateForm id={id} schedule_title={schedule_title} />;
 };
 
 export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
