@@ -1,6 +1,11 @@
-import React, { ChangeEvent } from 'react';
-import { useFormContext } from 'react-hook-form';
+import React, { FC, useEffect } from 'react';
+import { Controller, useFormContext } from 'react-hook-form';
 import { TextField } from '@material-ui/core';
+
+type Props = {
+  startDefaultValue?: string;
+  endDefaultValue?: string;
+};
 
 const createDate = (dt: Date) => {
   return `${dt.getFullYear()}-${dt.getMonth().toString().padStart(2, '0')}-${dt
@@ -9,50 +14,31 @@ const createDate = (dt: Date) => {
     .padStart(2, '0')}T${dt.getHours().toString().padStart(2, '0')}:${dt.getMinutes().toString().padStart(2, '0')}`;
 };
 
-const PeriodInput = () => {
-  const {
-    register,
-    setValue,
-    formState: { errors },
-  } = useFormContext();
-  const dt = new Date();
-  const today = createDate(dt);
-  dt.setHours(dt.getHours() + 1);
-  const after = createDate(dt);
+const PeriodInput: FC<Props> = ({ startDefaultValue = '', endDefaultValue = '' }) => {
+  const { control, setValue } = useFormContext();
 
-  setValue('start_time', after);
-  setValue('end_time', today);
+  useEffect(() => {
+    const dt = new Date(startDefaultValue === '' ? '' : startDefaultValue);
+    setValue('start_time', createDate(dt));
+  }, [startDefaultValue]);
 
-  const handleStartTimeChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setValue('start_time', e.target.value);
-  };
-
-  const handleEndTimeChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setValue('end_time', e.target.value);
-  };
+  useEffect(() => {
+    setValue('end_time', endDefaultValue === '' ? '' : createDate(new Date(endDefaultValue)));
+  }, [endDefaultValue]);
 
   return (
     <>
-      <TextField
-        label='start_time'
-        type='datetime-local'
-        defaultValue={today}
-        InputLabelProps={{
-          shrink: true,
-        }}
-        {...register('start_time')}
-        onChange={handleStartTimeChange}
+      <Controller
+        control={control}
+        defaultValue=''
+        name='start_time'
+        render={({ field }) => <TextField {...field} type='datetime-local' InputLabelProps={{ shrink: true }} />}
       />
-
-      <TextField
-        label='end_time'
-        type='datetime-local'
-        defaultValue={after}
-        InputLabelProps={{
-          shrink: true,
-        }}
-        {...register('end_time')}
-        onChange={handleEndTimeChange}
+      <Controller
+        control={control}
+        defaultValue=''
+        name='end_time'
+        render={({ field }) => <TextField {...field} type='datetime-local' InputLabelProps={{ shrink: true }} />}
       />
     </>
   );
