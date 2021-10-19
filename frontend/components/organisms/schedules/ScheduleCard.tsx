@@ -1,7 +1,7 @@
 import { Box, Grid, Typography } from '@material-ui/core';
 import { Emoji } from 'emoji-mart';
 import React, { FC } from 'react';
-import TimeFormat, { Schedule } from '../../../types/model/schedule';
+import { TimeFormat, Schedule } from '../../../types/model/schedule';
 
 type Props = {
   schedule: Schedule;
