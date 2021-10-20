@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import React, { FC } from 'react';
 import Loading from '../../../../components/organisms/loading/Loading';
 import useGetScheduleInfo from '../../../../hooks/api/schedule/useGetScheduleInfo';
+import { StartTimeFormat, EndTimeFormat } from '../../../../types/model/schedule';
 
 type Props = {
   schedule_title: string;
@@ -34,6 +35,9 @@ const Index: FC<Props> = ({ schedule_title, id }) => {
     return null;
   }
 
+  const start_time = StartTimeFormat(info);
+  const end_time = EndTimeFormat(info);
+
   return (
     <Grid container direction='column' justifyContent='center' alignContent='center'>
       <Grid item xs={8}>
@@ -50,11 +54,11 @@ const Index: FC<Props> = ({ schedule_title, id }) => {
         <Box {...defaultProps}>
           <Typography variant='h5'>Starts</Typography>
           <hr />
-          <Typography variant='h5'>{info.start_time}</Typography>
+          <Typography variant='h5'>{start_time}</Typography>
           <br />
           <Typography variant='h5'>Ends</Typography>
           <hr />
-          <Typography variant='h5'>{info?.end_time ?? '未定'}</Typography>
+          <Typography variant='h5'>{end_time != '' ? end_time : '未定'}</Typography>
         </Box>
       </Grid>
       <Grid item xs={8}>
